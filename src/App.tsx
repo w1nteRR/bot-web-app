@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+
+import { useRoutes } from './hooks/useRoutes'
+import { useTelegram } from './hooks/telegram/useTelegram'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const tg = useTelegram()
+  const routes = useRoutes()
+
+  const {
+    initDataUnsafe: { user },
+  } = tg
+
+  console.log('ready', tg.ready())
+
+  useEffect(() => {
+    tg.ready()
+    tg.expand()
+    console.log('tg', tg.initDataUnsafe)
+    console.log('color', tg.colorScheme)
+  }, [tg])
+
+  const backgroundColor = tg.colorScheme === 'dark' ? '#000' : '#fff'
+
+  return <div style={{ backgroundColor, minHeight: '100vh' }}>{routes}</div>
 }
 
-export default App;
+export default App

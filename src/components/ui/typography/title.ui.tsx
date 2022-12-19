@@ -1,0 +1,20 @@
+import { FC, ReactNode } from 'react'
+import { useTelegram } from '../../../hooks/telegram/useTelegram'
+
+interface ITitleProps {
+  children: ReactNode
+  size?: string
+}
+
+export const Title: FC<ITitleProps> = ({ children, size = '4xl' }) => {
+  const { themeParams } = useTelegram()
+
+  return (
+    <p
+      className={`text-2xl font-bold`}
+      style={{ color: themeParams.text_color }}
+    >
+      {children}
+    </p>
+  )
+}
