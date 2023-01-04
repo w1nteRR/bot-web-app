@@ -1,48 +1,40 @@
 import { memo, FC } from 'react'
-import ReactPlayer from 'react-player'
-import { useDevice } from '../../../hooks/useDevice'
 
 interface IMediaRenderProps {
   isVideo: boolean
-  image: string
-  poster?: string
-  playback?: {
-    hls: string
-    dash: string
-  }
+  source: string
 }
 
 export const MediaRender: FC<IMediaRenderProps> = memo(
-  ({ isVideo, image, playback, poster }) => {
-    // const { dash, hls } = playback
-
-    const os = useDevice()
+  ({ isVideo, source }) => {
+    console.log('REJDER')
 
     return isVideo ? (
-      <ReactPlayer
-        // className='react-player'
-        width='100%'
-        height='100%'
+      <video
+        // width='100%'
+        // height='100%'
         controls
-        light={poster}
-        // preload='metadata'
-        // style={{
-        //   height: 100,
-        //   borderRadius: 10,
-        //   // objectFit: 'cover',
-        //   width: 200,
-        // }}
-        // playsinline
-
-        url={os === 'ios' ? playback?.hls : playback?.hls}
+        playsInline
+        preload='metadata'
+        style={{
+          // height: 100,
+          borderRadius: 10,
+          objectFit: 'contain',
+          width: '100%',
+          height: '100%',
+          // width: 200,
+        }}
       >
-        Video not supported.
-      </ReactPlayer>
+        <source src={`${source}#t=0.1`} type='video/mp4' />
+      </video>
     ) : (
       <img
-        src={image}
+        src={source}
         alt='preview'
-        style={{ height: '100%', borderRadius: 10, width: '100%' }}
+        className='rounded-xl w-full h-full'
+        style={{
+          objectFit: 'contain',
+        }}
       />
     )
   }

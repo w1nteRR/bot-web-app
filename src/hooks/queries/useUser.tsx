@@ -12,18 +12,18 @@ export const useUser = (username: string) => {
 
   const { addUserToRecent } = useRecent()
 
-  const { isLoading, data, refetch, error } = useQuery(
+  const { isLoading, data, refetch, error, isError } = useQuery(
     ['user info', username],
     () => ScrapperApi.findUserByUsername(username),
     {
       // enabled: false,
-      retry: 0,
+      retry: 3,
       onSuccess: (data) => {
         const { username, pk_id, profile_image, full_name } = data.data
 
         addUserToRecent({
           username,
-          pk_id,
+          pk_id: Number(pk_id),
           profile_image,
           full_name,
           timestamp: Date.now(),

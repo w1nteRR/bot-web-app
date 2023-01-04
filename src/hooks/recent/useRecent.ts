@@ -1,20 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-
-interface IRecentUser {
-  pk_id: number
-  profile_image: string
-  full_name: string
-  username: string
-  timestamp: number
-}
+import { IRecentUser } from '../../types/user/user.types'
 
 const RECENT_SEARCH_STORAGE = 'recent-search'
 
 export const useRecent = () => {
-  // const recentSearchList = JSON.parse(
-  //   localStorage.getItem(RECENT_SEARCH_STORAGE) || '[]'
-  // ) as IRecentUser[]
-
   const [recentSearchList, setRecentSearchList] = useState<IRecentUser[]>(
     JSON.parse(localStorage.getItem(RECENT_SEARCH_STORAGE) || '[]')
   )

@@ -12,3 +12,11 @@ export interface IUser {
   category: string
   has_highlight_reels: boolean
 }
+
+export interface IRecentUser {
+  pk_id: number
+  profile_image: string
+  full_name: string
+  username: string
+  timestamp: number
+}

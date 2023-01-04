@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SwiperSlide, Swiper } from 'swiper/react'
+import { FreeMode } from 'swiper'
 
 import { RecentCard } from './recent.card'
 import { MediaRender } from '../shared/media-render/media-render.shared'
@@ -9,9 +10,14 @@ import { useStories } from '../../hooks/queries/useStories'
 import { useRecent } from '../../hooks/recent/useRecent'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 
+import 'swiper/css/free-mode'
+import { textConstants } from '../../constants/text.constants'
+import { StoriesViewer } from '../stories-viewer/stories.viewer'
+
 export const RecentListV2: FC = () => {
   const [activeUserId, setActiveUserId] = useState<null | number>(null)
   const [activeUsername, setActviveUsername] = useState('')
+  const [isStoriesViewerOpen, setIsStoriesViewerOpen] = useState(false)
 
   const { refetch, data, isLoading, error, isError } = useStories(
     String(activeUserId),
@@ -39,8 +45,6 @@ export const RecentListV2: FC = () => {
 
   if (!recentSearchList.length) return null
 
-  console.log('DATA', data)
-
   return (
     <>
       <div className='flex justify-between items-start  px-5 mt-5 mb-1'>
@@ -61,7 +65,13 @@ export const RecentListV2: FC = () => {
       </div>
 
       <div className='p-3 my-4 relative'>
-        <Swiper spaceBetween={10} slidesPerView={5.2} className='mySwiper'>
+        <Swiper
+          spaceBetween={10}
+          slidesPerView={5.2}
+          freeMode={true}
+          modules={[FreeMode]}
+          className='mySwiper'
+        >
           {recentSearchList.map(({ pk_id, profile_image, username }) => (
             <SwiperSlide
               key={pk_id}
@@ -91,13 +101,13 @@ export const RecentListV2: FC = () => {
           >
             {isLoading && (
               <p className='text-xs' style={{ color: themeParams.hint_color }}>
-                👀 Looking for the stories
+                {textConstants.storiesSearch}
               </p>
             )}
 
             {isError && (
               <p className='text-xs' style={{ color: themeParams.hint_color }}>
-                😔 Stories not found
+                {textConstants.storiesError}
               </p>
             )}
 
@@ -113,32 +123,43 @@ export const RecentListV2: FC = () => {
             >
               Profile
             </Link>
+            <p
+              style={{ color: themeParams.link_color }}
+              onClick={() => setIsStoriesViewerOpen(true)}
+            >
+              All
+            </p>
           </div>
-          <Swiper spaceBetween={10} slidesPerView={2.3} className='mySwiper'>
+
+          <Swiper
+            // freeMode={true}
+            // modules={[FreeMode]}
+            spaceBetween={10}
+            slidesPerView={2.3}
+            className='mySwiper'
+          >
             {data?.stories.media.map(
-              ({ id, is_video, url, expiring_at, playback, thumbnail }) => {
+              ({ id, is_video, url, expiring_at, videoPath }) => {
                 const expiringTime = new Date(expiring_at).toLocaleTimeString()
+                const source = url || videoPath || ''
 
                 return (
-                  <SwiperSlide
-                    key={id}
-                    // onClick={() => navigate(`/user/${username}`)}
-                  >
-                    <div className='h-64 w-40 bg-zinc-900 rounded-xl'>
-                      <MediaRender
-                        isVideo={is_video}
-                        image={url || ''}
-                        playback={playback}
-                        poster={thumbnail}
-                      />
+                  <SwiperSlide key={id}>
+                    <div className='h-64 w-40 rounded-xl'>
+                      <MediaRender isVideo={is_video} source={source} />
                     </div>
-                    {/* <video src={video_dash_manifest} /> */}
-                    {/* <Overline>{expiringTime}</Overline> */}
                   </SwiperSlide>
                 )
               }
             )}
           </Swiper>
+
+          {isStoriesViewerOpen && data && (
+            <StoriesViewer
+              stories={data?.stories.media}
+              onCloseClick={() => setIsStoriesViewerOpen(false)}
+            />
+          )}
         </>
       )}
     </>

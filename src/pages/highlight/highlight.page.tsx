@@ -47,35 +47,16 @@ export const HighlightPage: FC = () => {
       <Title>Life 1</Title>
 
       <Margin>
-        {/* <Swiper
-          direction='vertical'
-          slidesPerView={'auto'}
-          spaceBetween={30}
-          freeMode={true}
-          modules={[FreeMode, Pagination]}
-          className='mySwiper'
-          // style={{ height: 400 }}
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => (
-            <SwiperSlide
-              style={{ height: 300 }}
-              className='my-4 bg-zinc-800 rounded-xl'
-            >
-              {x}
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
-
         {DATA.map((highlight) => (
           <div key={highlight.id}>
             <div
               style={{ height: 440 }}
               className='my-5 bg-zinc-800 rounded-xl'
             >
-              <MediaRender
+              {/* <MediaRender
                 isVideo={highlight.isVideo!}
                 source={highlight.source}
-              />
+              /> */}
             </div>
             <div className='flex justify-between items-center mt-4 px-2'>
               <Description>{highlight.date}</Description>

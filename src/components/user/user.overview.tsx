@@ -1,34 +1,89 @@
-import { FC } from 'react'
+import { FC, useRef } from 'react'
 
-import { Overline } from '../ui/typography/overline.ui'
-import { Title } from '../ui/typography/title.ui'
+import { useUserContext } from '../../hooks/context/useUserContext'
+import { useImageBackground } from '../../hooks/useImageBackground'
 
-interface IUserOverviewProps {
-  username: string
-  category: string
-  fullName: string
-  biography: string
-}
+export const UserOverview: FC = () => {
+  const ref = useRef(null)
 
-export const UserOverview: FC<IUserOverviewProps> = ({
-  username,
-  category,
-  fullName,
-  biography,
-}) => {
+  const { user } = useUserContext()
+  const { color, onLoad, isDark } = useImageBackground(ref)
+
+  if (!user) return null
+
   return (
-    <>
-      <Title>{username}</Title>
-      <div className='mt-1'>
-        <Overline>{category}</Overline>
+    <div
+      className='pt-10'
+      style={{
+        backgroundColor: `rgb(${color.toString()})`,
+        minHeight: '65vh',
+      }}
+    >
+      <div className='w-52 h-52 m-auto drop-shadow-2xl'>
+        <img
+          ref={ref}
+          src={user.profile_image}
+          alt=''
+          className='rounded-md drop-shadow-2xl'
+          onLoad={onLoad}
+        />
       </div>
-
-      <div className=''>
-        <p className='text-zinc-400 text-md my-3'>{fullName}</p>
-        <p className='text-slate-50 text-md my-3'>
-          <pre>{biography}</pre>
+      <div className='mt-5 px-5'>
+        <div className='text-center'>
+          <h2
+            className='text-xl mb-4 font-semibold'
+            style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
+          >
+            {user.username}
+          </h2>
+        </div>
+        <p
+          className='text-sm font-semibold'
+          style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
+        >
+          {user.full_name}
         </p>
+
+        <div className='mt-5'>
+          <pre
+            className='text-xs'
+            style={{
+              color: isDark(color) ? 'silver' : '#1c1c1c',
+              whiteSpace: 'break-spaces',
+            }}
+          >
+            {user.biography}
+          </pre>
+        </div>
+
+        <ul className='mt-5 flex flex-row'>
+          {user.category && (
+            <li
+              className='text-xs mr-2'
+              style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
+            >
+              &#x2022; {user.category}
+            </li>
+          )}
+
+          <li
+            className='text-xs mr-2'
+            style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
+          >
+            &#x2022;{' '}
+            <span className='font-semibold'>{user.follower_count}</span>{' '}
+            followers
+          </li>
+          <li
+            className='text-xs mr-2'
+            style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
+          >
+            &#x2022;{' '}
+            <span className='font-semibold'>{user.following_count}</span>{' '}
+            following
+          </li>
+        </ul>
       </div>
-    </>
+    </div>
   )
 }

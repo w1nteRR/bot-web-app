@@ -8,6 +8,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { Id } from '../../types/common'
 
 import 'swiper/css'
+import { Title } from '../ui/typography/title.ui'
 
 interface IHighlightsProps {
   userId: Id
@@ -25,15 +26,29 @@ export const Highlights: FC<IHighlightsProps> = ({ userId }) => {
     navigate(`highlight/${id}`)
   }
 
-  if (!data) return <p className='text-gray-200'>loading highlights...</p>
-
-  // if (error) return <p className='text-gray-200'>error</p>
+  if (!data)
+    return (
+      <div className='flex direction-row'>
+        {[0, 1, 2, 3, 4].map((x) => (
+          <div
+            key={x}
+            role='status'
+            className='mr-4 space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center'
+          >
+            <div className='flex justify-center items-center w-14 h-14 bg-gray-300 rounded-full'></div>
+          </div>
+        ))}
+      </div>
+    )
 
   console.log('DATA', data)
 
   return (
     <>
-      <Swiper className='mySwiper' spaceBetween={5} slidesPerView={4.3}>
+      <div className='mb-10'>
+        <Title>Highlights</Title>
+      </div>
+      <Swiper className='mySwiper' slidesPerView={4.3}>
         {data?.data.highlights.map(({ id, cover, title }) => (
           <SwiperSlide key={id} onClick={onHighlightClick(id)}>
             <>

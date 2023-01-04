@@ -1,8 +1,9 @@
-import { useQuery, QueriesOptions, UseQueryOptions } from 'react-query'
+import { AxiosError, AxiosResponse } from 'axios'
+import { useQuery } from 'react-query'
 
 import { ScrapperApi } from '../../api/scrapper.api'
+import { IStoriesResponse } from '../../types/api/stories.response'
 import { Id } from '../../types/common'
-import { IStory } from '../../types/stories/stories.types'
 
 export const useStories = (
   id: Id,
@@ -12,13 +13,12 @@ export const useStories = (
   }
   // options: UseQueryOptions<any, any, IStory, string[]>
 ) => {
-  const { isLoading, data, refetch, error, isError } = useQuery(
-    ['user stories', id],
-    () => ScrapperApi.getUserStories(id),
-    {
-      ...config,
-    }
-  )
+  const { isLoading, data, refetch, error, isError } = useQuery<
+    AxiosResponse<IStoriesResponse>,
+    AxiosError<{ message: string }>
+  >(['user stories', id], () => ScrapperApi.getUserStories(id), {
+    ...config,
+  })
 
   return {
     isLoading,

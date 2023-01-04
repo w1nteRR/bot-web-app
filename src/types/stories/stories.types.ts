@@ -4,10 +4,5 @@ export interface IStory {
   is_video: boolean
   pk: number
   url?: string
-  preview?: string
-  thumbnail?: string
-  playback?: {
-    dash: string
-    hls: string
-  }
+  videoPath?: string
 }

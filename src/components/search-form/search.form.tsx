@@ -24,14 +24,6 @@ export const SearchForm = () => {
     console.log('SEARCH', searchValue)
 
     navigate(`/user/${searchValue}`)
-    // tg.showPopup({
-    //   title: 'Popup title',
-    //   message: 'MEssafe',
-    // })
-
-    // tg.HapticFeedback.notificationOccurred('error')
-    // tg.showAlert('message')
-    // refetch()
   }, [searchValue])
 
   useEffect(() => {
@@ -45,39 +37,12 @@ export const SearchForm = () => {
 
   useEffect(() => {
     if (searchValue.length >= 3) {
+      tg.MainButton.setText('Search')
       tg.MainButton.show()
     } else {
       tg.MainButton.hide()
     }
   }, [searchValue.length])
-
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     tg.MainButton.showProgress()
-  //   } else {
-  //     tg.MainButton.hideProgress()
-  //   }
-  // }, [isLoading])
-
-  // useEffect(() => {
-  //   console.log('DATA TRIGGER')
-
-  // if (data?.data.message) {
-  //   tg.HapticFeedback.notificationOccurred('error')
-
-  //   tg.showAlert('User not found')
-
-  //   return
-  // }
-
-  // if (data?.data.id) {
-  //   tg.HapticFeedback.notificationOccurred('success')
-
-  //   return navigate(`/user/${data?.data.id}`)
-  // }
-  // }, [data])
-
-  // console.log('DATA', data)
 
   document.onclick = () => {
     console.log('click doc')
