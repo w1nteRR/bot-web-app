@@ -6,7 +6,7 @@ import { Margin } from '../../components/ui/spacing/margin.ui'
 import { Title } from '../../components/ui/typography/title.ui'
 import { Description } from '../../components/ui/typography/description.ui'
 
-import { MediaRender } from '../../components/shared/media-render/media-render.shared'
+// import { MediaRender } from '../../components/shared/media-render/media-render.shared'
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 

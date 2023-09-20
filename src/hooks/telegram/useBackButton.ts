@@ -14,5 +14,7 @@ export const useBackButton: useBackButtonType = (callback) => {
       tg.BackButton.hide()
       tg.BackButton.offClick(callback)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }

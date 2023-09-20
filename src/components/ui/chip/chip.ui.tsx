@@ -15,6 +15,8 @@ export const Chip: FC<IChipProps> = ({ isActive, children, onClick }) => {
     if (isActive && colorScheme === 'light') return themeParams.bg_color
 
     return 'unset'
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive, colorScheme])
 
   return (

@@ -5,7 +5,7 @@ import { IUserSendChatPayload } from '../../types/api/user.payload'
 import { useTelegram } from '../telegram/useTelegram'
 
 export const useAddUserToChat = () => {
-  const { isLoading, mutateAsync, error, data } = useMutation(
+  const { mutateAsync } = useMutation(
     'add user chat',
     (data: IUserSendChatPayload) => telegramApi.addUserToBotChat(data)
   )
@@ -24,6 +24,8 @@ export const useAddUserToChat = () => {
 
       HapticFeedback.notificationOccurred('success')
     },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [initDataUnsafe]
   )
 

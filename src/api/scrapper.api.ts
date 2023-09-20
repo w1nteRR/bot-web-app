@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { mainInstance } from './axios.config'
 
 import { Id } from '../types/common'

@@ -5,7 +5,6 @@ import { useLiveQuery } from 'dexie-react-hooks'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 
-import { users } from '../../mock/recent.mock'
 import { IRecentUser } from '../../types/user/user.types'
 import { db } from '../../db/recent-users.db'
 

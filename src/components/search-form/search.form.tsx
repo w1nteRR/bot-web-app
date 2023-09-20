@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { MdCancel } from 'react-icons/md'
 
 import { Input } from '../ui/input/input.ui'
-import { Margin } from '../ui/spacing/margin.ui'
-import { Title } from '../ui/typography/title.ui'
 
-import { useId } from '../../hooks/queries/useId'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 export const SearchForm = () => {
@@ -24,6 +21,8 @@ export const SearchForm = () => {
     console.log('SEARCH', searchValue)
 
     navigate(`/user/${searchValue}`)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue])
 
   useEffect(() => {
@@ -42,6 +41,8 @@ export const SearchForm = () => {
     } else {
       tg.MainButton.hide()
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue.length])
 
   document.onclick = () => {

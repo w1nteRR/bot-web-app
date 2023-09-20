@@ -1,14 +1,9 @@
 import { FC } from 'react'
 
-import { RecentManageItem } from './manage.item'
-
 // import {} from '../../../hooks/recent/useRecent'
-import { useAddUserToChat } from '../../../hooks/user/useAddUserToChat'
 
 export const RecentManageList: FC = () => {
   // const { recentSearchList, removeUserFromRecent } = useRecent()
-
-  const { addUserToChat } = useAddUserToChat()
 
   return (
     <>

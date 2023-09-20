@@ -7,10 +7,6 @@ function App() {
   const tg = useTelegram()
   const routes = useRoutes()
 
-  const {
-    initDataUnsafe: { user },
-  } = tg
-
   useEffect(() => {
     tg.ready()
     tg.expand()

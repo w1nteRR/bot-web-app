@@ -50,7 +50,7 @@ export const UserPage: FC = () => {
   const {
     data: stories,
     isLoading: isStoriesLoading,
-    isError: isStoreisError,
+    // isError: isStoreisError,
     refetch: refetchStories,
   } = useQuery(
     ['user stories', data?.data.id],
@@ -80,6 +80,8 @@ export const UserPage: FC = () => {
 
   useEffect(() => {
     tg.MainButton.hide()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) return <p>Loading...</p>

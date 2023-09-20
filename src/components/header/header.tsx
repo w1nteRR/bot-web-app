@@ -6,7 +6,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useProfile } from '../../hooks/queries/useProfile'
 
 export const Header = () => {
-  const { themeParams, initDataUnsafe } = useTelegram()
+  const { initDataUnsafe } = useTelegram()
 
   const { mutateAsync, isLoading, data } = useProfile()
 
