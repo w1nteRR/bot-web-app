@@ -6,10 +6,10 @@ import { useImageBackground } from '../../hooks/useImageBackground'
 export const UserOverview: FC = () => {
   const ref = useRef(null)
 
-  const { user } = useUserContext()
+  // const { user } = useUserContext()
   const { color, onLoad, isDark } = useImageBackground(ref)
 
-  if (!user) return null
+  // if (!user) return null
 
   return (
     <div
@@ -22,7 +22,9 @@ export const UserOverview: FC = () => {
       <div className='w-52 h-52 m-auto drop-shadow-2xl'>
         <img
           ref={ref}
-          src={user.profile_image}
+          src={
+            'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+          }
           alt=''
           className='rounded-md drop-shadow-2xl'
           onLoad={onLoad}
@@ -34,14 +36,16 @@ export const UserOverview: FC = () => {
             className='text-xl mb-4 font-semibold'
             style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
           >
-            {user.username}
+            name
+            {/* {user.username} */}
           </h2>
         </div>
         <p
           className='text-sm font-semibold'
           style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
         >
-          {user.full_name}
+          full name
+          {/* {user.full_name} */}
         </p>
 
         <div className='mt-5'>
@@ -52,26 +56,30 @@ export const UserOverview: FC = () => {
               whiteSpace: 'break-spaces',
             }}
           >
-            {user.biography}
+            biography
+            {/* {user.biography} */}
           </pre>
         </div>
 
         <ul className='mt-5 flex flex-row'>
-          {user.category && (
-            <li
-              className='text-xs mr-2'
-              style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
-            >
-              &#x2022; {user.category}
-            </li>
-          )}
+          {/* {user.category && ( */}
+          <li
+            className='text-xs mr-2'
+            style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
+          >
+            &#x2022; category
+          </li>
+          {/* )} */}
 
           <li
             className='text-xs mr-2'
             style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
           >
             &#x2022;{' '}
-            <span className='font-semibold'>{user.follower_count}</span>{' '}
+            <span className='font-semibold'>
+              {/* {user.follower_count */}
+              212
+            </span>{' '}
             followers
           </li>
           <li
@@ -79,7 +87,10 @@ export const UserOverview: FC = () => {
             style={{ color: isDark(color) ? 'silver' : '#1c1c1c' }}
           >
             &#x2022;{' '}
-            <span className='font-semibold'>{user.following_count}</span>{' '}
+            <span className='font-semibold'>
+              {/* {user.following_count} */}
+              342
+            </span>{' '}
             following
           </li>
         </ul>

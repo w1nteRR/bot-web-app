@@ -11,18 +11,29 @@ function App() {
     initDataUnsafe: { user },
   } = tg
 
-  console.log('ready', tg.ready())
-
   useEffect(() => {
     tg.ready()
     tg.expand()
-    console.log('tg', tg.initDataUnsafe)
-    console.log('color', tg.colorScheme)
+
+    console.log('color')
+
+    console.log('theme', tg.themeParams)
+
+    tg.setBackgroundColor(tg.themeParams.secondary_bg_color)
+
+    // console.log('tg', tg.backgroundColor)
   }, [tg])
 
-  const backgroundColor = tg.colorScheme === 'dark' ? '#000' : '#fff'
-
-  return <div style={{ backgroundColor, minHeight: '100vh' }}>{routes}</div>
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: tg.themeParams.secondary_bg_color,
+      }}
+    >
+      {routes}
+    </div>
+  )
 }
 
 export default App

@@ -24,7 +24,7 @@ export const Header = () => {
     <>
       <header
         className='flex justify-between items-center p-5'
-        style={{ backgroundColor: themeParams.bg_color }}
+        // style={{ backgroundColor: themeParams.bg_color }}
       >
         <SearchForm />
         {isLoading ? (

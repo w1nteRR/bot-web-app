@@ -58,7 +58,6 @@ export const SearchForm = () => {
   return (
     <>
       <form className='w-full mr-5 relative'>
-        {/* <label htmlFor='search'>Name</label> */}
         <div className='p-2 absolute right-0 h-full flex items-center'>
           {searchValue.length >= 1 && (
             <MdCancel size={20} color='gray' onClick={resetSearchForm} />
@@ -67,7 +66,7 @@ export const SearchForm = () => {
         <Input
           style={{
             fontSize: 16,
-            backgroundColor: tg.themeParams.secondary_bg_color,
+            backgroundColor: tg.themeParams.bg_color,
           }}
           placeholder='Search'
           value={searchValue}

@@ -12,8 +12,7 @@ export const Chip: FC<IChipProps> = ({ isActive, children, onClick }) => {
 
   const backgroundColor = useMemo(() => {
     if (isActive && colorScheme === 'dark') return themeParams.bg_color
-    if (isActive && colorScheme === 'light')
-      return themeParams.secondary_bg_color
+    if (isActive && colorScheme === 'light') return themeParams.bg_color
 
     return 'unset'
   }, [isActive, colorScheme])
@@ -21,7 +20,7 @@ export const Chip: FC<IChipProps> = ({ isActive, children, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className='py-2 px-5 mr-5 rounded-full font-bold'
+      className='py-2 px-5 mr-5 rounded-full font-semibold text-sm'
       style={{
         backgroundColor,
       }}

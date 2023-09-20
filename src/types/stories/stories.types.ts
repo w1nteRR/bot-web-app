@@ -6,3 +6,5 @@ export interface IStory {
   url?: string
   videoPath?: string
 }
+
+export type StoriesList = Array<IStory>

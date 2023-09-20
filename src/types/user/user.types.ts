@@ -4,19 +4,24 @@ export interface IUser {
   username: string
   full_name: string
   biography: string
-  pk_id: number
-  media_count: number
-  follower_count: number
-  following_count: number
+  id: number
+  followers: {
+    count: number
+  }
+  following: {
+    count: number
+  }
   profile_image: string
-  category: string
-  has_highlight_reels: boolean
+  category_name: string
+  is_private: boolean
+  // has_highlight_reels: boolean
 }
 
 export interface IRecentUser {
-  pk_id: number
+  id: string
   profile_image: string
   full_name: string
   username: string
-  timestamp: number
 }
+
+export type RecentUsersList = Array<IRecentUser>

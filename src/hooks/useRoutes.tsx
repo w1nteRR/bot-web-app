@@ -4,8 +4,10 @@ import { LayoutMain } from '../components/layout/layout.main'
 import { HighlightPage } from '../pages/highlight/highlight.page'
 import { HomeV2Page } from '../pages/home/home-v2.page'
 import { RecentManagePage } from '../pages/recent-manage/recent-manage.page'
-import { UserV2Page } from '../pages/user/user-v2.page'
 import { UserProvider } from '../providers/user.provider'
+import { UserStoriesPage } from '../pages/user-stories/UserStoriesPage'
+import { UserPage } from '../pages/user/user.page'
+import { Test } from '../pages/test.page'
 
 export const useRoutes = () => {
   return (
@@ -23,10 +25,12 @@ export const useRoutes = () => {
         path='user/:username'
         element={
           <UserProvider>
-            <UserV2Page />
+            <UserPage />
           </UserProvider>
         }
       />
+      <Route path='user/stories/:id' element={<UserStoriesPage />} />
+      <Route path='test' element={<Test />} />
     </Routes>
   )
 }

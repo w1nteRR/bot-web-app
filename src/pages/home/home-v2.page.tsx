@@ -1,19 +1,15 @@
-import { FC, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { BsList } from 'react-icons/bs'
+import { FC } from 'react'
 
 import { Header } from '../../components/header/header'
-
-import { RecentListV2 } from '../../components/recent-list/recent-list.v2'
+import { RecentListV3 } from '../../components/recent-list/recent-list.v3'
+import { Menu } from '../../components/menu/menu'
 
 export const HomeV2Page: FC = () => {
   return (
-    <div style={{}}>
+    <>
       <Header />
-
-      <div className=''>
-        <RecentListV2 />
-      </div>
-    </div>
+      <RecentListV3 />
+      <Menu />
+    </>
   )
 }

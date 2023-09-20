@@ -24,22 +24,22 @@ export const useMediaRenderTabs = () => {
   const renderTabContent = useCallback(() => {
     if (!user) return
 
-    const { pk_id, has_highlight_reels, username } = user
+    const { username } = user
 
-    if (activeTab === Tabs.Stories) return <StoriesV2 id={String(pk_id)} />
+    // if (activeTab === Tabs.Stories) return <StoriesV2 id={String(pk_id)} />
 
-    if (activeTab === Tabs.Highlights && has_highlight_reels)
-      return <Highlights userId={String(user.pk_id)} />
+    // if (activeTab === Tabs.Highlights && has_highlight_reels)
+    //   return <Highlights userId={String(user.pk_id)} />
 
-    if (activeTab === Tabs.Highlights && !has_highlight_reels)
-      return (
-        <Alert>
-          <p className='text-xs' style={{ color: themeParams.hint_color }}>
-            😔 <span className='font-semibold'>{username}</span> has no
-            highlights
-          </p>
-        </Alert>
-      )
+    // if (activeTab === Tabs.Highlights && !has_highlight_reels)
+    //   return (
+    //     <Alert>
+    //       <p className='text-xs' style={{ color: themeParams.hint_color }}>
+    //         😔 <span className='font-semibold'>{username}</span> has no
+    //         highlights
+    //       </p>
+    //     </Alert>
+    //   )
 
     if (activeTab === Tabs.Posts)
       return (

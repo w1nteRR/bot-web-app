@@ -16,23 +16,23 @@ export const UserV2Page: FC = () => {
   const navigate = useNavigate()
   useBackButton(() => navigate(-1))
 
-  const { initUser } = useUserContext()
-  const { MainButton } = useTelegram()
+  // const { initUser } = useUserContext()
+  // const { MainButton } = useTelegram()
 
-  const { data, isLoading } = useUser(username || '')
+  // const { data, isLoading } = useUser(username || '')
 
-  useEffect(() => {
-    if (data) initUser(data)
-  }, [data])
+  // useEffect(() => {
+  //   if (data) initUser(data)
+  // }, [data])
 
-  MainButton.hide()
+  // MainButton.hide()
 
-  if (isLoading) return <Overline>Loading...</Overline>
+  // if (isLoading) return <Overline>Loading...</Overline>
 
   return (
     <>
       <UserOverview />
-      <Tabs />
+      {/* <Tabs /> */}
     </>
   )
 }

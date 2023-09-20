@@ -7,7 +7,6 @@ import { RecentCard } from './recent.card'
 import { MediaRender } from '../shared/media-render/media-render.shared'
 
 import { useStories } from '../../hooks/queries/useStories'
-import { useRecent } from '../../hooks/recent/useRecent'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 import 'swiper/css/free-mode'
@@ -28,7 +27,6 @@ export const RecentListV2: FC = () => {
   )
 
   const { themeParams, colorScheme } = useTelegram()
-  const { recentSearchList } = useRecent()
 
   const toggleActiveRecentUserId = (id: number, username: string) => {
     setActiveUserId((prev) => (prev === id ? null : id))
@@ -42,8 +40,6 @@ export const RecentListV2: FC = () => {
       refetch()
     }
   }, [activeUserId, refetch])
-
-  if (!recentSearchList.length) return null
 
   return (
     <>
@@ -72,7 +68,7 @@ export const RecentListV2: FC = () => {
           modules={[FreeMode]}
           className='mySwiper'
         >
-          {recentSearchList.map(({ pk_id, profile_image, username }) => (
+          {/* {recentSearchList.map(({ pk_id, profile_image, username }) => (
             <SwiperSlide
               key={pk_id}
               // onClick={() => navigate(`/user/${username}`)}
@@ -84,7 +80,7 @@ export const RecentListV2: FC = () => {
                 isActive={pk_id === activeUserId}
               />
             </SwiperSlide>
-          ))}
+          ))} */}
         </Swiper>
       </div>
 

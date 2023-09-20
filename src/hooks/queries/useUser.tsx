@@ -3,14 +3,11 @@ import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
 import { ScrapperApi } from '../../api/scrapper.api'
-import { useRecent } from '../recent/useRecent'
 import { useTelegram } from '../telegram/useTelegram'
 
 export const useUser = (username: string) => {
   const navigate = useNavigate()
   const tg = useTelegram()
-
-  const { addUserToRecent } = useRecent()
 
   const { isLoading, data, refetch, error, isError } = useQuery(
     ['user info', username],
@@ -19,15 +16,15 @@ export const useUser = (username: string) => {
       // enabled: false,
       retry: 3,
       onSuccess: (data) => {
-        const { username, pk_id, profile_image, full_name } = data.data
+        const { username, profile_image, full_name } = data.data
 
-        addUserToRecent({
-          username,
-          pk_id: Number(pk_id),
-          profile_image,
-          full_name,
-          timestamp: Date.now(),
-        })
+        // addUserToRecent({
+        //   username,
+        //   pk_id: Number(pk_id),
+        //   profile_image,
+        //   full_name,
+        //   timestamp: Date.now(),
+        // })
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
