@@ -7,7 +7,7 @@ import { RecentManagePage } from '../pages/recent-manage/recent-manage.page'
 import { UserProvider } from '../providers/user.provider'
 import { UserStoriesPage } from '../pages/user-stories/UserStoriesPage'
 import { UserPage } from '../pages/user/user.page'
-import { Test } from '../pages/test.page'
+import { FavoritesPage } from '../pages/favorites/favorites.page'
 
 export const useRoutes = () => {
   return (
@@ -30,7 +30,8 @@ export const useRoutes = () => {
         }
       />
       <Route path='user/stories/:id' element={<UserStoriesPage />} />
-      <Route path='test' element={<Test />} />
+      <Route path='favorites' element={<FavoritesPage />} />
+      <Route path='recent' element={<RecentManagePage />} />
     </Routes>
   )
 }
