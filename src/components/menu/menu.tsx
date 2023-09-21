@@ -4,16 +4,19 @@ import { AiOutlineHistory } from 'react-icons/ai'
 import { BiChevronRight } from 'react-icons/bi'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+import { useNavigate } from 'react-router-dom'
 
 const menu = [
   {
     label: 'Favorites',
+    to: 'favorites',
     icon: <MdOutlineFavoriteBorder />,
     size: 25,
     rightLabel: '4',
   },
   {
     label: 'Recent activity',
+    to: 'recent',
     icon: <AiOutlineHistory />,
     size: 25,
   },
@@ -26,6 +29,11 @@ const menu = [
 
 export const Menu: FC = () => {
   const { themeParams } = useTelegram()
+  const navigate = useNavigate()
+
+  const onMenuClick = (to: string) => {
+    navigate(to)
+  }
 
   return (
     <div
@@ -36,6 +44,7 @@ export const Menu: FC = () => {
         <div
           key={index}
           className='flex items-center py-2 px-4 active:opacity-80'
+          onClick={() => onMenuClick(item.to)}
         >
           {cloneElement(item.icon, {
             size: item.size,
