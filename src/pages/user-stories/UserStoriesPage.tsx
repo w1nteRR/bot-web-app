@@ -1,8 +1,8 @@
+import { useEffect } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { AxiosError } from 'axios'
 
-import { Title } from '../../components/ui/typography/title.ui'
 import { MediaRender } from '../../components/shared/media-render/media-render.shared'
 
 import { ScrapperApi } from '../../api/scrapper.api'
@@ -15,7 +15,7 @@ export const UserStoriesPage = () => {
   const params = useParams()
   const location = useLocation()
 
-  const { themeParams } = useTelegram()
+  const { themeParams, MainButton } = useTelegram()
 
   useBackButton(() => navigate(-1))
 
@@ -28,8 +28,25 @@ export const UserStoriesPage = () => {
   )
 
   const onUserPress = () => {
-    navigate(`/user/${location.state.user.username}`)
+    navigate(`/user/${location.state.user.username}`, { replace: true })
   }
+
+  useEffect(() => {
+    if (isLoading) return
+
+    if (location.state.user) {
+      MainButton.show()
+      MainButton.setText('Go to profile')
+      MainButton.onClick(() =>
+        navigate(`/user/${location.state.user.username}`)
+      )
+    }
+
+    return () => {
+      MainButton.hide()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [MainButton, location.state.user, isLoading])
 
   if (isLoading)
     return <p style={{ color: themeParams.text_color }}>Loading...</p>
@@ -43,9 +60,14 @@ export const UserStoriesPage = () => {
 
   return (
     <div>
-      <div className='mt-5 mx-5 flex items-center' onClick={onUserPress}>
-        <div className='bg-gray-300 rounded-full mr-2 w-12 h-12' />
-        <Title>{location.state.user.username}</Title>
+      <div className='mx-5 py-5 flex items-center' onClick={onUserPress}>
+        {/* <img
+          src={location.state.user.profile_image}
+          alt='Avatar'
+          className='rounded-full w-12 h-12 mr-2'
+        /> */}
+        {/* <div className='bg-gray-300 rounded-full mr-2 w-12 h-12' /> */}
+        {/* <Title>{location.state.user.username}</Title> */}
       </div>
 
       <div>
