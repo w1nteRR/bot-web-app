@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 export const LayoutMain: FC = () => {
   return (
-    <main className='px-7'>
+    <main className=''>
       <Outlet />
     </main>
   )
