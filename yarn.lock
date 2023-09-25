@@ -1810,6 +1810,11 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
+"@twa-dev/types@^6.9.0":
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/@twa-dev/types/-/types-6.9.0.tgz#5f978e63dcb8ec507ae2b035774ff568c5ebb69a"
+  integrity sha512-hBkIuJgVtkLAPPhKsNfgyBpgS+15spzUScy5jgpfPJPqXPaaUVDTaWHbeEUU+lUgHmryeQjWyz+UjS7987Pyaw==
+
 "@types/aria-query@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-5.0.1.tgz#3286741fb8f1e1580ac28784add4c7a1d49bdfbc"
@@ -2101,11 +2106,6 @@
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
-
-"@types/telegram-web-app@^6.2.2":
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/@types/telegram-web-app/-/telegram-web-app-6.2.2.tgz#0d4b74d159d6c704cef4503abf19541bf399dd7b"
-  integrity sha512-VkNreOOz2uZPkX8w1ex5zp/oKVKnxDJ2gqmWzzGsREmJ9k8mfkRvuofazqAPDQ6xYj4YlPO1mM0rdeyidOdmpg==
 
 "@types/testing-library__jest-dom@^5.9.1":
   version "5.14.5"
