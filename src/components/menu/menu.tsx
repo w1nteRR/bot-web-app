@@ -2,9 +2,10 @@ import { FC, cloneElement } from 'react'
 import { MdOutlineFavoriteBorder } from 'react-icons/md'
 import { AiOutlineHistory } from 'react-icons/ai'
 import { BiChevronRight } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
-import { useNavigate } from 'react-router-dom'
+import { FavoritesCount } from '../favorites/favorites-count'
 
 const menu = [
   {
@@ -12,7 +13,7 @@ const menu = [
     to: 'favorites',
     icon: <MdOutlineFavoriteBorder />,
     size: 25,
-    rightLabel: '4',
+    rightLabel: <FavoritesCount />,
   },
   {
     label: 'Recent activity',
@@ -20,11 +21,6 @@ const menu = [
     icon: <AiOutlineHistory />,
     size: 25,
   },
-  // {
-  //   label: 'Tracking',
-  //   icon: <AiOutlineHistory />,
-  //   size: 25,
-  // },
 ]
 
 export const Menu: FC = () => {

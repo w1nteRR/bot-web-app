@@ -9,10 +9,10 @@ import { MediaRender } from '../../components/shared/media-render/media-render.s
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
+import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 import { ScrapperApi } from '../../api/scrapper.api'
-import { db } from '../../db/recent-users.db'
-import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -25,6 +25,7 @@ export const UserPage: FC = () => {
   useBackButton(() => navigate('/'))
 
   const { addUserToRecentList } = useRecentUsers()
+  const { add: addToFavorties } = useFavorites()
 
   const { data, isLoading, isError } = useQuery(
     ['user', params.username],
@@ -67,17 +68,6 @@ export const UserPage: FC = () => {
     if (chipIndex === 0) return refetchStories()
   }
 
-  const onFavoritesClick = () => {
-    const id = db.recentUsers.add({
-      id: String(data?.data.id),
-      profile_image: data?.data.profile_image || '',
-      full_name: data?.data.full_name || '',
-      username: data?.data.username || '',
-    })
-
-    console.log('i', id)
-  }
-
   useEffect(() => {
     tg.MainButton.hide()
 
@@ -88,12 +78,21 @@ export const UserPage: FC = () => {
 
   if (isError) return <p>error</p>
 
-  console.log('stories', stories)
+  const onFavoritesClick = () => {
+    if (!data?.data) return
+
+    const { username, profile_image, full_name, id } = data.data
+
+    addToFavorties(
+      String(id),
+      JSON.stringify({ username, full_name, profile_image })
+    )
+  }
 
   return (
     <div>
       <img
-        className='bg-gray-500 w-52 h-52 m-auto mt-10 rounded-lg'
+        className='bg-gray-500 w-72 h-72 m-auto mt-10 rounded-lg'
         alt='avatar'
         src={data?.data.profile_image}
       />
@@ -148,7 +147,7 @@ export const UserPage: FC = () => {
             isActive={activeTabIndex === index}
             onClick={() => onChipClick(index)}
           >
-            {tab}
+            <span style={{ color: tg.themeParams.text_color }}>{tab}</span>
           </Chip>
         ))}
       </div>
