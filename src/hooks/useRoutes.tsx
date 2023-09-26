@@ -15,10 +15,6 @@ export const useRoutes = () => {
       <Route path='/' element={<HomeV2Page />} />
 
       <Route element={<LayoutMain />}>
-        <Route
-          path='user/:username/highlight/:id'
-          element={<HighlightPage />}
-        />
         <Route path='recent/manage' element={<RecentManagePage />} />
       </Route>
       <Route
@@ -29,6 +25,7 @@ export const useRoutes = () => {
           </UserProvider>
         }
       />
+      <Route path='user/:username/highlight/:id' element={<HighlightPage />} />
       <Route path='user/stories/:id' element={<UserStoriesPage />} />
       <Route path='favorites' element={<FavoritesPage />} />
       <Route path='recent' element={<RecentManagePage />} />

@@ -22,7 +22,7 @@ export const UserPage: FC = () => {
   const navigate = useNavigate()
   const params = useParams()
 
-  useBackButton(() => navigate('/'))
+  useBackButton(() => navigate(-1))
 
   const { addUserToRecentList } = useRecentUsers()
   const { add: addToFavorties } = useFavorites()
