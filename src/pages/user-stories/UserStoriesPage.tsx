@@ -28,17 +28,15 @@ export const UserStoriesPage = () => {
   )
 
   const onUserPress = () => {
-    navigate(`/user/${location.state.user.username}`, { replace: true })
+    navigate(`/user/${location.state.user.username}`)
   }
 
   useEffect(() => {
-    if (isLoading) return
-
     if (location.state.user) {
       MainButton.show()
       MainButton.setText('Go to profile')
       MainButton.onClick(() =>
-        navigate(`/user/${location.state.user.username}`)
+        navigate(`/user/${location.state.user.username}`, { replace: true })
       )
     }
 
