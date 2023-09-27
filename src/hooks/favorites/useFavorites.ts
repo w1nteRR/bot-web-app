@@ -79,11 +79,24 @@ export const useFavorites = () => {
     return keys
   }
 
+  const check = async (key: string) => {
+    return new Promise<boolean>((resolve, reject) => {
+      CloudStorage.getItem(key, (error, result) => {
+        if (error) reject(new Error(error))
+
+        if (result) resolve(true)
+
+        resolve(false)
+      })
+    })
+  }
+
   return {
     add,
     remove,
     listFavoritesUsers,
     removeAll,
     count,
+    check,
   }
 }
