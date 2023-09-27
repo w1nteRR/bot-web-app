@@ -1,3 +1,4 @@
+import { FavoritesUsers } from '../../types/favorites/favorites.types'
 import { useTelegram } from '../telegram/useTelegram'
 
 export const useFavorites = () => {
@@ -34,7 +35,7 @@ export const useFavorites = () => {
 
     if (!keys) return []
 
-    return new Promise((resolve, reject) => {
+    return new Promise<FavoritesUsers>((resolve, reject) => {
       CloudStorage.getItems(keys, (error, result) => {
         if (error) reject(new Error(error))
 
