@@ -6,11 +6,11 @@ import { useQuery } from 'react-query'
 import { Title } from '../../components/ui/typography/title.ui'
 import { Chip } from '../../components/ui/chip/chip.ui'
 import { MediaRender } from '../../components/shared/media-render/media-render.shared'
+import { AddToFavorites } from '../../components/favorites/add-favorites'
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
-import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 import { ScrapperApi } from '../../api/scrapper.api'
 
@@ -25,7 +25,6 @@ export const UserPage: FC = () => {
   useBackButton(() => navigate(-1))
 
   const { addUserToRecentList } = useRecentUsers()
-  const { add: addToFavorties } = useFavorites()
 
   const { data, isLoading, isError } = useQuery(
     ['user', params.username],
@@ -78,16 +77,9 @@ export const UserPage: FC = () => {
 
   if (isError) return <p>error</p>
 
-  const onFavoritesClick = () => {
-    if (!data?.data) return
+  if (!data) return <p>No data available.</p>
 
-    const { username, profile_image, full_name, id } = data.data
-
-    addToFavorties(
-      String(id),
-      JSON.stringify({ username, full_name, profile_image })
-    )
-  }
+  const { username, profile_image, full_name, id } = data.data
 
   return (
     <div>
@@ -106,16 +98,9 @@ export const UserPage: FC = () => {
       </div>
 
       <div className='flex items-center justify-center'>
-        <button
-          className='p-3 rounded-xl w-full max-w-xs font-semibold'
-          style={{
-            backgroundColor: tg.themeParams.button_color,
-            color: tg.themeParams.button_text_color,
-          }}
-          onClick={onFavoritesClick}
-        >
-          Add to favorites
-        </button>
+        <AddToFavorites
+          user={{ username, profile_image, full_name, id: String(id) }}
+        />
       </div>
 
       <div className='my-5 mx-5'>
