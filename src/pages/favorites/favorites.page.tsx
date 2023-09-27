@@ -6,6 +6,7 @@ import { ModeButton } from '../../components/favorites/mode.button'
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
+import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 import { IFavoriteUser } from '../../types/user/user.types'
 import { FavoritesModeList } from '../../types/favorites/favorites.types'
@@ -17,6 +18,7 @@ export const FavoritesPage: FC = () => {
   const navigate = useNavigate()
 
   const { listFavoritesUsers, remove } = useFavorites()
+  const { showConfirm, HapticFeedback } = useTelegram()
 
   useBackButton(() => navigate(-1))
 
@@ -40,11 +42,15 @@ export const FavoritesPage: FC = () => {
 
   const handleRemoveFavorite = async (id: string) => {
     try {
-      await remove(id)
+      showConfirm('Are you sure?', async (confirmed) => {
+        await remove(id)
 
-      const list = await listFavoritesUsers()
+        const list = await listFavoritesUsers()
 
-      setUsers(list)
+        HapticFeedback.notificationOccurred('success')
+
+        setUsers(list)
+      })
     } catch (error) {
       console.log('e', error)
     }
