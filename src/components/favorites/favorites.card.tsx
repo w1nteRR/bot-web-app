@@ -2,8 +2,9 @@ import { memo } from 'react'
 import { CgStories } from 'react-icons/cg'
 import { RxCross2 } from 'react-icons/rx'
 
-import { IFavoriteUser } from '../../types/user/user.types'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+
+import { IFavoriteUser } from '../../types/favorites/favorites.types'
 import { FavoritesModeList } from '../../types/favorites/favorites.types'
 
 interface IFavoritesCardProps {
