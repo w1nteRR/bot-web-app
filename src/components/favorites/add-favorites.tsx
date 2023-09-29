@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
 
-import { useFavorites } from '../../hooks/favorites/useFavorites'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+import { useFavorites } from '../../hooks/favorites/useFavorites'
 
-import { IFavoriteUser } from '../../types/user/user.types'
+import { IFavoriteUser } from '../../types/favorites/favorites.types'
 
 interface IAddToFavoritesProps {
   user: IFavoriteUser
@@ -14,22 +14,24 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     'pending'
   )
 
-  const { add, check, remove } = useFavorites()
+  const { patch, check } = useFavorites()
   const { themeParams, showAlert, showConfirm } = useTelegram()
 
   const onButtonClick = async () => {
-    const isUserExist = await check(user.id)
+    const isUserExist = await check(user)
 
     if (isUserExist) {
       showConfirm('Are u sure?', async (confirmed) => {
         if (confirmed) {
-          await remove(user.id)
+          await patch(user, 'remove')
           setIsUserFavorite(false)
+
+          return
         }
       })
     }
 
-    add(user.id, JSON.stringify(user))
+    await patch(user, 'add')
 
     setIsUserFavorite(true)
     showAlert('User added to favorites.')
@@ -37,7 +39,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
 
   useEffect(() => {
     const checkIsUserFavorite = async () => {
-      const result = await check(user.id)
+      const result = await check(user)
 
       setIsUserFavorite(result)
     }
@@ -45,8 +47,8 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     checkIsUserFavorite()
   }, [])
 
-  if (isUserFavorite === 'pending')
-    return <div className='p-3 w-full max-w-xs' />
+  // if (isUserFavorite === 'pending')
+  //   return <div className='p-3 w-full max-w-xs' />
 
   return (
     <button
