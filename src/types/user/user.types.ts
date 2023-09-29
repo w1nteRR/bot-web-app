@@ -24,7 +24,4 @@ export interface IRecentUser {
   username: string
 }
 
-export interface IFavoriteUser extends IRecentUser {}
-
 export type RecentUsersList = Array<IRecentUser>
-export type FavoritesUserList = Array<IFavoriteUser>
