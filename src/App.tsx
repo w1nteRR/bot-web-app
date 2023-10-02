@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react'
+import { useRoutes } from 'react-router-dom'
 
-import { useRoutes } from './hooks/useRoutes'
 import { useTelegram } from './hooks/telegram/useTelegram'
+import { routes } from './navigation/routes'
 
 function App() {
   const tg = useTelegram()
-  const routes = useRoutes()
+  const element = useRoutes(routes)
 
   useEffect(() => {
     tg.ready()
     tg.expand()
-
-    console.log('color')
-
-    console.log('theme', tg.themeParams)
 
     tg.setBackgroundColor(tg.themeParams.secondary_bg_color)
 
@@ -27,7 +24,7 @@ function App() {
         backgroundColor: tg.themeParams.secondary_bg_color,
       }}
     >
-      {routes}
+      {element}
     </div>
   )
 }

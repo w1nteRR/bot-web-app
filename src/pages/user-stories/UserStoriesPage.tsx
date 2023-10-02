@@ -17,7 +17,7 @@ export const UserStoriesPage = () => {
 
   const { themeParams, MainButton } = useTelegram()
 
-  useBackButton(() => navigate(-1))
+  useBackButton(() => navigate(location.state.from || '/'))
 
   const { data, isLoading, isError, error } = useQuery(
     ['user stories', params.id],
@@ -27,27 +27,23 @@ export const UserStoriesPage = () => {
     }
   )
 
-  const onUserPress = () => {
-    navigate(`/user/${location.state.user.username}`)
-  }
-
   useEffect(() => {
-    if (location.state.user) {
-      MainButton.show()
-      MainButton.setText('Go to profile')
-      MainButton.onClick(() =>
-        navigate(`/user/${location.state.user.username}`, { replace: true })
-      )
-    }
+    MainButton.show()
+    MainButton.setText('Go to profile')
+    MainButton.onClick(() =>
+      navigate(`/user/${location.state.user.username}`, {
+        state: { from: location.pathname },
+      })
+    )
 
     return () => {
       MainButton.hide()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [MainButton, location.state.user, isLoading])
+  }, [MainButton, location.state.user])
 
   if (isLoading)
-    return <p style={{ color: themeParams.text_color }}>Loading...</p>
+    return <p style={{ color: themeParams.text_color }}>Loading stories</p>
 
   if (isError)
     return (
@@ -58,16 +54,6 @@ export const UserStoriesPage = () => {
 
   return (
     <div>
-      <div className='mx-5 py-5 flex items-center' onClick={onUserPress}>
-        {/* <img
-          src={location.state.user.profile_image}
-          alt='Avatar'
-          className='rounded-full w-12 h-12 mr-2'
-        /> */}
-        {/* <div className='bg-gray-300 rounded-full mr-2 w-12 h-12' /> */}
-        {/* <Title>{location.state.user.username}</Title> */}
-      </div>
-
       <div>
         {data?.data.stories.media.map((story) => (
           <div key={story.id} className='h-96 my-5 mx-5 rounded-lg'>

@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { MdCancel } from 'react-icons/md'
 
 import { Input } from '../ui/input/input.ui'
@@ -11,16 +11,14 @@ export const SearchForm = () => {
 
   const tg = useTelegram()
   const navigate = useNavigate()
-  // const { isLoading, data, refetch } = useId(searchValue)
+  const location = useLocation()
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
   }
 
   const searchRequest = useCallback(() => {
-    console.log('SEARCH', searchValue)
-
-    navigate(`/user/${searchValue}`)
+    navigate(`/user/${searchValue}`, { state: { from: location.pathname } })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue])
