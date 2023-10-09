@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ModeButton } from '../../components/favorites/mode.button'
 import { FavoriteCard } from '../../components/favorites/favorites.card'
@@ -17,22 +17,25 @@ export const FavoritesPage: FC = () => {
   const [listMode, setListMode] = useState<FavoritesModeList>('stories')
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { themeParams, showConfirm, HapticFeedback } = useTelegram()
   const { list, patch, isLoading } = useFavorites()
 
-  useBackButton(() => navigate(-1))
+  useBackButton(() => navigate('/'))
 
   const handleListModeClick = (mode: FavoritesModeList) => {
     setListMode(mode)
   }
 
   const handleUserClick = (username: string) => {
-    navigate(`/user/${username}`)
+    navigate(`/user/${username}`, { state: { from: location.pathname } })
   }
 
   const handleStoriesClick = (user: IFavoriteUser) => {
-    navigate(`/user/stories/${user.id}`, { state: { user } })
+    navigate(`/user/stories/${user.id}`, {
+      state: { user, from: location.pathname },
+    })
   }
 
   const handleRemoveFavorite = async (user: IFavoriteUser) => {

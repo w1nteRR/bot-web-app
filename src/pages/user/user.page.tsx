@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
 
@@ -21,8 +21,11 @@ export const UserPage: FC = () => {
 
   const navigate = useNavigate()
   const params = useParams()
+  const location = useLocation()
 
-  useBackButton(() => navigate(-1))
+  useBackButton(() =>
+    navigate(location.state.from, { state: { user: location.state.user } })
+  )
 
   const { addUserToRecentList } = useRecentUsers()
 
@@ -32,9 +35,9 @@ export const UserPage: FC = () => {
     {
       retry: 1,
       onError: (error) => {
-        if (error instanceof AxiosError) {
-          tg.showAlert(error.response?.data.message, () => navigate(-1))
-        }
+        // if (error instanceof AxiosError) {
+        //   tg.showAlert(error.response?.data.message, () => navigate(-1))
+        // }
       },
       onSuccess: ({ data }) => {
         addUserToRecentList({
