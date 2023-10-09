@@ -21,16 +21,14 @@
     "react-player": "^2.13.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.16.0",
-    "react-scripts": "5.0.1",
     "swiper": "^10.3.1",
-    "typescript": "^5.2.2",
+    "vite-tsconfig-paths": "^4.2.1",
     "web-vitals": "^3.5.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
@@ -51,9 +49,15 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
+    "@vitejs/plugin-react": "^4.1.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
-    "telegram-webapps-types": "^1.0.5"
+    "telegram-webapps-types": "^1.0.5",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.11",
+    "vite-plugin-svgr": "^4.1.0"
   }
 }
