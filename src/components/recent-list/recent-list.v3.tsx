@@ -1,5 +1,5 @@
 import { SwiperSlide, Swiper } from 'swiper/react'
-import { FreeMode } from 'swiper'
+import { FreeMode } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 
@@ -7,6 +7,8 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 import { IRecentUser } from '../../types/user/user.types'
 import { db } from '../../db/recent-users.db'
+
+import 'swiper/css/free-mode'
 
 export const RecentListV3 = () => {
   const { themeParams } = useTelegram()
