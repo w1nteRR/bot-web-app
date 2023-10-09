@@ -6,18 +6,19 @@ import { useNavigate } from 'react-router-dom'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { FavoritesCount } from '../favorites/favorites-count'
+import { Pages } from '../../types/navigation/navigation.types'
 
 const menu = [
   {
     label: 'Favorites',
-    to: 'favorites',
+    to: Pages.Favorites,
     icon: <MdOutlineFavoriteBorder />,
     size: 25,
     rightLabel: <FavoritesCount />,
   },
   {
     label: 'Recent activity',
-    to: 'recent',
+    to: '/',
     icon: <AiOutlineHistory />,
     size: 25,
   },

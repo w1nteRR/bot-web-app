@@ -1,5 +1,10 @@
 import { useEffect } from 'react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import {
+  useNavigate,
+  useParams,
+  useLocation,
+  createSearchParams,
+} from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { AxiosError } from 'axios'
 
@@ -9,6 +14,7 @@ import { ScrapperApi } from '../../api/scrapper.api'
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+import { Pages } from '../../types/navigation/navigation.types'
 
 export const UserStoriesPage = () => {
   const navigate = useNavigate()
@@ -31,9 +37,12 @@ export const UserStoriesPage = () => {
     MainButton.show()
     MainButton.setText('Go to profile')
     MainButton.onClick(() =>
-      navigate(`/user/${location.state.user.username}`, {
-        state: { from: location.pathname },
-      })
+      navigate(
+        `${Pages.User.replace(':username', location.state.user.username)}`,
+        {
+          state: { from: location.pathname },
+        }
+      )
     )
 
     return () => {
