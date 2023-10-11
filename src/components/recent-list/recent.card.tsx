@@ -2,38 +2,25 @@ import { memo } from 'react'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 interface IRecentCardProps {
-  profileImage: string
+  image: string
   username: string
-  isActive: boolean
+  onClick: () => void
 }
 
 export const RecentCard = memo<IRecentCardProps>(
-  ({ profileImage, username, isActive }) => {
+  ({ image, username, onClick }) => {
     const { themeParams } = useTelegram()
 
     return (
-      <>
-        <img
-          alt=''
-          src={profileImage}
-          className='h-14 w-14 rounded-full bg-zinc-300 m-auto cursor-pointer'
-        />
+      <div className='inline-block px-1.5' onClick={onClick}>
+        <img className='w-16 h-16 rounded-full' src={image} />
         <p
-          className='truncate w-14 text-xs font-medium mt-1'
+          className='truncate w-16 text-xs font-medium mt-1'
           style={{ color: themeParams.text_color }}
         >
           {username}
         </p>
-
-        {isActive && (
-          <div
-            className='h-1 w-3.5 rounded-full mt-3 m-auto'
-            style={{
-              backgroundColor: themeParams.link_color,
-            }}
-          />
-        )}
-      </>
+      </div>
     )
   }
 )

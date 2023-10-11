@@ -1,5 +1,3 @@
-import { SwiperSlide, Swiper } from 'swiper/react'
-import { FreeMode } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 
@@ -9,6 +7,7 @@ import { IRecentUser } from '../../types/user/user.types'
 import { db } from '../../db/recent-users.db'
 
 import 'swiper/css/free-mode'
+import { RecentCard } from './recent.card'
 
 export const RecentListV3 = () => {
   const { themeParams } = useTelegram()
@@ -34,30 +33,16 @@ export const RecentListV3 = () => {
           recent search
         </span>
       </div>
-      <Swiper
-        spaceBetween={10}
-        slidesPerView={5.2}
-        style={{ paddingLeft: 20, paddingRight: 5 }}
-        freeMode={true}
-        modules={[FreeMode]}
-        className='mySwiper mt-5'
-      >
+      <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
         {recentUsers?.map((user) => (
-          <SwiperSlide key={user.id} onClick={() => onUserClick(user)}>
-            <img
-              className='w-16 h-16 rounded-full'
-              alt=''
-              src={user.profile_image}
-            />
-            <p
-              className='truncate w-16 text-xs font-medium mt-1'
-              style={{ color: themeParams.text_color }}
-            >
-              {user.username}
-            </p>
-          </SwiperSlide>
+          <RecentCard
+            key={user.id}
+            username={user.username}
+            image={user.profile_image}
+            onClick={() => onUserClick(user)}
+          />
         ))}
-      </Swiper>
+      </div>
     </>
   )
 }

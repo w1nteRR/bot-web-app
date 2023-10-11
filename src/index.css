@@ -17,6 +17,19 @@ code {
     monospace;
 }
 
+@layer utilities {
+  @variants responsive {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+}
+
 .swiper {
   width: 100%;
   height: 100%;
