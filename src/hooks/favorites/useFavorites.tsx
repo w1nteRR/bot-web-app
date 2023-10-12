@@ -5,12 +5,15 @@ import {
   IFavoriteUser,
 } from '../../types/favorites/favorites.types'
 import { getFavorites, setFavorites } from '../../helpers/favorites.storage'
+import { useTelegram } from '../telegram/useTelegram'
 
 type UpdateType = 'remove' | 'add'
 
 export const useFavorites = () => {
   const [list, setList] = useState<FavoritesUserList>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  const { showConfirm, HapticFeedback } = useTelegram()
 
   const updateFavorites = async (newList: FavoritesUserList) => {
     const value = JSON.stringify(newList)
@@ -42,6 +45,16 @@ export const useFavorites = () => {
     return result.some((currentUser) => currentUser.id === user.id)
   }
 
+  const remove = async (user: IFavoriteUser) => {
+    showConfirm('Are you sure?', async (confirmed) => {
+      if (confirmed) {
+        await patch(user, 'remove')
+
+        HapticFeedback.notificationOccurred('success')
+      }
+    })
+  }
+
   useEffect(() => {
     const loadFavoritesList = async () => {
       try {
@@ -57,12 +70,11 @@ export const useFavorites = () => {
     loadFavoritesList()
   }, [])
 
-  console.log('LIST', list)
-
   return {
     isLoading,
     list,
     patch,
     check,
+    remove,
   }
 }

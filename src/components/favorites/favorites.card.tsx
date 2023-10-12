@@ -13,10 +13,11 @@ interface IFavoritesCardProps {
   onDeleteClick: () => void
   mode: FavoritesModeList
   user: IFavoriteUser
+  isLoading?: boolean
 }
 
 export const FavoriteCard = memo<IFavoritesCardProps>(
-  ({ onUserClick, onDeleteClick, onStoriesClick, mode, user }) => {
+  ({ onUserClick, onDeleteClick, onStoriesClick, mode, user, isLoading }) => {
     const { themeParams } = useTelegram()
 
     return (
@@ -38,6 +39,7 @@ export const FavoriteCard = memo<IFavoritesCardProps>(
               {user.full_name}
             </p>
           </div>
+          {isLoading && <p className='ml-4 text-white text-xs'>loading...</p>}
         </div>
         {mode === 'stories' ? (
           <button onClick={onStoriesClick}>
