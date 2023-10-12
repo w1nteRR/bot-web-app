@@ -1,5 +1,5 @@
-import { FC, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { FC, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { ModeButton } from '../../components/favorites/mode.button'
 import { FavoriteCard } from '../../components/favorites/favorites.card'
@@ -7,48 +7,48 @@ import { FavoriteCard } from '../../components/favorites/favorites.card'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
+import { useStoriesQuery } from '../../hooks/stories/useStoriesQuery'
 
 import {
   FavoritesModeList,
   IFavoriteUser,
 } from '../../types/favorites/favorites.types'
+import { Pages } from '../../types/navigation/navigation.types'
 
 export const FavoritesPage: FC = () => {
   const [listMode, setListMode] = useState<FavoritesModeList>('stories')
 
   const navigate = useNavigate()
-  const location = useLocation()
 
-  const { themeParams, showConfirm, HapticFeedback } = useTelegram()
-  const { list, patch, isLoading } = useFavorites()
+  const { themeParams, HapticFeedback, showAlert } = useTelegram()
+  const { list, remove, isLoading } = useFavorites()
 
-  useBackButton(() => navigate('/'))
+  useBackButton(() => navigate(Pages.Home))
+
+  const { setUser, query, user } = useStoriesQuery()
 
   const handleListModeClick = (mode: FavoritesModeList) => {
     setListMode(mode)
   }
 
   const handleUserClick = (username: string) => {
-    navigate(`/user/${username}`, { state: { from: location.pathname } })
+    navigate(`/user/${username}`, { state: { from: Pages.Favorites } })
   }
 
   const handleStoriesClick = (user: IFavoriteUser) => {
-    navigate(`/user/stories/${user.id}`, {
-      state: { user, from: location.pathname },
-    })
+    HapticFeedback.selectionChanged()
+    setUser(user)
   }
 
-  const handleRemoveFavorite = async (user: IFavoriteUser) => {
-    try {
-      showConfirm('Are you sure?', async (confirmed) => {
-        if (confirmed) {
-          await patch(user, 'remove')
-
-          HapticFeedback.notificationOccurred('success')
+  useEffect(() => {
+    if (user.id) {
+      query.refetch().then((result) => {
+        if (result.isError) {
+          showAlert('Stories not found.')
         }
       })
-    } catch (error) {}
-  }
+    }
+  }, [user.id])
 
   if (isLoading)
     return (
@@ -75,14 +75,15 @@ export const FavoritesPage: FC = () => {
       </div>
 
       <div className='pt-10'>
-        {list.map((user: IFavoriteUser) => (
+        {list.map((currentUser: IFavoriteUser) => (
           <FavoriteCard
-            key={user.id}
-            user={user}
+            key={currentUser.id}
+            user={currentUser}
             mode={listMode}
-            onDeleteClick={() => handleRemoveFavorite(user)}
-            onStoriesClick={() => handleStoriesClick(user)}
-            onUserClick={() => handleUserClick(user.username)}
+            onDeleteClick={() => remove(currentUser)}
+            onStoriesClick={() => handleStoriesClick(currentUser)}
+            onUserClick={() => handleUserClick(currentUser.username)}
+            isLoading={user.id === currentUser.id}
           />
         ))}
       </div>

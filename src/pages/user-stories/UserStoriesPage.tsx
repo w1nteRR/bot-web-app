@@ -1,10 +1,5 @@
 import { useEffect } from 'react'
-import {
-  useNavigate,
-  useParams,
-  useLocation,
-  createSearchParams,
-} from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { AxiosError } from 'axios'
 
@@ -30,6 +25,7 @@ export const UserStoriesPage = () => {
     () => ScrapperApi.getUserStories(params.id || ''),
     {
       retry: 0,
+      enabled: false,
     }
   )
 
