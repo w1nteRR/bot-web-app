@@ -1,11 +1,10 @@
 import { FC, useState, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
 
 import { Title } from '../../components/ui/typography/title.ui'
 import { Chip } from '../../components/ui/chip/chip.ui'
-import { MediaRender } from '../../components/shared/media-render/media-render.shared'
+import { StoriesList } from '../../components/stories/stories.list'
 import { AddToFavorites } from '../../components/favorites/add-favorites'
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
@@ -143,14 +142,7 @@ export const UserPage: FC = () => {
       <div className='mt-10'>
         {isStoriesLoading && <p>Loading stories...</p>}
 
-        {stories?.data.stories.media.map((story) => (
-          <div key={story.id} className='h-96 my-5 mx-5 rounded-lg'>
-            <MediaRender
-              source={story.url || story.videoPath || ''}
-              isVideo={story.is_video}
-            />
-          </div>
-        ))}
+        <StoriesList stories={stories?.data.stories.media || []} />
       </div>
     </div>
   )
