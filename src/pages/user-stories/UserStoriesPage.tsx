@@ -3,12 +3,13 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { AxiosError } from 'axios'
 
-import { MediaRender } from '../../components/shared/media-render/media-render.shared'
-
-import { ScrapperApi } from '../../api/scrapper.api'
+import { StoriesList } from '../../components/stories/stories.list'
 
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+
+import { ScrapperApi } from '../../api/scrapper.api'
+
 import { Pages } from '../../types/navigation/navigation.types'
 
 export const UserStoriesPage = () => {
@@ -59,16 +60,7 @@ export const UserStoriesPage = () => {
 
   return (
     <div>
-      <div>
-        {data?.data.stories.media.map((story) => (
-          <div key={story.id} className='h-96 my-5 mx-5 rounded-lg'>
-            <MediaRender
-              source={story.url || story.videoPath || ''}
-              isVideo={story.is_video}
-            />
-          </div>
-        ))}
-      </div>
+      <StoriesList stories={data?.data.stories.media || []} />
     </div>
   )
 }
