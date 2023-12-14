@@ -35,7 +35,7 @@ export const Menu: FC = () => {
   return (
     <div
       className='mt-20 mx-5 rounded-xl'
-      style={{ backgroundColor: themeParams.bg_color }}
+      style={{ backgroundColor: themeParams.secondary_bg_color }}
     >
       {menu.map((item, index) => (
         <div
