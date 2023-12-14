@@ -1,6 +1,9 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
+import { CgSpinnerTwoAlt } from 'react-icons/cg'
+import { IoMdLock } from 'react-icons/io'
 
 import { Title } from '../../components/ui/typography/title.ui'
 import { Chip } from '../../components/ui/chip/chip.ui'
@@ -52,7 +55,8 @@ export const UserPage: FC = () => {
   const {
     data: stories,
     isLoading: isStoriesLoading,
-    // isError: isStoreisError,
+    isError: isStoreisError,
+    error: storiesError,
     refetch: refetchStories,
   } = useQuery(
     ['user stories', data?.data.id],
@@ -69,44 +73,64 @@ export const UserPage: FC = () => {
     if (chipIndex === 0) return refetchStories()
   }
 
+  const writeError = useMemo(() => {
+    const error = storiesError as AxiosError<{ message: string }>
+
+    if (!error) return null
+
+    return error.response?.data.message || ''
+  }, [storiesError])
+
   useEffect(() => {
     tg.MainButton.hide()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading)
+    return (
+      <div className='h-screen flex items-center justify-center'>
+        <CgSpinnerTwoAlt
+          className='animate-spin ml-2'
+          color={tg.themeParams.link_color}
+          size={26}
+        />
+      </div>
+    )
 
   if (isError) return <p>error</p>
 
   if (!data) return <p>No data available.</p>
 
-  const { username, profile_image, full_name, id } = data.data
+  const { username, profile_image, full_name, id, is_privite } = data.data
 
   return (
-    <div>
+    <div className='py-10'>
       <img
-        className='bg-gray-500 w-72 h-72 m-auto mt-10 rounded-lg'
+        className='bg-gray-500 w-64 h-64 m-auto 0 rounded-lg'
         alt='avatar'
         src={data?.data.profile_image}
       />
       <div className='w-56 m-auto'>
         <div className='my-5 text-center'>
           <Title>{data?.data.username}</Title>
+
           <p style={{ color: tg.themeParams.hint_color }}>
             {data?.data.full_name}
           </p>
         </div>
       </div>
 
-      <div className='flex items-center justify-center'>
+      <div className='flex items-center justify-center py-3'>
         <AddToFavorites
           user={{ username, profile_image, full_name, id: String(id) }}
         />
       </div>
 
       <div className='my-5 mx-5'>
-        <pre className='text-xs'>{data?.data.biography}</pre>
+        <pre className='text-xs' style={{ color: tg.themeParams.text_color }}>
+          {data?.data.biography}
+        </pre>
       </div>
       <ul
         className='flex  mx-5 gap-x-1'
@@ -127,23 +151,66 @@ export const UserPage: FC = () => {
         )}
       </ul>
 
-      <div className='flex items-center justify-center mt-10'>
-        {['Stories', 'Highlights', 'Posts'].map((tab, index) => (
-          <Chip
-            key={index}
-            isActive={activeTabIndex === index}
-            onClick={() => onChipClick(index)}
-          >
-            <span style={{ color: tg.themeParams.text_color }}>{tab}</span>
+      {is_privite ? (
+        <div className='flex items-center justify-center mt-10'>
+          <Chip isActive>
+            <div className='flex items-center'>
+              <span style={{ color: tg.themeParams.text_color }}>
+                User is private
+              </span>
+              <IoMdLock
+                size={16}
+                color={tg.themeParams.link_color}
+                className='ml-2'
+              />
+            </div>
           </Chip>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <>
+          <div className='flex items-center justify-center mt-10'>
+            {['Stories'].map((tab, index) => (
+              <Chip
+                key={index}
+                isActive={activeTabIndex === index}
+                onClick={() => onChipClick(index)}
+              >
+                <div className='flex items-center'>
+                  {isStoreisError ? (
+                    <div className='text-center'>
+                      <span style={{ color: tg.themeParams.text_color }}>
+                        {writeError}
+                      </span>
+                      <br />
+                      <span
+                        style={{ color: tg.themeParams.hint_color }}
+                        className='text-xs'
+                      >
+                        Tap to refetch
+                      </span>
+                    </div>
+                  ) : (
+                    <span style={{ color: tg.themeParams.text_color }}>
+                      {tab}
+                    </span>
+                  )}
 
-      <div className='mt-10'>
-        {isStoriesLoading && <p>Loading stories...</p>}
-
-        <StoriesList stories={stories?.data.stories.media || []} />
-      </div>
+                  {isStoriesLoading && (
+                    <CgSpinnerTwoAlt
+                      className='animate-spin ml-2'
+                      color={tg.themeParams.link_color}
+                      size={13}
+                    />
+                  )}
+                </div>
+              </Chip>
+            ))}
+          </div>
+          <div className=''>
+            <StoriesList stories={stories?.data.stories.media || []} />
+          </div>
+        </>
+      )}
     </div>
   )
 }
