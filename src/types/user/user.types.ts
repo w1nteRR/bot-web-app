@@ -13,7 +13,7 @@ export interface IUser {
   }
   profile_image: string
   category_name: string
-  is_private: boolean
+  is_privite: boolean
   // has_highlight_reels: boolean
 }
 

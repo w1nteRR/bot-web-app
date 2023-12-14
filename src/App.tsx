@@ -12,16 +12,14 @@ function App() {
     tg.ready()
     tg.expand()
 
-    tg.setBackgroundColor(tg.themeParams.secondary_bg_color)
-
-    // console.log('tg', tg.backgroundColor)
+    // tg.setBackgroundColor(tg.themeParams.bg_color)
   }, [tg])
 
   return (
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: tg.themeParams.secondary_bg_color,
+        backgroundColor: tg.themeParams.bg_color,
       }}
     >
       {element}
