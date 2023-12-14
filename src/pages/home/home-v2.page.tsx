@@ -2,14 +2,14 @@ import { FC } from 'react'
 
 import { Header } from '../../components/header/header'
 import { RecentListV3 } from '../../components/recent-list/recent-list.v3'
-import { Menu } from '../../components/menu/menu'
+import { RecentListV4 } from '../../components/recent-list/recent-list.v4'
 
 export const HomeV2Page: FC = () => {
   return (
     <>
       <Header />
       <RecentListV3 />
-      <Menu />
+      <RecentListV4 />
     </>
   )
 }

@@ -55,7 +55,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
       className='p-3 rounded-xl w-full max-w-xs font-semibold'
       style={{
         backgroundColor: isUserFavorite
-          ? themeParams.bg_color
+          ? themeParams.secondary_bg_color
           : themeParams.button_color,
         color: isUserFavorite
           ? themeParams.text_color
