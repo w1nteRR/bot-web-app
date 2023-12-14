@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
 
 import { RecentCard } from './recent.card'
@@ -10,12 +10,15 @@ import { useStoriesQuery } from '../../hooks/stories/useStoriesQuery'
 import { IRecentUser } from '../../types/user/user.types'
 import { db } from '../../db/recent-users.db'
 import { showRecentListPopupError } from '../../helpers/popup.error'
+import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 export const RecentListV3 = () => {
   const { themeParams, HapticFeedback } = useTelegram()
 
   const { setUser, query, user } = useStoriesQuery()
   const navigate = useNavigate()
+
+  const { list } = useFavorites()
 
   const onUserClick = (user: IRecentUser) => {
     if (query.isLoading) return
@@ -25,7 +28,7 @@ export const RecentListV3 = () => {
     setUser(user)
   }
 
-  const recentUsers = useLiveQuery(() => db.recentUsers.toArray())
+  // const recentUsers = useLiveQuery(() => db.recentUsers.toArray())
 
   useEffect(() => {
     if (user.id) {
@@ -37,7 +40,7 @@ export const RecentListV3 = () => {
     }
   }, [user.id])
 
-  if (!recentUsers?.length) return null
+  // if (!recentUsers?.length) return null
 
   return (
     <>
@@ -46,17 +49,19 @@ export const RecentListV3 = () => {
           className='uppercase text-sm'
           style={{ color: themeParams.hint_color }}
         >
-          recent search
+          Favorites
         </span>
 
         {query.isLoading && (
-          <span className='text-xs' style={{ color: themeParams.hint_color }}>
-            Loading...
-          </span>
+          <CgSpinnerTwoAlt
+            className='animate-spin'
+            color={themeParams.link_color}
+            size={16}
+          />
         )}
       </div>
       <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
-        {recentUsers?.map((user) => (
+        {list?.map((user) => (
           <RecentCard
             key={user.id}
             username={user.username}
