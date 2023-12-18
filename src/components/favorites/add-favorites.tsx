@@ -4,6 +4,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 import { IFavoriteUser } from '../../types/favorites/favorites.types'
+import { useTranslation } from 'react-i18next'
 
 interface IAddToFavoritesProps {
   user: IFavoriteUser
@@ -16,6 +17,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
 
   const { patch, check, list } = useFavorites()
   const { themeParams, showAlert, showConfirm, HapticFeedback } = useTelegram()
+  const { t } = useTranslation()
 
   const onButtonClick = async () => {
     if (list.length >= 25) {
@@ -28,7 +30,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     const isUserExist = await check(user)
 
     if (isUserExist) {
-      showConfirm('Are u sure?', async (confirmed) => {
+      showConfirm(t('common.areUSure'), async (confirmed) => {
         if (confirmed) {
           await patch(user, 'remove')
           setIsUserFavorite(false)
@@ -41,7 +43,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     await patch(user, 'add')
 
     setIsUserFavorite(true)
-    showAlert('User added to favorites.')
+    showAlert(t('common.userAddedToFavorites'))
   }
 
   useEffect(() => {
@@ -70,7 +72,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
       }}
       onClick={onButtonClick}
     >
-      {isUserFavorite ? 'Remove from favorites' : 'Add to favorites'}
+      {isUserFavorite ? t('favorites.removeFrom') : t('favorites.addTo')}
     </button>
   )
 }

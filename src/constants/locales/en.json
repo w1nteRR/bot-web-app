@@ -1,0 +1,33 @@
+{
+  "translation": {
+    "home": {
+      "search": "Search",
+      "recentSearch": "Recent search",
+      "favorites": "Favorites"
+    },
+    "favorites": {
+      "removeFrom": "Remove from favorites",
+      "addTo": "Add to favorites"
+    },
+    "user": {
+      "followers": "followers",
+      "following": "following",
+      "userIsPrivate": "User is private",
+      "tapToRefetch": "Tap to refetch"
+    },
+    "common": {
+      "loading": "Loading...",
+      "noFavoritesUsers": "No favorites users.",
+      "storiesNotFound": "Stories not found.",
+      "manage": "Manage",
+      "stories": "Stories",
+      "error": "Error",
+      "noDataAvailable": "No data available.",
+      "loadingStories": "Loading stories",
+      "areUSure": "Are u sure?",
+      "userAddedToFavorites": "User added to favorites",
+      "highlights": "Highlights",
+      "recentActivity": "Recent activity"
+    }
+  }
+}

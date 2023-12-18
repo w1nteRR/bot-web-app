@@ -6,6 +6,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 import { IFavoriteUser } from '../../types/favorites/favorites.types'
 import { FavoritesModeList } from '../../types/favorites/favorites.types'
+import { useTranslation } from 'react-i18next'
 
 interface IFavoritesCardProps {
   onUserClick: () => void
@@ -19,6 +20,7 @@ interface IFavoritesCardProps {
 export const FavoriteCard = memo<IFavoritesCardProps>(
   ({ onUserClick, onDeleteClick, onStoriesClick, mode, user, isLoading }) => {
     const { themeParams } = useTelegram()
+    const { t } = useTranslation()
 
     return (
       <div className='flex justify-between items-center px-4'>
@@ -39,7 +41,9 @@ export const FavoriteCard = memo<IFavoritesCardProps>(
               {user.full_name}
             </p>
           </div>
-          {isLoading && <p className='ml-4 text-white text-xs'>loading...</p>}
+          {isLoading && (
+            <p className='ml-4 text-white text-xs'>{t('common.loading')}</p>
+          )}
         </div>
         {mode === 'stories' ? (
           <button onClick={onStoriesClick}>
