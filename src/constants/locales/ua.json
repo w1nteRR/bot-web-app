@@ -1,0 +1,33 @@
+{
+  "translation": {
+    "home": {
+      "search": "Пошук",
+      "recentSearch": "Недавній пошук",
+      "favorites": "Обрані"
+    },
+    "favorites": {
+      "removeFrom": "Видалити з вибраного",
+      "addTo": "Додати до вибраного"
+    },
+    "user": {
+      "followers": "фоловерів",
+      "following": "слідую",
+      "userIsPrivate": "Користувач приватний",
+      "tapToRefetch": "Торкніться, щоб переглянути"
+    },
+    "common": {
+      "loading": "Завантаження...",
+      "noFavoritesUsers": "Немає обраних користувачів.",
+      "storiesNotFound": "Історії не знайдено.",
+      "manage": "Керувати",
+      "stories": "Історії",
+      "error": "Помилка",
+      "noDataAvailable": "Немає даних.",
+      "loadingStories": "Завантаження історій",
+      "areUSure": "Ви впевнені?",
+      "userAddedToFavorites": "Користувач доданий до вибраного",
+      "highlights": "Основні моменти",
+      "recentActivity": "Остання активність"
+    }
+  }
+}
