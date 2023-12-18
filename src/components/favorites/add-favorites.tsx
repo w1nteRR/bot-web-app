@@ -14,10 +14,17 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     'pending'
   )
 
-  const { patch, check } = useFavorites()
-  const { themeParams, showAlert, showConfirm } = useTelegram()
+  const { patch, check, list } = useFavorites()
+  const { themeParams, showAlert, showConfirm, HapticFeedback } = useTelegram()
 
   const onButtonClick = async () => {
+    if (list.length >= 25) {
+      HapticFeedback.notificationOccurred('error')
+      showAlert('You have reached your favorites limit')
+
+      return
+    }
+
     const isUserExist = await check(user)
 
     if (isUserExist) {
