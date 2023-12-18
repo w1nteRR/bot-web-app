@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
@@ -15,7 +16,6 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { ScrapperApi } from '../../api/scrapper.api'
-import { useTranslation } from 'react-i18next'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -175,7 +175,7 @@ export const UserPage: FC = () => {
       ) : (
         <>
           <div className='flex items-center justify-center mt-10'>
-            {['Stories'].map((tab, index) => (
+            {[t('common.stories')].map((tab, index) => (
               <Chip
                 key={index}
                 isActive={activeTabIndex === index}

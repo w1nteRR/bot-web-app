@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { RecentCard } from './recent.card'
 
@@ -11,7 +12,6 @@ import { IRecentUser } from '../../types/user/user.types'
 import { db } from '../../db/recent-users.db'
 import { showRecentListPopupError } from '../../helpers/popup.error'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
-import { useTranslation } from 'react-i18next'
 
 export const RecentListV3 = () => {
   const { t } = useTranslation()
@@ -44,8 +44,6 @@ export const RecentListV3 = () => {
 
   const isLoading = query.isLoading || query.isRefetching
 
-  const show = false
-
   return (
     <>
       <div className='mx-5 flex justify-between items-center'>
@@ -65,9 +63,9 @@ export const RecentListV3 = () => {
         )}
       </div>
 
-      {show ? (
+      {!!list.length ? (
         <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
-          {list?.map((user) => (
+          {list.map((user) => (
             <RecentCard
               key={user.id}
               username={user.username}
@@ -85,14 +83,14 @@ export const RecentListV3 = () => {
             style={{ color: themeParams.text_color }}
             className='text-center font-semibold'
           >
-            No favorites yet
+            {t('favorites.emptyTitle')}
           </p>
 
           <p
             style={{ color: themeParams.hint_color }}
             className='text-center text-xs'
           >
-            Once you add favorites, they'll show up here
+            {t('favorites.emptyBody')}
           </p>
         </div>
       )}
