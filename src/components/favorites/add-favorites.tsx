@@ -20,13 +20,6 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
   const { t } = useTranslation()
 
   const onButtonClick = async () => {
-    if (list.length >= 25) {
-      HapticFeedback.notificationOccurred('error')
-      showAlert('You have reached your favorites limit')
-
-      return
-    }
-
     const isUserExist = await check(user)
 
     if (isUserExist) {
@@ -38,6 +31,13 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
           return
         }
       })
+    }
+
+    if (list.length >= 25) {
+      HapticFeedback.notificationOccurred('error')
+      showAlert(t('favorites.limitError'))
+
+      return
     }
 
     await patch(user, 'add')
