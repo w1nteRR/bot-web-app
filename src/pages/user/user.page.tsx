@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
@@ -21,6 +22,7 @@ export const UserPage: FC = () => {
 
   const tg = useTelegram()
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
@@ -37,9 +39,10 @@ export const UserPage: FC = () => {
     {
       retry: 1,
       onError: (error) => {
-        // if (error instanceof AxiosError) {
-        //   tg.showAlert(error.response?.data.message, () => navigate(-1))
-        // }
+        if (error instanceof AxiosError) {
+          tg.HapticFeedback.notificationOccurred('error')
+          tg.showAlert(error.response?.data.message, () => navigate(-1))
+        }
       },
       onSuccess: ({ data }) => {
         addUserToRecentList({
@@ -64,6 +67,9 @@ export const UserPage: FC = () => {
     {
       enabled: false,
       retry: 0,
+      onError: () => {
+        tg.HapticFeedback.notificationOccurred('error')
+      },
     }
   )
 
@@ -98,9 +104,9 @@ export const UserPage: FC = () => {
       </div>
     )
 
-  if (isError) return <p>error</p>
+  if (isError) return <></>
 
-  if (!data) return <p>No data available.</p>
+  if (!data) return <p>{t('common.noDataAvailable')}</p>
 
   const { username, profile_image, full_name, id, is_privite } = data.data
 
@@ -139,12 +145,12 @@ export const UserPage: FC = () => {
         <li>
           &#x2022;{' '}
           <span className='font-semibold'>{data?.data.followers.count}</span>{' '}
-          followers
+          {t('user.followers')}
         </li>
         <li>
           &#x2022;{' '}
           <span className='font-semibold'>{data?.data.following.count}</span>{' '}
-          following
+          {t('user.following')}
         </li>
         {data?.data.category_name && (
           <li>&#x2022; {data.data.category_name}</li>
@@ -156,7 +162,7 @@ export const UserPage: FC = () => {
           <Chip isActive>
             <div className='flex items-center'>
               <span style={{ color: tg.themeParams.text_color }}>
-                User is private
+                {t('user.userIsPrivate')}
               </span>
               <IoMdLock
                 size={16}
@@ -169,7 +175,7 @@ export const UserPage: FC = () => {
       ) : (
         <>
           <div className='flex items-center justify-center mt-10'>
-            {['Stories'].map((tab, index) => (
+            {[t('common.stories')].map((tab, index) => (
               <Chip
                 key={index}
                 isActive={activeTabIndex === index}
@@ -186,7 +192,7 @@ export const UserPage: FC = () => {
                         style={{ color: tg.themeParams.hint_color }}
                         className='text-xs'
                       >
-                        Tap to refetch
+                        {t('user.tapToRefetch')}
                       </span>
                     </div>
                   ) : (

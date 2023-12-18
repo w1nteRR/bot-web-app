@@ -14,12 +14,14 @@ import {
   IFavoriteUser,
 } from '../../types/favorites/favorites.types'
 import { Pages } from '../../types/navigation/navigation.types'
+import { useTranslation } from 'react-i18next'
 
 export const FavoritesPage: FC = () => {
   const [listMode, setListMode] = useState<FavoritesModeList>('stories')
 
   const navigate = useNavigate()
 
+  const { t } = useTranslation()
   const { themeParams, HapticFeedback, showAlert } = useTelegram()
   const { list, remove, isLoading } = useFavorites()
 
@@ -44,7 +46,7 @@ export const FavoritesPage: FC = () => {
     if (user.id) {
       query.refetch().then((result) => {
         if (result.isError) {
-          showAlert('Stories not found.')
+          showAlert(t('common.storiesNotFound'))
         }
       })
     }
@@ -55,7 +57,7 @@ export const FavoritesPage: FC = () => {
       //refactor
 
       <p style={{ color: themeParams.text_color }} className='text-center'>
-        Loading...
+        {t('common.loading')}
       </p>
     )
 
@@ -64,7 +66,7 @@ export const FavoritesPage: FC = () => {
       //refactor
 
       <p style={{ color: themeParams.text_color }} className='text-center'>
-        No favorites users.
+        {t('common.noFavoritesUsers')}
       </p>
     )
 

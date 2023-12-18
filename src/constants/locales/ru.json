@@ -1,0 +1,40 @@
+{
+  "translation": {
+    "home": {
+      "search": "Поиск",
+      "recentSearch": "Последний поиск",
+      "favorites": "Избранное"
+    },
+    "favorites": {
+      "removeFrom": "Удалить из избранного",
+      "addTo": "Добавить в избранное",
+      "emptyTitle": "Еще нет избранных",
+      "emptyBody": "Когда вы добавите избранные, они появятся здесь",
+      "limitError": "Вы достигли лимита избранных"
+    },
+    "user": {
+      "followers": "подписчики",
+      "following": "подписки",
+      "userIsPrivate": "Пользователь закрыт",
+      "tapToRefetch": "Нажмите, чтобы обновить"
+    },
+    "navigation": {
+      "profile": "Перейти в профиль",
+      "close": "Закрыть"
+    },
+    "common": {
+      "loading": "Загрузка...",
+      "noFavoritesUsers": "Нет избранных пользователей.",
+      "storiesNotFound": "Истории не найдены.",
+      "manage": "Управление",
+      "stories": "Истории",
+      "error": "Ошибка",
+      "noDataAvailable": "Данные отсутствуют.",
+      "loadingStories": "Загрузка историй",
+      "areUSure": "Вы уверены?",
+      "userAddedToFavorites": "Пользователь добавлен в избранное",
+      "highlights": "Хайлайты",
+      "recentActivity": "Последняя активность"
+    }
+  }
+}

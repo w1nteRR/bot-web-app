@@ -9,6 +9,7 @@ import { Id } from '../../types/common'
 
 import 'swiper/css'
 import { Title } from '../ui/typography/title.ui'
+import { useTranslation } from 'react-i18next'
 
 interface IHighlightsProps {
   userId: Id
@@ -19,6 +20,7 @@ export const Highlights: FC<IHighlightsProps> = ({ userId }) => {
 
   const navigate = useNavigate()
   const { themeParams } = useTelegram()
+  const { t } = useTranslation()
 
   const onHighlightClick = (id: string) => () => {
     console.log('REDIRECT', id)
@@ -46,7 +48,7 @@ export const Highlights: FC<IHighlightsProps> = ({ userId }) => {
   return (
     <>
       <div className='mb-10'>
-        <Title>Highlights</Title>
+        <Title>{t('common.highlights')}</Title>
       </div>
       <Swiper className='mySwiper' slidesPerView={4.3}>
         {data?.data.highlights.map(({ id, cover, title }) => (

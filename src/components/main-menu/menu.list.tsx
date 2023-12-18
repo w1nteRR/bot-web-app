@@ -4,9 +4,11 @@ import { FaRegHeart } from 'react-icons/fa'
 import { HiSearch } from 'react-icons/hi'
 
 import { ROUTE } from '../../types/routes.enum'
+import { useTranslation } from 'react-i18next'
 
 export const MenuList: FC = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   return (
     <div className='border-solid my-10 h-48 grid grid-cols-2 gap-5 grid-flow-col'>
@@ -21,7 +23,7 @@ export const MenuList: FC = () => {
         >
           <HiSearch size={18} />
         </div>{' '}
-        Search
+        {t('home.search')}
       </button>
       <button
         className='row-span-1 col-span-2 bg-red-200 px-5 rounded-3xl flex justify-between items-center'
@@ -33,7 +35,7 @@ export const MenuList: FC = () => {
         >
           <FaRegHeart size={18} />
         </div>
-        Favorites
+        {t('home.favorites')}
       </button>
     </div>
   )

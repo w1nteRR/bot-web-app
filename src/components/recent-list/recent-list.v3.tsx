@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { RecentCard } from './recent.card'
 
@@ -13,6 +14,7 @@ import { showRecentListPopupError } from '../../helpers/popup.error'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 export const RecentListV3 = () => {
+  const { t } = useTranslation()
   const { themeParams, HapticFeedback } = useTelegram()
 
   const { setUser, query, user } = useStoriesQuery()
@@ -40,7 +42,7 @@ export const RecentListV3 = () => {
     }
   }, [user.id])
 
-  // if (!recentUsers?.length) return null
+  const isLoading = query.isLoading || query.isRefetching
 
   return (
     <>
@@ -49,10 +51,10 @@ export const RecentListV3 = () => {
           className='uppercase text-sm'
           style={{ color: themeParams.hint_color }}
         >
-          Favorites
+          {t('home.favorites')}
         </span>
 
-        {query.isLoading && (
+        {isLoading && (
           <CgSpinnerTwoAlt
             className='animate-spin'
             color={themeParams.link_color}
@@ -60,16 +62,38 @@ export const RecentListV3 = () => {
           />
         )}
       </div>
-      <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
-        {list?.map((user) => (
-          <RecentCard
-            key={user.id}
-            username={user.username}
-            image={user.profile_image}
-            onClick={() => onUserClick(user)}
-          />
-        ))}
-      </div>
+
+      {!!list.length ? (
+        <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
+          {list.map((user) => (
+            <RecentCard
+              key={user.id}
+              username={user.username}
+              image={user.profile_image}
+              onClick={() => onUserClick(user)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div
+          className='rounded-xl p-3 m-5'
+          style={{ backgroundColor: themeParams.secondary_bg_color }}
+        >
+          <p
+            style={{ color: themeParams.text_color }}
+            className='text-center font-semibold'
+          >
+            {t('favorites.emptyTitle')}
+          </p>
+
+          <p
+            style={{ color: themeParams.hint_color }}
+            className='text-center text-xs'
+          >
+            {t('favorites.emptyBody')}
+          </p>
+        </div>
+      )}
     </>
   )
 }

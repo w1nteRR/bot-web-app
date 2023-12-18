@@ -7,22 +7,27 @@ import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { FavoritesCount } from '../favorites/favorites-count'
 import { Pages } from '../../types/navigation/navigation.types'
+import { useTranslation } from 'react-i18next'
 
-const menu = [
-  {
-    label: 'Favorites',
-    to: Pages.Favorites,
-    icon: <MdOutlineFavoriteBorder />,
-    size: 25,
-    rightLabel: <FavoritesCount />,
-  },
-  {
-    label: 'Recent activity',
-    to: '/',
-    icon: <AiOutlineHistory />,
-    size: 25,
-  },
-]
+const menu = () => {
+  const { t } = useTranslation()
+  const menu = [
+    {
+      label: t('home.favorites'),
+      to: Pages.Favorites,
+      icon: <MdOutlineFavoriteBorder />,
+      size: 25,
+      rightLabel: <FavoritesCount />,
+    },
+    {
+      label: t('common.recentActivity'),
+      to: '/',
+      icon: <AiOutlineHistory />,
+      size: 25,
+    },
+  ]
+  return menu
+}
 
 export const Menu: FC = () => {
   const { themeParams } = useTelegram()
@@ -37,7 +42,7 @@ export const Menu: FC = () => {
       className='mt-20 mx-5 rounded-xl'
       style={{ backgroundColor: themeParams.secondary_bg_color }}
     >
-      {menu.map((item, index) => (
+      {menu().map((item, index) => (
         <div
           key={index}
           className='flex items-center py-2 px-4 active:opacity-80'
