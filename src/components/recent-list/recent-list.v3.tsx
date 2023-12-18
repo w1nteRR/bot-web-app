@@ -40,7 +40,9 @@ export const RecentListV3 = () => {
     }
   }, [user.id])
 
-  // if (!recentUsers?.length) return null
+  const isLoading = query.isLoading || query.isRefetching
+
+  const show = false
 
   return (
     <>
@@ -52,7 +54,7 @@ export const RecentListV3 = () => {
           Favorites
         </span>
 
-        {query.isLoading && (
+        {isLoading && (
           <CgSpinnerTwoAlt
             className='animate-spin'
             color={themeParams.link_color}
@@ -60,16 +62,38 @@ export const RecentListV3 = () => {
           />
         )}
       </div>
-      <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
-        {list?.map((user) => (
-          <RecentCard
-            key={user.id}
-            username={user.username}
-            image={user.profile_image}
-            onClick={() => onUserClick(user)}
-          />
-        ))}
-      </div>
+
+      {show ? (
+        <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
+          {list?.map((user) => (
+            <RecentCard
+              key={user.id}
+              username={user.username}
+              image={user.profile_image}
+              onClick={() => onUserClick(user)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div
+          className='rounded-xl p-3 m-5'
+          style={{ backgroundColor: themeParams.secondary_bg_color }}
+        >
+          <p
+            style={{ color: themeParams.text_color }}
+            className='text-center font-semibold'
+          >
+            No favorites yet
+          </p>
+
+          <p
+            style={{ color: themeParams.hint_color }}
+            className='text-center text-xs'
+          >
+            Once you add favorites, they'll show up here
+          </p>
+        </div>
+      )}
     </>
   )
 }
