@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 import { IFavoriteUser } from '../../types/favorites/favorites.types'
-import { useTranslation } from 'react-i18next'
 
 interface IAddToFavoritesProps {
   user: IFavoriteUser
