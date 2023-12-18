@@ -37,9 +37,10 @@ export const UserPage: FC = () => {
     {
       retry: 1,
       onError: (error) => {
-        // if (error instanceof AxiosError) {
-        //   tg.showAlert(error.response?.data.message, () => navigate(-1))
-        // }
+        if (error instanceof AxiosError) {
+          tg.HapticFeedback.notificationOccurred('error')
+          tg.showAlert(error.response?.data.message, () => navigate(-1))
+        }
       },
       onSuccess: ({ data }) => {
         addUserToRecentList({
@@ -64,6 +65,9 @@ export const UserPage: FC = () => {
     {
       enabled: false,
       retry: 0,
+      onError: () => {
+        tg.HapticFeedback.notificationOccurred('error')
+      },
     }
   )
 
@@ -98,7 +102,7 @@ export const UserPage: FC = () => {
       </div>
     )
 
-  if (isError) return <p>error</p>
+  if (isError) return <></>
 
   if (!data) return <p>No data available.</p>
 
