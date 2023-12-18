@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { db } from '../../db/recent-users.db'
 import { Pages } from '../../types/navigation/navigation.types'
+import { useTranslation } from 'react-i18next'
 
 export const RecentListV4: FC = () => {
   const { themeParams } = useTelegram()
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const recentUsers = useLiveQuery(() => db.recentUsers.toArray())
@@ -27,7 +29,7 @@ export const RecentListV4: FC = () => {
           className='uppercase text-sm'
           style={{ color: themeParams.hint_color }}
         >
-          Recent search
+          {t('home.recentSearch')}
         </span>
       </div>
       <div
