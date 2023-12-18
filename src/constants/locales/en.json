@@ -7,13 +7,20 @@
     },
     "favorites": {
       "removeFrom": "Remove from favorites",
-      "addTo": "Add to favorites"
+      "addTo": "Add to favorites",
+      "emptyTitle": "No favorites yet",
+      "emptyBody": "Once you add favorites, they'll show up here",
+      "limitError": "You have reached your favorites limit"
     },
     "user": {
       "followers": "followers",
       "following": "following",
       "userIsPrivate": "User is private",
       "tapToRefetch": "Tap to refetch"
+    },
+    "navigation": {
+      "profile": "Go to profile",
+      "close": "Close"
     },
     "common": {
       "loading": "Loading...",

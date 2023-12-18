@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
@@ -15,7 +16,6 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { ScrapperApi } from '../../api/scrapper.api'
-import { useTranslation } from 'react-i18next'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -39,9 +39,10 @@ export const UserPage: FC = () => {
     {
       retry: 1,
       onError: (error) => {
-        // if (error instanceof AxiosError) {
-        //   tg.showAlert(error.response?.data.message, () => navigate(-1))
-        // }
+        if (error instanceof AxiosError) {
+          tg.HapticFeedback.notificationOccurred('error')
+          tg.showAlert(error.response?.data.message, () => navigate(-1))
+        }
       },
       onSuccess: ({ data }) => {
         addUserToRecentList({
@@ -66,6 +67,9 @@ export const UserPage: FC = () => {
     {
       enabled: false,
       retry: 0,
+      onError: () => {
+        tg.HapticFeedback.notificationOccurred('error')
+      },
     }
   )
 
@@ -100,7 +104,7 @@ export const UserPage: FC = () => {
       </div>
     )
 
-  if (isError) return <p>{t('common.error')}</p>
+  if (isError) return <></>
 
   if (!data) return <p>{t('common.noDataAvailable')}</p>
 
@@ -171,7 +175,7 @@ export const UserPage: FC = () => {
       ) : (
         <>
           <div className='flex items-center justify-center mt-10'>
-            {['Stories'].map((tab, index) => (
+            {[t('common.stories')].map((tab, index) => (
               <Chip
                 key={index}
                 isActive={activeTabIndex === index}
