@@ -11,11 +11,13 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { ScrapperApi } from '../../api/scrapper.api'
 
 import { Pages } from '../../types/navigation/navigation.types'
+import { useTranslation } from 'react-i18next'
 
 export const UserStoriesPage = () => {
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
+  const { t } = useTranslation()
 
   const { themeParams, MainButton } = useTelegram()
 
@@ -49,7 +51,11 @@ export const UserStoriesPage = () => {
   }, [MainButton, location.state.user])
 
   if (isLoading)
-    return <p style={{ color: themeParams.text_color }}>Loading stories</p>
+    return (
+      <p style={{ color: themeParams.text_color }}>
+        {t('common.loadingStories')}
+      </p>
+    )
 
   if (isError)
     return (

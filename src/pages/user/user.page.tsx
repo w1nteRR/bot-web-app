@@ -15,12 +15,14 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { ScrapperApi } from '../../api/scrapper.api'
+import { useTranslation } from 'react-i18next'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
 
   const tg = useTelegram()
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
@@ -98,9 +100,9 @@ export const UserPage: FC = () => {
       </div>
     )
 
-  if (isError) return <p>error</p>
+  if (isError) return <p>{t('common.error')}</p>
 
-  if (!data) return <p>No data available.</p>
+  if (!data) return <p>{t('common.noDataAvailable')}</p>
 
   const { username, profile_image, full_name, id, is_privite } = data.data
 
@@ -139,12 +141,12 @@ export const UserPage: FC = () => {
         <li>
           &#x2022;{' '}
           <span className='font-semibold'>{data?.data.followers.count}</span>{' '}
-          followers
+          {t('user.followers')}
         </li>
         <li>
           &#x2022;{' '}
           <span className='font-semibold'>{data?.data.following.count}</span>{' '}
-          following
+          {t('user.following')}
         </li>
         {data?.data.category_name && (
           <li>&#x2022; {data.data.category_name}</li>
@@ -156,7 +158,7 @@ export const UserPage: FC = () => {
           <Chip isActive>
             <div className='flex items-center'>
               <span style={{ color: tg.themeParams.text_color }}>
-                User is private
+                {t('user.userIsPrivate')}
               </span>
               <IoMdLock
                 size={16}
@@ -186,7 +188,7 @@ export const UserPage: FC = () => {
                         style={{ color: tg.themeParams.hint_color }}
                         className='text-xs'
                       >
-                        Tap to refetch
+                        {t('user.tapToRefetch')}
                       </span>
                     </div>
                   ) : (

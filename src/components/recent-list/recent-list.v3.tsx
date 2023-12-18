@@ -11,8 +11,10 @@ import { IRecentUser } from '../../types/user/user.types'
 import { db } from '../../db/recent-users.db'
 import { showRecentListPopupError } from '../../helpers/popup.error'
 import { useFavorites } from '../../hooks/favorites/useFavorites'
+import { useTranslation } from 'react-i18next'
 
 export const RecentListV3 = () => {
+  const { t } = useTranslation()
   const { themeParams, HapticFeedback } = useTelegram()
 
   const { setUser, query, user } = useStoriesQuery()
@@ -49,7 +51,7 @@ export const RecentListV3 = () => {
           className='uppercase text-sm'
           style={{ color: themeParams.hint_color }}
         >
-          Favorites
+          {t('home.favorites')}
         </span>
 
         {query.isLoading && (

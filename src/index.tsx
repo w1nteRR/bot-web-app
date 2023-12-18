@@ -7,6 +7,8 @@ import 'swiper/css/bundle'
 
 import App from './App'
 
+import './providers/i18next'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

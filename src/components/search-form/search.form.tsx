@@ -5,10 +5,12 @@ import { MdCancel } from 'react-icons/md'
 import { Input } from '../ui/input/input.ui'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+import { useTranslation } from 'react-i18next'
 
 export const SearchForm = () => {
   const [searchValue, setSearchValue] = useState('')
 
+  const { t } = useTranslation()
   const tg = useTelegram()
   const navigate = useNavigate()
   const location = useLocation()
@@ -34,7 +36,7 @@ export const SearchForm = () => {
 
   useEffect(() => {
     if (searchValue.length >= 3) {
-      tg.MainButton.setText('Search')
+      tg.MainButton.setText(t('home.search'))
       tg.MainButton.show()
     } else {
       tg.MainButton.hide()
@@ -67,7 +69,7 @@ export const SearchForm = () => {
             fontSize: 16,
             backgroundColor: tg.themeParams.secondary_bg_color,
           }}
-          placeholder='Search'
+          placeholder={t('home.search')}
           value={searchValue}
           onChange={handleInputChange}
           type='text'
