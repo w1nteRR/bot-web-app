@@ -25,10 +25,11 @@ export const UserPage: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const params = useParams()
-  const location = useLocation()
+  // const location = useLocation()
 
   useBackButton(() =>
-    navigate(location.state.from, { state: { user: location.state.user } })
+    // navigate(location.state.from, { state: { user: location.state.user } })
+    navigate(-1)
   )
 
   const { addUserToRecentList } = useRecentUsers()
@@ -212,7 +213,7 @@ export const UserPage: FC = () => {
               </Chip>
             ))}
           </div>
-          <div className=''>
+          <div className='my-5'>
             <StoriesList stories={stories?.data.stories.media || []} />
           </div>
         </>
