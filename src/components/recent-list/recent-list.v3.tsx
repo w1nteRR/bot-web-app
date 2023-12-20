@@ -64,7 +64,7 @@ export const RecentListV3 = () => {
       </div>
 
       {!!list.length ? (
-        <div className='w-full mt-5 whitespace-nowrap overflow-scroll no-scrollbar'>
+        <div className='w-full mt-5 whitespace-nowrap overflow-x-scroll'>
           {list.map((user) => (
             <RecentCard
               key={user.id}
