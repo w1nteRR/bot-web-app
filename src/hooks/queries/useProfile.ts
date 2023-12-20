@@ -4,8 +4,8 @@ import { telegramApi } from '../../api/telegram.api'
 import { IProfilePayload } from '../../types/api/profile.request'
 
 export const useProfile = () => {
-  const { isLoading, mutateAsync, error, data } = useMutation(
-    'get profile picture',
+  const { isLoading, mutateAsync, mutate, error, data } = useMutation(
+    ['profile picture'],
     (data: IProfilePayload) => telegramApi.getMyProfilePicture(data),
     {
       // onSuccess: (data) => {
@@ -17,6 +17,7 @@ export const useProfile = () => {
   return {
     isLoading,
     mutateAsync,
+    mutate,
     error,
     data: data?.data,
   }

@@ -46,7 +46,6 @@ export const SearchForm = () => {
   }, [searchValue.length])
 
   document.onclick = () => {
-    console.log('click doc')
     if (document.activeElement instanceof HTMLElement) {
       document.body.blur()
     }
@@ -58,7 +57,7 @@ export const SearchForm = () => {
 
   return (
     <>
-      <form className='w-full mr-5 relative'>
+      <form className='w-full relative'>
         <div className='p-2 absolute right-0 h-full flex items-center'>
           {searchValue.length >= 1 && (
             <MdCancel size={20} color='gray' onClick={resetSearchForm} />
