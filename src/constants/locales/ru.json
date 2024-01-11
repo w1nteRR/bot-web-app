@@ -23,6 +23,7 @@
       "close": "Закрыть"
     },
     "common": {
+      "clearAll": "Очистить все",
       "loading": "Загрузка...",
       "noFavoritesUsers": "Нет избранных пользователей.",
       "storiesNotFound": "Истории не найдены.",
