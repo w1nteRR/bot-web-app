@@ -1,11 +1,11 @@
 import { useState, ChangeEvent, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MdCancel } from 'react-icons/md'
 
 import { Input } from '../ui/input/input.ui'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
-import { useTranslation } from 'react-i18next'
 
 export const SearchForm = () => {
   const [searchValue, setSearchValue] = useState('')
