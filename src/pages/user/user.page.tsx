@@ -32,7 +32,7 @@ export const UserPage: FC = () => {
     navigate(-1)
   )
 
-  const { addUserToRecentList } = useRecentUsers()
+  const { addUserToRecentCloudStorage } = useRecentUsers()
 
   const { data, isLoading, isError } = useQuery(
     ['user', params.username],
@@ -45,12 +45,14 @@ export const UserPage: FC = () => {
           tg.showAlert(error.response?.data.message, () => navigate(-1))
         }
       },
-      onSuccess: ({ data }) => {
-        addUserToRecentList({
-          username: data.username,
-          full_name: data.full_name,
-          id: String(data.id),
-          profile_image: data.profile_image,
+      onSuccess: async ({ data }) => {
+        const { username, full_name, id, profile_image } = data
+
+        await addUserToRecentCloudStorage({
+          username,
+          full_name,
+          id: String(id),
+          profile_image,
         })
       },
     }
