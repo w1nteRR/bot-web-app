@@ -23,6 +23,7 @@
       "close": "Close"
     },
     "common": {
+      "clearAll": "Clear All",
       "loading": "Loading...",
       "noFavoritesUsers": "No favorites users.",
       "storiesNotFound": "Stories not found.",
