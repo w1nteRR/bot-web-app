@@ -23,6 +23,7 @@
       "close": "Закрити"
     },
     "common": {
+      "clearAll": "Очистити всі",
       "loading": "Завантаження...",
       "noFavoritesUsers": "Немає улюблених користувачів.",
       "storiesNotFound": "Історії не знайдено.",
