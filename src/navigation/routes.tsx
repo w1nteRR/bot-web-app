@@ -4,7 +4,10 @@ import { HomeV2Page } from '../pages/home/home-v2.page'
 import { FavoritesPage } from '../pages/favorites/favorites.page'
 import { UserPage } from '../pages/user/user.page'
 import { UserStoriesPage } from '../pages/user-stories/UserStoriesPage'
+import { NotificationsPage } from '../pages/tracking/notifications.page'
+
 import { Pages } from '../types/navigation/navigation.types'
+
 
 export const routes: RouteObject[] = [
   {
@@ -23,4 +26,8 @@ export const routes: RouteObject[] = [
     path: Pages.UserStories,
     element: <UserStoriesPage />,
   },
+  {
+    path: Pages.Notifications,
+    element: <NotificationsPage />
+  }
 ]
