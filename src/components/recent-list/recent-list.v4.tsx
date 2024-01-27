@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { IoClose } from 'react-icons/io5'
@@ -7,6 +7,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { Pages } from '../../types/navigation/navigation.types'
+import { UserCard } from '../shared/cards/user-card'
 
 export const RecentListV4: FC = () => {
   const { themeParams } = useTelegram()
@@ -19,11 +20,14 @@ export const RecentListV4: FC = () => {
     removeAllUsersFromRecentCloudStorage,
   } = useRecentUsers()
 
-  const handleUserClick = (username: string) => {
-    navigate(`${Pages.User.replace(':username', username)}`, {
-      state: { from: location.pathname },
-    })
-  }
+
+  const handleUserClick = useCallback((username: string) => {
+
+      navigate(`${Pages.User.replace(':username', username)}`, {
+        state: { from: location.pathname },
+      })
+
+  }, [])
 
   if (!recentUsers?.length) return null
 
@@ -49,28 +53,7 @@ export const RecentListV4: FC = () => {
       >
         {recentUsers.map((user) => (
           <div key={user.id} className='p-3 flex justify-between '>
-            <div className='flex'>
-              <img
-                src={user.profile_image}
-                alt='avatar'
-                className='rounded-full w-11 h-11 mr-2'
-                onClick={() => handleUserClick(user.username)}
-              />
-              <div>
-                <p
-                  style={{ color: themeParams.text_color }}
-                  className='text-sm'
-                >
-                  {user.username}
-                </p>
-                <p
-                  style={{ color: themeParams.hint_color }}
-                  className='text-xs'
-                >
-                  {user.full_name}
-                </p>
-              </div>
-            </div>
+           <UserCard {...user} onUserAvatarClick={() => handleUserClick(user.username)} />
 
             <button
               className='flex items-center'
