@@ -1,12 +1,11 @@
 import { PopupButton, PopupParams } from '@twa-dev/types'
 import { NavigateFunction } from 'react-router-dom'
-// import i18next from 'react-i18next'
 import i18next from 'i18next'
 import { Pages } from '../types/navigation/navigation.types'
 
 export const showRecentListPopupError = (
   navigate: NavigateFunction,
-  username: string
+  username: string,
 ) => {
   const buttons: PopupButton[] = [
     { id: '1', type: 'default', text: i18next.t('navigation.profile') },

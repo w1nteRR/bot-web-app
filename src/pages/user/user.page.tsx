@@ -16,6 +16,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { ScrapperApi } from '../../api/scrapper.api'
+import { ILocationFrom } from '../../types/navigation/navigation.types'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -25,12 +26,11 @@ export const UserPage: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const params = useParams()
-  // const location = useLocation()
+  const location = useLocation()
 
-  useBackButton(() =>
-    // navigate(location.state.from, { state: { user: location.state.user } })
-    navigate(-1),
-  )
+  const { from, isFromSearch } = location.state as ILocationFrom
+
+  useBackButton(() => navigate(from, { state: { user: location.state.user } }))
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
 
@@ -49,12 +49,14 @@ export const UserPage: FC = () => {
       onSuccess: async ({ data }) => {
         const { username, full_name, id, profile_image } = data
 
-        await addUserToRecentCloudStorage({
-          username,
-          full_name,
-          id: String(id),
-          profile_image,
-        })
+        if (isFromSearch) {
+          await addUserToRecentCloudStorage({
+            username,
+            full_name,
+            id: String(id),
+            profile_image,
+          })
+        }
       },
     },
   )
@@ -131,17 +133,6 @@ export const UserPage: FC = () => {
         />
       </div>
 
-      {/*<div className='w-56 m-auto'>*/}
-      {/*  <div className='my-5 text-center'>*/}
-      {/*    <Title>{data?.data.username}</Title>*/}
-
-      {/*  </div>*/}
-      {/*</div>*/}
-
-      {/*<div className='flex items-center justify-center py-3'>*/}
-
-      {/*</div>*/}
-
       <div className='my-5 mx-5'>
         <pre className='text-xs' style={{ color: tg.themeParams.text_color }}>
           {data?.data.biography}
@@ -165,7 +156,7 @@ export const UserPage: FC = () => {
           <li>&#x2022; {data.data.category_name}</li>
         )}
       </ul>
-      <div className='mt-5'>
+      <div className='mt-5 px-2'>
         <AddToFavorites
           user={{ username, profile_image, full_name, id: String(id) }}
         />
