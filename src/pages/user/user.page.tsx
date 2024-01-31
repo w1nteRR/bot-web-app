@@ -29,7 +29,7 @@ export const UserPage: FC = () => {
 
   useBackButton(() =>
     // navigate(location.state.from, { state: { user: location.state.user } })
-    navigate(-1)
+    navigate(-1),
   )
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
@@ -39,6 +39,7 @@ export const UserPage: FC = () => {
     () => ScrapperApi.findUserByUsername(params.username!),
     {
       retry: 1,
+
       onError: (error) => {
         if (error instanceof AxiosError) {
           tg.HapticFeedback.notificationOccurred('error')
@@ -55,7 +56,7 @@ export const UserPage: FC = () => {
           profile_image,
         })
       },
-    }
+    },
   )
 
   const {
@@ -73,7 +74,7 @@ export const UserPage: FC = () => {
       onError: () => {
         tg.HapticFeedback.notificationOccurred('error')
       },
-    }
+    },
   )
 
   const onChipClick = (chipIndex: number) => {
@@ -115,26 +116,31 @@ export const UserPage: FC = () => {
 
   return (
     <div className='py-10'>
-      <img
-        className='bg-gray-500 w-64 h-64 m-auto 0 rounded-lg'
-        alt='avatar'
-        src={data?.data.profile_image}
-      />
-      <div className='w-56 m-auto'>
-        <div className='my-5 text-center'>
-          <Title>{data?.data.username}</Title>
-
-          <p style={{ color: tg.themeParams.hint_color }}>
+      <div className='flex px-5 justify-between'>
+        <div>
+          <Title>{data.data.username}</Title>
+          <p className='text-sm' style={{ color: tg.themeParams.hint_color }}>
             {data?.data.full_name}
           </p>
         </div>
-      </div>
 
-      <div className='flex items-center justify-center py-3'>
-        <AddToFavorites
-          user={{ username, profile_image, full_name, id: String(id) }}
+        <img
+          className='bg-gray-500 w-20 h-20 rounded-full'
+          alt='avatar'
+          src={data?.data.profile_image}
         />
       </div>
+
+      {/*<div className='w-56 m-auto'>*/}
+      {/*  <div className='my-5 text-center'>*/}
+      {/*    <Title>{data?.data.username}</Title>*/}
+
+      {/*  </div>*/}
+      {/*</div>*/}
+
+      {/*<div className='flex items-center justify-center py-3'>*/}
+
+      {/*</div>*/}
 
       <div className='my-5 mx-5'>
         <pre className='text-xs' style={{ color: tg.themeParams.text_color }}>
@@ -159,6 +165,11 @@ export const UserPage: FC = () => {
           <li>&#x2022; {data.data.category_name}</li>
         )}
       </ul>
+      <div className='mt-5'>
+        <AddToFavorites
+          user={{ username, profile_image, full_name, id: String(id) }}
+        />
+      </div>
 
       {is_privite ? (
         <div className='flex items-center justify-center mt-10'>
