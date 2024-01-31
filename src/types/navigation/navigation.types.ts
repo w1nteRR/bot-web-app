@@ -3,5 +3,10 @@ export enum Pages {
   Favorites = '/favorites',
   User = '/user/:username',
   UserStories = '/user/stories/:id',
-  Notifications = '/notifications'
+  Notifications = '/notifications',
+}
+
+export interface ILocationFrom {
+  from: string
+  isFromSearch?: boolean
 }
