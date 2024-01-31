@@ -12,7 +12,7 @@ interface IAddToFavoritesProps {
 
 export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
   const [isUserFavorite, setIsUserFavorite] = useState<boolean | 'pending'>(
-    'pending'
+    'pending',
   )
 
   const { patch, check, list } = useFavorites()
@@ -61,7 +61,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
 
   return (
     <button
-      className='p-3 rounded-xl w-full max-w-xs font-semibold'
+      className='p-2 rounded-xl w-full  font-semibold'
       style={{
         backgroundColor: isUserFavorite
           ? themeParams.secondary_bg_color
