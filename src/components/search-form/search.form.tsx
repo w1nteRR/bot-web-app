@@ -20,7 +20,9 @@ export const SearchForm = () => {
   }
 
   const searchRequest = useCallback(() => {
-    navigate(`/user/${searchValue}`, { state: { from: location.pathname } })
+    navigate(`/user/${searchValue}`, {
+      state: { from: location.pathname, isFromSearch: true },
+    })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue])

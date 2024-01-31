@@ -29,7 +29,7 @@ export const UserStoriesPage = () => {
     {
       retry: 0,
       enabled: false,
-    }
+    },
   )
 
   useEffect(() => {
@@ -40,8 +40,8 @@ export const UserStoriesPage = () => {
         `${Pages.User.replace(':username', location.state.user.username)}`,
         {
           state: { from: location.pathname },
-        }
-      )
+        },
+      ),
     )
 
     return () => {

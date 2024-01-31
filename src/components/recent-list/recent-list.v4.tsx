@@ -20,13 +20,10 @@ export const RecentListV4: FC = () => {
     removeAllUsersFromRecentCloudStorage,
   } = useRecentUsers()
 
-
   const handleUserClick = useCallback((username: string) => {
-
-      navigate(`${Pages.User.replace(':username', username)}`, {
-        state: { from: location.pathname },
-      })
-
+    navigate(`${Pages.User.replace(':username', username)}`, {
+      state: { from: location.pathname },
+    })
   }, [])
 
   if (!recentUsers?.length) return null
@@ -53,7 +50,10 @@ export const RecentListV4: FC = () => {
       >
         {recentUsers.map((user) => (
           <div key={user.id} className='p-3 flex justify-between '>
-           <UserCard {...user} onUserAvatarClick={() => handleUserClick(user.username)} />
+            <UserCard
+              {...user}
+              onUserAvatarClick={() => handleUserClick(user.username)}
+            />
 
             <button
               className='flex items-center'
