@@ -34,7 +34,12 @@ export const UserPage: FC = () => {
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
 
-  const { data, isLoading, isError } = useQuery(
+  const {
+    data,
+    isLoading,
+    isError,
+    isSuccess: isUserSuccess,
+  } = useQuery(
     ['user', params.username],
     () => ScrapperApi.findUserByUsername(params.username!),
     {
@@ -71,13 +76,15 @@ export const UserPage: FC = () => {
     ['user stories', data?.data.id],
     () => ScrapperApi.getUserStories(String(data?.data.id)),
     {
-      enabled: false,
-      retry: 0,
+      enabled: isUserSuccess,
+      retry: 1,
       onError: () => {
         tg.HapticFeedback.notificationOccurred('error')
       },
     },
   )
+
+  console.log('page user id', data?.data.id)
 
   const onChipClick = (chipIndex: number) => {
     setActiveTabIndex(chipIndex)

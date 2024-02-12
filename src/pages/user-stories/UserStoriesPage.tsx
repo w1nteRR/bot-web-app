@@ -33,19 +33,22 @@ export const UserStoriesPage = () => {
   )
 
   useEffect(() => {
-    MainButton.show()
-    MainButton.setText('Go to profile')
-    MainButton.onClick(() =>
+    const mainButtonCallback = () =>
       navigate(
         `${Pages.User.replace(':username', location.state.user.username)}`,
         {
           state: { from: location.pathname },
         },
-      ),
-    )
+      )
+
+    MainButton.setText('Go to profile')
+    MainButton.show()
+    MainButton.onClick(mainButtonCallback)
 
     return () => {
       MainButton.hide()
+      MainButton.text
+      MainButton.offClick(mainButtonCallback)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [MainButton, location.state.user])
