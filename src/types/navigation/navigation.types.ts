@@ -4,6 +4,7 @@ export enum Pages {
   User = '/user/:username',
   UserStories = '/user/stories/:id',
   Notifications = '/notifications',
+  NotificationsCreate = '/notifications/create',
 }
 
 export interface ILocationFrom {

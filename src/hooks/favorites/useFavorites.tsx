@@ -57,6 +57,7 @@ export const useFavorites = () => {
 
   useEffect(() => {
     const loadFavoritesList = async () => {
+      setIsLoading(true)
       try {
         const result = await getFavorites()
         setList(result)
@@ -64,6 +65,9 @@ export const useFavorites = () => {
         console.error('Favorites loading error.', error)
       } finally {
         setIsLoading(false)
+        // setTimeout(() => {
+        //   setIsLoading(false)
+        // }, 100)
       }
     }
 

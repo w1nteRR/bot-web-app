@@ -7,7 +7,7 @@ import { UserStoriesPage } from '../pages/user-stories/UserStoriesPage'
 import { NotificationsPage } from '../pages/tracking/notifications.page'
 
 import { Pages } from '../types/navigation/navigation.types'
-
+import { NotificationsSettingsPage } from '../pages/tracking/notifications-settings.page'
 
 export const routes: RouteObject[] = [
   {
@@ -28,6 +28,10 @@ export const routes: RouteObject[] = [
   },
   {
     path: Pages.Notifications,
-    element: <NotificationsPage />
-  }
+    element: <NotificationsPage />,
+  },
+  {
+    path: Pages.NotificationsCreate,
+    element: <NotificationsSettingsPage />,
+  },
 ]
