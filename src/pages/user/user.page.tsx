@@ -140,8 +140,11 @@ export const UserPage: FC = () => {
         />
       </div>
 
-      <div className='my-5 mx-5'>
-        <pre className='text-xs' style={{ color: tg.themeParams.text_color }}>
+      <div className='my-5 mx-5 bg'>
+        <pre
+          className='text-xs whitespace-pre-wrap'
+          style={{ color: tg.themeParams.text_color }}
+        >
           {data?.data.biography}
         </pre>
       </div>

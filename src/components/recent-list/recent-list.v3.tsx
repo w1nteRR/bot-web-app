@@ -42,9 +42,6 @@ export const RecentListV3 = () => {
 
   const isLoading = query.isLoading || query.isRefetching
 
-  console.log('is loading', isFavoritesLoading)
-  console.log('fav', list)
-
   if (isFavoritesLoading)
     return (
       <div className='w-full mt-5 flex justify-center gap-1'>
