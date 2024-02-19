@@ -5,9 +5,10 @@ import { FavoritesPage } from '../pages/favorites/favorites.page'
 import { UserPage } from '../pages/user/user.page'
 import { UserStoriesPage } from '../pages/user-stories/UserStoriesPage'
 import { NotificationsPage } from '../pages/tracking/notifications.page'
+import { NotificationsSettingsPage } from '../pages/tracking/notifications-settings.page'
+import { SubscriptionPage } from '../pages/subscription/subscription.page'
 
 import { Pages } from '../types/navigation/navigation.types'
-import { NotificationsSettingsPage } from '../pages/tracking/notifications-settings.page'
 
 export const routes: RouteObject[] = [
   {
@@ -33,5 +34,9 @@ export const routes: RouteObject[] = [
   {
     path: Pages.NotificationsCreate,
     element: <NotificationsSettingsPage />,
+  },
+  {
+    path: Pages.Subscription,
+    element: <SubscriptionPage />,
   },
 ]
