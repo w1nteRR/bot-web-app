@@ -36,7 +36,7 @@ export const Tracking: FC = () => {
   return (
     <div
       className='mx-3 mt-6 rounded-t-xl'
-      style={{ backgroundColor: themeParams.secondary_bg_color }}
+      style={{ backgroundColor: themeParams.section_bg_color }}
     >
       <button
         className='p-4 rounded-xl  w-full h-full flex items-center gap-2'

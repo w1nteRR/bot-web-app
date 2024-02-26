@@ -594,10 +594,10 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.5.1.tgz#27337d72046d5236b32fd977edee3f74c71d332f"
   integrity sha512-UCcUKrUYGj7ClomOo2SpNVvx4/fkd/2BbIHDCle8A0ax+P3bU7yJwDBDrS6ZwdTMARWTGODX1hEsCcO+7beJjg==
 
-"@twa-dev/types@^6.9.0":
-  version "6.9.0"
-  resolved "https://registry.yarnpkg.com/@twa-dev/types/-/types-6.9.0.tgz#5f978e63dcb8ec507ae2b035774ff568c5ebb69a"
-  integrity sha512-hBkIuJgVtkLAPPhKsNfgyBpgS+15spzUScy5jgpfPJPqXPaaUVDTaWHbeEUU+lUgHmryeQjWyz+UjS7987Pyaw==
+"@twa-dev/types@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@twa-dev/types/-/types-7.0.0.tgz#4bfa26472144704a12ec9a4bf91f90918afcaba0"
+  integrity sha512-LBnMklxORuXd/ypv9gFKcQVNJkCktkeuU+2V6B5Ww7dcxDCoYBAKkNnIwEQ3cShq+cxTi96jC/CqWhgDMQ7AXQ==
 
 "@types/aria-query@^5.0.1":
   version "5.0.2"

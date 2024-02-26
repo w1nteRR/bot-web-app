@@ -1,29 +1,22 @@
 import React, { useEffect } from 'react'
-import { useRoutes } from 'react-router-dom'
 
 import { useTelegram } from './hooks/telegram/useTelegram'
-import { routes } from './navigation/routes'
+import { WebAppUserProvider } from './providers/tg-user.provider'
+import { MainLayout } from './layouts/main.layout'
 
 function App() {
   const tg = useTelegram()
-  const element = useRoutes(routes)
 
   useEffect(() => {
     tg.ready()
+    tg.setHeaderColor('secondary_bg_color')
     tg.expand()
-
-    // tg.setBackgroundColor(tg.themeParams.bg_color)
   }, [tg])
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: tg.themeParams.bg_color,
-      }}
-    >
-      {element}
-    </div>
+    <WebAppUserProvider>
+      <MainLayout />
+    </WebAppUserProvider>
   )
 }
 

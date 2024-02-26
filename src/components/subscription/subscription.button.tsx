@@ -18,7 +18,7 @@ export const SubscriptionButton: FC = () => {
   return (
     <div
       className='mx-3 rounded-b-xl'
-      style={{ backgroundColor: themeParams.secondary_bg_color }}
+      style={{ backgroundColor: themeParams.section_bg_color }}
     >
       <button
         className='p-4 w-full h-full flex items-center gap-2'
