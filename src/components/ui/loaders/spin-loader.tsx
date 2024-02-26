@@ -11,7 +11,10 @@ export const SpinLoader: FC<ISpinLoaderProps> = ({ fullscreen }) => {
 
   if (fullscreen)
     return (
-      <div className='h-screen flex items-center justify-center'>
+      <div
+        className='h-screen flex items-center justify-center'
+        style={{ backgroundColor: themeParams.bg_color }}
+      >
         <CgSpinnerTwoAlt
           className='animate-spin ml-2'
           color={themeParams.link_color}

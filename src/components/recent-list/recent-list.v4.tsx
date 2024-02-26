@@ -33,7 +33,7 @@ export const RecentListV4: FC = () => {
       <div className='mb-3 flex justify-between items-center'>
         <p
           className='uppercase text-sm'
-          style={{ color: themeParams.hint_color }}
+          style={{ color: themeParams.section_header_text_color }}
         >
           {t('home.recentSearch')}
         </p>
@@ -46,7 +46,7 @@ export const RecentListV4: FC = () => {
       </div>
       <div
         className='rounded-xl'
-        style={{ backgroundColor: themeParams.secondary_bg_color }}
+        style={{ backgroundColor: themeParams.section_bg_color }}
       >
         {recentUsers.map((user) => (
           <div key={user.id} className='p-3 flex justify-between '>

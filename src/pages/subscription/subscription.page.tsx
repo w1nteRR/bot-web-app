@@ -19,7 +19,13 @@ export const SubscriptionPage: FC = () => {
   useSubscriptionMainButton()
   useBackButton(() => navigate(-1))
 
-  const { text_color, secondary_bg_color, hint_color, link_color } = themeParams
+  const {
+    text_color,
+    hint_color,
+    link_color,
+    section_bg_color,
+    subtitle_text_color,
+  } = themeParams
 
   return (
     <div className='px-3 py-5'>
@@ -40,7 +46,7 @@ export const SubscriptionPage: FC = () => {
 
       <div
         className='mt-10 py-3 px-5 flex rounded-xl mx-1'
-        style={{ backgroundColor: secondary_bg_color }}
+        style={{ backgroundColor: section_bg_color }}
       >
         <div className='mr-2'>
           <IoCheckmarkCircleSharp size={30} color={link_color} />
@@ -57,14 +63,14 @@ export const SubscriptionPage: FC = () => {
       <div className='mt-10 mx-2'>
         <span
           className='uppercase text-sm'
-          style={{ color: themeParams.hint_color }}
+          style={{ color: themeParams.section_header_text_color }}
         >
           What's included
         </span>
       </div>
       <div
         className='py-5 px-4 rounded-xl m-2 flex flex-col gap-5'
-        style={{ backgroundColor: secondary_bg_color }}
+        style={{ backgroundColor: section_bg_color }}
       >
         {sections.map((section, index) => (
           <div className='flex gap-2.5' key={index}>
@@ -79,7 +85,7 @@ export const SubscriptionPage: FC = () => {
               <p className='font-bold' style={{ color: text_color }}>
                 {section.title}
               </p>
-              <p className='text-sm' style={{ color: hint_color }}>
+              <p className='text-sm' style={{ color: subtitle_text_color }}>
                 {section.description}
               </p>
             </div>

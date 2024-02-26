@@ -7,11 +7,10 @@ import { RecentCard } from './recent.card'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useStoriesQuery } from '../../hooks/stories/useStoriesQuery'
+import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 import { IRecentUser } from '../../types/user/user.types'
-import { db } from '../../db/recent-users.db'
 import { showRecentListPopupError } from '../../helpers/popup.error'
-import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 export const RecentListV3 = () => {
   const { t } = useTranslation()
@@ -82,7 +81,7 @@ export const RecentListV3 = () => {
       <div className='mx-5 flex justify-between items-center'>
         <span
           className='uppercase text-sm'
-          style={{ color: themeParams.hint_color }}
+          style={{ color: themeParams.section_header_text_color }}
         >
           {t('home.favorites')}
         </span>

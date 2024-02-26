@@ -68,7 +68,7 @@ export const SearchForm = () => {
         <Input
           style={{
             fontSize: 16,
-            backgroundColor: tg.themeParams.secondary_bg_color,
+            backgroundColor: tg.themeParams.section_bg_color,
           }}
           placeholder={t('home.search')}
           value={searchValue}
