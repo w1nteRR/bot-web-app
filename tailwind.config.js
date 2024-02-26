@@ -2,7 +2,11 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'tg-accent': 'var(--tg-theme-accent-text-color)',
+      },
+    },
   },
   plugins: [],
 }
