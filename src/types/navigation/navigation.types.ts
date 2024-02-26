@@ -6,6 +6,7 @@ export enum Pages {
   Notifications = '/notifications',
   NotificationsCreate = '/notifications/create',
   Subscription = '/subscription',
+  NotAuthorized = '/403',
 }
 
 export interface ILocationFrom {

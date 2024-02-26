@@ -7,6 +7,7 @@ import { UserStoriesPage } from '../pages/user-stories/UserStoriesPage'
 import { NotificationsPage } from '../pages/tracking/notifications.page'
 import { NotificationsSettingsPage } from '../pages/tracking/notifications-settings.page'
 import { SubscriptionPage } from '../pages/subscription/subscription.page'
+import { NotAuthorizedPage } from '../pages/misc/403.page'
 
 import { Pages } from '../types/navigation/navigation.types'
 
@@ -38,5 +39,9 @@ export const routes: RouteObject[] = [
   {
     path: Pages.Subscription,
     element: <SubscriptionPage />,
+  },
+  {
+    path: Pages.NotAuthorized,
+    element: <NotAuthorizedPage />,
   },
 ]

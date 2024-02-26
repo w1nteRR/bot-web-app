@@ -3,10 +3,12 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from 'react-query'
 import { FiMinus } from 'react-icons/fi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
+import { IoTimer } from 'react-icons/io5'
 
 import { SpinLoader } from '../../components/ui/loaders/spin-loader'
 import { ModalVertical } from '../../components/ui/modals/modal-vertical'
 import { UserCard } from '../../components/shared/cards/user-card'
+import { ModeToggler } from '../../components/notifications/mode-toggler'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
@@ -116,6 +118,50 @@ export const NotificationsSettingsPage: FC = () => {
 
   return (
     <>
+      <div className='px-3 py-5 flex flex-col gap-3.5'>
+        <h1
+          className='text-4xl font-bold text-center'
+          style={{ color: themeParams.text_color }}
+        >
+          Notifications Accounts
+        </h1>
+        <p
+          className='text-center font-medium text-md'
+          style={{ color: themeParams.text_color }}
+        >
+          Manage Your notifications settings
+        </p>
+      </div>
+
+      <div className='p-5'>
+        <p
+          className='uppercase text-sm mb-1'
+          style={{ color: themeParams.subtitle_text_color }}
+        >
+          Settings
+        </p>
+
+        <div
+          className='px-5 py-3 rounded-xl flex flex-col gap-3.5'
+          style={{ backgroundColor: themeParams.section_bg_color }}
+        >
+          <ModeToggler />
+
+          <div className='flex justify-between items-center'>
+            <div className='flex items-center gap-2'>
+              <div>
+                <IoTimer size={28} color={themeParams.accent_text_color} />
+              </div>
+              <p style={{ color: themeParams.text_color }}>Frequency</p>
+            </div>
+
+            <div>
+              <p style={{ color: themeParams.hint_color }}>30m</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className='px-5'>
         <p
           className='uppercase text-sm mb-1'
@@ -125,7 +171,7 @@ export const NotificationsSettingsPage: FC = () => {
         </p>
         <div
           className='px-5 py-3 rounded-xl flex  flex-row items-center'
-          style={{ backgroundColor: themeParams.secondary_bg_color }}
+          style={{ backgroundColor: themeParams.section_bg_color }}
         >
           {data.length < 5 && (
             <button onClick={handleAccountAddClick}>
