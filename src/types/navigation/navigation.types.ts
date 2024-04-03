@@ -4,7 +4,7 @@ export enum Pages {
   User = '/user/:username',
   UserStories = '/user/stories/:id',
   Notifications = '/notifications',
-  NotificationsCreate = '/notifications/create',
+  NotificationsSettings = '/notifications/settings',
   Subscription = '/subscription',
   NotAuthorized = '/403',
 }

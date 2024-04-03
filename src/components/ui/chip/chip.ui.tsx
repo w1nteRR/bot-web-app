@@ -18,7 +18,7 @@ export const Chip: FC<IChipProps> = ({ isActive, children, onClick }) => {
         'py-2 px-5 mr-5 transition ease-in-out rounded-full font-semibold text-sm'
       }
       style={{
-        backgroundColor: isActive ? themeParams.secondary_bg_color : 'unset',
+        backgroundColor: themeParams.section_bg_color,
       }}
     >
       {children}

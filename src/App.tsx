@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useTelegram } from './hooks/telegram/useTelegram'
 import { WebAppUserProvider } from './providers/tg-user.provider'
 import { MainLayout } from './layouts/main.layout'
+import { FavoritesProvider } from './providers/favorites.provider'
 
 function App() {
   const tg = useTelegram()
@@ -15,7 +16,9 @@ function App() {
 
   return (
     <WebAppUserProvider>
-      <MainLayout />
+      <FavoritesProvider>
+        <MainLayout />
+      </FavoritesProvider>
     </WebAppUserProvider>
   )
 }

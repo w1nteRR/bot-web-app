@@ -24,7 +24,7 @@ export const NotificationsPage: FC = () => {
   const { list } = useFavorites()
   const { create } = useNotifications()
 
-  useBackButton(() => navigate(-1))
+  useBackButton(() => navigate(Pages.Home))
 
   const handleShowMoreClick = () => {
     setTrimOffset(list.length)
@@ -32,8 +32,6 @@ export const NotificationsPage: FC = () => {
 
   const createNotifications = async () => {
     await create(selected)
-
-    navigate(Pages.NotificationsCreate)
   }
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -111,8 +109,8 @@ export const NotificationsPage: FC = () => {
       </div>
 
       <div
-        className='mx-3  rounded-xl'
-        style={{ backgroundColor: themeParams.secondary_bg_color }}
+        className='mx-3 rounded-xl'
+        style={{ backgroundColor: themeParams.section_bg_color }}
       >
         {list.slice(0, trimOffset).map((user) => (
           <div key={user.id} className='p-3 flex justify-between'>

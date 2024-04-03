@@ -1,8 +1,10 @@
-import { useMutation, useQueryClient } from 'react-query'
+import { useCallback } from 'react'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useTelegram } from '../telegram/useTelegram'
 import { NotificationsApi } from '../../api/notifications.api'
-import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Pages } from '../../types/navigation/navigation.types'
 
 export const useNotifications = () => {
   const {
@@ -10,34 +12,39 @@ export const useNotifications = () => {
     showAlert,
   } = useTelegram()
 
-  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const mutation = useMutation(NotificationsApi.createNotifications, {
-    retry: 0,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['notifications'] }),
+    retry: 1,
   })
+
+  const { refetch } = useQuery(
+    ['notifications'],
+    () => NotificationsApi.getNotifications(user?.id!),
+    {
+      enabled: false,
+      onSuccess: () => navigate(Pages.NotificationsSettings),
+    },
+  )
 
   const create = useCallback(async (ids: string[]) => {
     if (!user?.id) return
 
-    const account_id = String(user.id)
+    const account_id = user.id
     const numberIds = ids.map(Number)
 
-    const promises = numberIds.map(async (accountId, index) => {
-      const currentTimestamp = Date.now()
-      const timeOffset = index + 1
-      const last_time_visited = currentTimestamp + timeOffset * 10000
+    const last_time_checked = Date.now()
 
-      mutation.mutate({
-        account_id,
-        last_time_visited,
-        ids: [accountId],
-      })
+    mutation.mutate({
+      account_id,
+      last_time_checked,
+      ids: numberIds,
     })
 
+    await refetch()
+
     try {
-      await Promise.all(promises)
+      // await Promise.all(promises)
     } catch (error) {
       console.log('error')
       showAlert('Something went wrong.')

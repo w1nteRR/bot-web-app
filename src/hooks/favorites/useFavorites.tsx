@@ -4,7 +4,10 @@ import {
   FavoritesUserList,
   IFavoriteUser,
 } from '../../types/favorites/favorites.types'
-import { getFavorites, setFavorites } from '../../helpers/favorites.storage'
+import {
+  getFavoritesStorage,
+  setFavoritesStorage,
+} from '../../helpers/favorites.storage'
 import { useTelegram } from '../telegram/useTelegram'
 
 type UpdateType = 'remove' | 'add'
@@ -17,7 +20,7 @@ export const useFavorites = () => {
 
   const updateFavorites = async (newList: FavoritesUserList) => {
     const value = JSON.stringify(newList)
-    await setFavorites(value)
+    await setFavoritesStorage(value)
     setList(newList)
   }
 
@@ -40,7 +43,7 @@ export const useFavorites = () => {
   }
 
   const check = async (user: IFavoriteUser) => {
-    const result = await getFavorites()
+    const result = await getFavoritesStorage()
 
     return result.some((currentUser) => currentUser.id === user.id)
   }
@@ -59,15 +62,12 @@ export const useFavorites = () => {
     const loadFavoritesList = async () => {
       setIsLoading(true)
       try {
-        const result = await getFavorites()
+        const result = await getFavoritesStorage()
         setList(result)
       } catch (error) {
         console.error('Favorites loading error.', error)
       } finally {
         setIsLoading(false)
-        // setTimeout(() => {
-        //   setIsLoading(false)
-        // }, 100)
       }
     }
 
