@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
-import { useFavorites } from '../../hooks/favorites/useFavorites'
+import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 
 import { IFavoriteUser } from '../../types/favorites/favorites.types'
 
@@ -15,17 +15,23 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     'pending',
   )
 
-  const { patch, check, list } = useFavorites()
   const { themeParams, showAlert, showConfirm, HapticFeedback } = useTelegram()
   const { t } = useTranslation()
 
+  const {
+    favorites,
+    remove: removeUserFromFavorites,
+    add: addUserToFavorites,
+    check,
+  } = useFavoritesContext()
+
   const onButtonClick = async () => {
-    const isUserExist = await check(user)
+    const isUserExist = check(user.id)
 
     if (isUserExist) {
       showConfirm(t('common.areUSure'), async (confirmed) => {
         if (confirmed) {
-          await patch(user, 'remove')
+          await removeUserFromFavorites(user.id)
           setIsUserFavorite(false)
 
           return
@@ -33,14 +39,14 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
       })
     }
 
-    if (list.length >= 25) {
+    if (favorites.length >= 25) {
       HapticFeedback.notificationOccurred('error')
       showAlert(t('favorites.limitError'))
 
       return
     }
 
-    await patch(user, 'add')
+    await addUserToFavorites(user)
 
     setIsUserFavorite(true)
     showAlert(t('common.userAddedToFavorites'))
@@ -48,7 +54,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
 
   useEffect(() => {
     const checkIsUserFavorite = async () => {
-      const result = await check(user)
+      const result = check(user.id)
 
       setIsUserFavorite(result)
     }
@@ -56,15 +62,12 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     checkIsUserFavorite()
   }, [])
 
-  // if (isUserFavorite === 'pending')
-  //   return <div className='p-3 w-full max-w-xs' />
-
   return (
     <button
       className='p-2 rounded-xl w-full  font-semibold'
       style={{
         backgroundColor: isUserFavorite
-          ? themeParams.secondary_bg_color
+          ? themeParams.bg_color
           : themeParams.button_color,
         color: isUserFavorite
           ? themeParams.text_color

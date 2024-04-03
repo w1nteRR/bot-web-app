@@ -3,7 +3,7 @@ import {
   FavoritesUserList,
 } from '../types/favorites/favorites.types'
 
-export const getFavorites = () => {
+export const getFavoritesStorage = () => {
   return new Promise<FavoritesUserList>((resolve, reject) => {
     window.Telegram.WebApp.CloudStorage.getItem(
       CloudStorageKeys.Favorites,
@@ -11,12 +11,12 @@ export const getFavorites = () => {
         if (error) reject(new Error(error))
 
         resolve(JSON.parse(result || '[]'))
-      }
+      },
     )
   })
 }
 
-export const setFavorites = (value: string) => {
+export const setFavoritesStorage = (value: string) => {
   return new Promise<boolean | undefined>((resolve, reject) => {
     window.Telegram.WebApp.CloudStorage.setItem(
       CloudStorageKeys.Favorites,
@@ -25,7 +25,7 @@ export const setFavorites = (value: string) => {
         if (error) reject(new Error(error))
 
         resolve(result)
-      }
+      },
     )
   })
 }
