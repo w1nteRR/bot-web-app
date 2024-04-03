@@ -1,63 +1,40 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useRecentUsersStore } from '../../store/recent-users.store'
+
 import { CloudStorage, CloudStorageKeys } from '../../helpers/cloud-storage'
 import { IRecentUser } from '../../types/user/user.types'
 
 type List = Array<IRecentUser>
 
 export const useRecentUsers = () => {
-  const [recentUsers, setRecentUsers] = useState<List>([])
+  const recentUsers = useRecentUsersStore((state) => state.recentUsers)
+
+  const initRecentUsers = useRecentUsersStore((state) => state.init)
+  const removeRecentUser = useRecentUsersStore((state) => state.remove)
+  const addRecentUser = useRecentUsersStore((state) => state.add)
+  const resetRecentUsers = useRecentUsersStore((state) => state.reset)
 
   const updateRecentUsers = async (list: List) => {
     const value = JSON.stringify(list)
 
     await CloudStorage.setValue(CloudStorageKeys.Recent, value)
-
-    setRecentUsers(list)
   }
 
-  const addUserToRecentCloudStorage = async (user: IRecentUser) => {
-    let list = [...recentUsers]
+  const addUserToRecentCloudStorage = (user: IRecentUser) => {
+    const isUserExist = recentUsers.some(
+      (recentUser) => recentUser.id === user.id,
+    )
 
-    try {
-      const isUserExist = recentUsers.some(
-        (recentUser) => recentUser.id === user.id
-      )
+    if (isUserExist) return
 
-      if (isUserExist) return
-
-      list.push(user)
-
-      await updateRecentUsers(list)
-    } catch (error) {
-      console.log('USER SAVE ERROR', error)
-    }
-  }
-
-  const removeUserFromRecentCloudStorage = async (id: string) => {
-    let list = [...recentUsers]
-
-    try {
-      list = list.filter((user) => user.id !== id)
-
-      await updateRecentUsers(list)
-    } catch (error) {
-      console.log('USER REMOVE ERROR', error)
-    }
-  }
-
-  const removeAllUsersFromRecentCloudStorage = async () => {
-    try {
-      await updateRecentUsers([])
-    } catch (error) {
-      console.log('RECENT REMOVE ALL ERROR', error)
-    }
+    addRecentUser(user)
   }
 
   const loadRecentUsers = async () => {
     try {
       const recentUsers = await CloudStorage.values(CloudStorageKeys.Recent)
 
-      setRecentUsers(recentUsers)
+      initRecentUsers(recentUsers)
     } catch (error) {
       console.log('LOAD ERROR', error)
     }
@@ -67,10 +44,18 @@ export const useRecentUsers = () => {
     loadRecentUsers()
   }, [])
 
+  useEffect(() => {
+    const updateRecentUsersStorage = async () => {
+      await updateRecentUsers(recentUsers)
+    }
+
+    updateRecentUsersStorage()
+  }, [recentUsers.length])
+
   return {
     addUserToRecentCloudStorage,
-    removeUserFromRecentCloudStorage,
-    removeAllUsersFromRecentCloudStorage,
+    removeRecentUser,
+    resetRecentUsers,
     recentUsers,
   }
 }
