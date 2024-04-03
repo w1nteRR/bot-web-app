@@ -33,7 +33,7 @@ export const routes: RouteObject[] = [
     element: <NotificationsPage />,
   },
   {
-    path: Pages.NotificationsCreate,
+    path: Pages.NotificationsSettings,
     element: <NotificationsSettingsPage />,
   },
   {
