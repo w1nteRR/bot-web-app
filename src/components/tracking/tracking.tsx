@@ -15,22 +15,22 @@ export const Tracking: FC = () => {
   const { themeParams, initDataUnsafe } = useTelegram()
   const navigate = useNavigate()
 
-  const { isLoading, data } = useQuery(
-    ['notifications'],
-    () => NotificationsApi.getNotifications(initDataUnsafe.user?.id!),
-    {
-      staleTime: Infinity,
-    },
-  )
+  // const { isLoading, data } = useQuery(
+  //   ['notifications'],
+  //   () => NotificationsApi.getNotifications(initDataUnsafe.user?.id!),
+  //   {
+  //     staleTime: Infinity,
+  //   },
+  // )
 
   const handleButtonClick = () => {
-    if (data?.data.length) {
-      navigate(Pages.NotificationsCreate)
+    // if (data?.data.length) {
+    // navigate(Pages.NotificationsCreate)
+    //
+    //   return
+    // }
 
-      return
-    }
-
-    navigate(Pages.Notifications)
+    navigate(Pages.NotificationsSettings)
   }
 
   return (
@@ -41,7 +41,7 @@ export const Tracking: FC = () => {
       <button
         className='p-4 rounded-xl  w-full h-full flex items-center gap-2'
         onClick={handleButtonClick}
-        disabled={isLoading}
+        // disabled={isLoading}
       >
         <IoNotificationsCircleSharp size={30} color={themeParams.link_color} />
 
@@ -49,18 +49,18 @@ export const Tracking: FC = () => {
           Notifications
         </span>
 
-        {isLoading ? (
-          <CgSpinnerTwoAlt
-            className='animate-spin justify-self-end ml-auto'
-            color={themeParams.link_color}
-            size={18}
-          />
-        ) : (
-          <IoChevronForwardOutline
-            className='justify-self-end ml-auto'
-            color={themeParams.hint_color}
-          />
-        )}
+        {/*{isLoading ? (*/}
+        {/*  <CgSpinnerTwoAlt*/}
+        {/*    className='animate-spin justify-self-end ml-auto'*/}
+        {/*    color={themeParams.link_color}*/}
+        {/*    size={18}*/}
+        {/*  />*/}
+        {/*) : (*/}
+        {/*  <IoChevronForwardOutline*/}
+        {/*    className='justify-self-end ml-auto'*/}
+        {/*    color={themeParams.hint_color}*/}
+        {/*  />*/}
+        {/*)}*/}
       </button>
     </div>
   )

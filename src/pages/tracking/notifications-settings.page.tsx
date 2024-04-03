@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from 'react-query'
+import { isError, useMutation, useQueryClient } from 'react-query'
 import { FiMinus } from 'react-icons/fi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { IoTimer } from 'react-icons/io5'
@@ -8,7 +8,7 @@ import { IoTimer } from 'react-icons/io5'
 import { SpinLoader } from '../../components/ui/loaders/spin-loader'
 import { ModalVertical } from '../../components/ui/modals/modal-vertical'
 import { UserCard } from '../../components/shared/cards/user-card'
-import { ModeToggler } from '../../components/notifications/mode-toggler'
+import { ModeToggle } from '../../components/notifications/mode-toggle'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
@@ -25,11 +25,7 @@ export const NotificationsSettingsPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const queryClient = useQueryClient()
-  const { data, isFetching } = useGetNotificationsQuery()
-  const mutation = useMutation(NotificationsApi.removeNotification, {
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['notifications'] }),
-  })
+  const { data, isFetching, isError } = useGetNotificationsQuery()
 
   const {
     themeParams,
@@ -43,6 +39,15 @@ export const NotificationsSettingsPage: FC = () => {
 
   const { list } = useFavorites()
   const { create } = useNotifications()
+
+  const updateNotificationMutation = useMutation(
+    NotificationsApi.updateNotification,
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries({ queryKey: ['notifications'] }),
+    },
+  )
+
   const {
     handleAccountClick,
     selectedNotificationsAccounts,
@@ -53,9 +58,13 @@ export const NotificationsSettingsPage: FC = () => {
   useBackButton(() => navigate(Pages.Home))
 
   const handleAccountRemoveClick = (id: string) => {
+    if (!data) return
+
+    const ids = data.filter((user) => user.id != id).map((x) => Number(x.id))
+
     showConfirm('Remove tracking', (confirmed) => {
       if (confirmed) {
-        mutation.mutate({ account_id: String(user?.id!), id })
+        updateNotificationMutation.mutate({ account_id: user?.id!, ids })
       }
     })
   }
@@ -112,9 +121,11 @@ export const NotificationsSettingsPage: FC = () => {
     return total === 5
   }, [selectedNotificationsAccounts.length, data?.length])
 
+  console.log('data', data)
+
   if (isFetching) return <SpinLoader fullscreen />
 
-  if (!data?.length) return <Navigate to={Pages.Home} />
+  if (isError || !data?.length) return <Navigate to={Pages.Notifications} />
 
   return (
     <>
@@ -145,7 +156,7 @@ export const NotificationsSettingsPage: FC = () => {
           className='px-5 py-3 rounded-xl flex flex-col gap-3.5'
           style={{ backgroundColor: themeParams.section_bg_color }}
         >
-          <ModeToggler />
+          <ModeToggle />
 
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-2'>
@@ -230,12 +241,12 @@ export const NotificationsSettingsPage: FC = () => {
                 {isSelected ? (
                   <button
                     className='w-14 py-1 rounded-full flex items-center justify-center'
-                    style={{ backgroundColor: themeParams.bg_color }}
+                    style={{ backgroundColor: themeParams.secondary_bg_color }}
                     onClick={() => handleAccountClick(user)}
                   >
                     <span
                       className='text-xs'
-                      style={{ color: themeParams.button_text_color }}
+                      style={{ color: themeParams.text_color }}
                     >
                       Remove
                     </span>
