@@ -84,8 +84,6 @@ export const UserPage: FC = () => {
     },
   )
 
-  console.log('page user id', data?.data.id)
-
   const onChipClick = (chipIndex: number) => {
     setActiveTabIndex(chipIndex)
 

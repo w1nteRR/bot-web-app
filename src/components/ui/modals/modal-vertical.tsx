@@ -33,16 +33,16 @@ export const ModalVertical: FC<IModalProps> = forwardRef(
             animate={{ bottom: 0 }}
             exit={{ bottom: '-100%', transition: { delay: 0.1 } }}
             // transition={{ duration: 0.1 }}
-            className='h-screen w-screen'
+            className='h-full w-screen'
             onClick={onClose}
           >
             <div
-              className='absolute bottom-0 w-screen h-5/6 rounded-t-xl p-3'
-              style={{ backgroundColor: themeParams.secondary_bg_color }}
+              className='absolute bottom-0 w-screen h-5/6 rounded-t-xl'
+              style={{ backgroundColor: themeParams.section_bg_color }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className='flex justify-between'>
-                <div className='w-5/6 overflow-x-scroll'>{header}</div>
+              <div className='flex justify-between p-3'>
+                <div className='overflow-x-scroll'>{header}</div>
 
                 <button
                   onClick={handleClose}
@@ -53,7 +53,9 @@ export const ModalVertical: FC<IModalProps> = forwardRef(
                 </button>
               </div>
 
-              <div>{children}</div>
+              <div style={{ backgroundColor: themeParams.section_bg_color }}>
+                {children}
+              </div>
             </div>
           </motion.div>
         )}
