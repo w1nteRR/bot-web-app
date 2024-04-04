@@ -45,13 +45,13 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
                 }
                 className='px-3 py-1 text-sm mr-3 my-1 w-fit rounded-full'
                 style={{
-                  backgroundColor: themeParams.secondary_bg_color,
+                  backgroundColor: themeParams.section_bg_color,
                   color: themeParams.text_color,
                 }}
               >
                 @{sticker_data.ig_mention.username}
               </div>
-            )
+            ),
           )}
         </div>
       </div>

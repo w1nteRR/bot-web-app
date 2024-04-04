@@ -5,12 +5,10 @@ import { UserCard } from '../../components/shared/cards/user-card'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
-import { useFavorites } from '../../hooks/favorites/useFavorites'
-import { Pages } from '../../types/navigation/navigation.types'
 import { useNotifications } from '../../hooks/notifications/useNotifications'
-import { useQuery } from 'react-query'
-import { NotificationsApi } from '../../api/notifications.api'
-import { CgSpinnerTwoAlt } from 'react-icons/cg'
+
+import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
+import { Pages } from '../../types/navigation/navigation.types'
 
 const TRIM_OFFSET = 5
 export const NotificationsPage: FC = () => {
@@ -21,13 +19,14 @@ export const NotificationsPage: FC = () => {
 
   const { themeParams, MainButton, onEvent, offEvent, initDataUnsafe } =
     useTelegram()
-  const { list } = useFavorites()
   const { create } = useNotifications()
+
+  const { favorites } = useFavoritesContext()
 
   useBackButton(() => navigate(Pages.Home))
 
   const handleShowMoreClick = () => {
-    setTrimOffset(list.length)
+    setTrimOffset(favorites.length)
   }
 
   const createNotifications = async () => {
@@ -112,7 +111,7 @@ export const NotificationsPage: FC = () => {
         className='mx-3 rounded-xl'
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
-        {list.slice(0, trimOffset).map((user) => (
+        {favorites.slice(0, trimOffset).map((user) => (
           <div key={user.id} className='p-3 flex justify-between'>
             <UserCard {...user} />
 
