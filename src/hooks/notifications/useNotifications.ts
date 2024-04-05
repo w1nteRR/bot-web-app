@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 
 import { useTelegram } from '../telegram/useTelegram'
 import { NotificationsApi } from '../../api/notifications.api'
