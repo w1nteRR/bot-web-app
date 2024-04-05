@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query'
 
 import { useTelegram } from '../../telegram/useTelegram'
-import { useFavorites } from '../../favorites/useFavorites'
 
 import { NotificationsApi } from '../../../api/notifications.api'
+import { useFavoritesContext } from '../../context/useFavoritesContext'
 
 const key = 'notifications'
 export const useGetNotificationsQuery = () => {
@@ -11,10 +11,10 @@ export const useGetNotificationsQuery = () => {
     initDataUnsafe: { user },
   } = useTelegram()
 
-  const { list: favorites } = useFavorites()
+  const { favorites } = useFavoritesContext()
 
   return useQuery([key], () => NotificationsApi.getNotifications(user?.id!), {
-    retry: false,
+    retry: 1,
     select: (data) => {
       const notificationIds = data.data.ids
 
