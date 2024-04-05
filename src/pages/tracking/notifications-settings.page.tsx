@@ -121,8 +121,6 @@ export const NotificationsSettingsPage: FC = () => {
     return total === 5
   }, [selectedNotificationsAccounts.length, data?.length])
 
-  console.log('data', data)
-
   if (isFetching) return <SpinLoader fullscreen />
 
   if (isError || !data?.length) return <Navigate to={Pages.Notifications} />
