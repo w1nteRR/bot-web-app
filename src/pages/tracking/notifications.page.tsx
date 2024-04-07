@@ -6,8 +6,8 @@ import { UserCard } from '../../components/shared/cards/user-card'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useNotifications } from '../../hooks/notifications/useNotifications'
-
 import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
+
 import { Pages } from '../../types/navigation/navigation.types'
 
 const TRIM_OFFSET = 5
@@ -19,7 +19,7 @@ export const NotificationsPage: FC = () => {
 
   const { themeParams, MainButton, onEvent, offEvent, initDataUnsafe } =
     useTelegram()
-  const { create } = useNotifications()
+  const { create, isLoading } = useNotifications()
 
   const { favorites } = useFavoritesContext()
 
@@ -74,6 +74,16 @@ export const NotificationsPage: FC = () => {
       MainButton.enable()
     }
   }, [selected.length])
+
+  useEffect(() => {
+    if (isLoading) {
+      MainButton.showProgress()
+
+      return
+    }
+
+    MainButton.hideProgress()
+  }, [isLoading])
 
   useEffect(() => {
     onEvent('mainButtonClicked', createNotifications)
