@@ -13,9 +13,8 @@ import { ModeToggle } from '../../components/notifications/mode-toggle'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useGetNotificationsQuery } from '../../hooks/queries/notifications/useGetNotificationsQuery'
-import { useFavorites } from '../../hooks/favorites/useFavorites'
 import { useNotificationsManagement } from '../../hooks/notifications/useNotificationsManagement'
-import { useNotifications } from '../../hooks/notifications/useNotifications'
+import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 
 import { Pages } from '../../types/navigation/navigation.types'
 
@@ -25,7 +24,7 @@ export const NotificationsSettingsPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const queryClient = useQueryClient()
-  const { data, isFetching, isError } = useGetNotificationsQuery()
+  const { data, isLoading, isError } = useGetNotificationsQuery()
 
   const {
     themeParams,
@@ -37,11 +36,11 @@ export const NotificationsSettingsPage: FC = () => {
     offEvent,
   } = useTelegram()
 
-  const { list } = useFavorites()
-  const { create } = useNotifications()
+  const { favorites, remove: removeAccountFromFavorites } =
+    useFavoritesContext()
 
-  const updateNotificationMutation = useMutation(
-    NotificationsApi.updateNotification,
+  const updateNotificationIdsMutation = useMutation(
+    NotificationsApi.updateNotificationIds,
     {
       onSuccess: () =>
         queryClient.invalidateQueries({ queryKey: ['notifications'] }),
@@ -64,7 +63,8 @@ export const NotificationsSettingsPage: FC = () => {
 
     showConfirm('Remove tracking', (confirmed) => {
       if (confirmed) {
-        updateNotificationMutation.mutate({ account_id: user?.id!, ids })
+        updateNotificationIdsMutation.mutate({ account_id: user?.id!, ids })
+        HapticFeedback.notificationOccurred('success')
       }
     })
   }
@@ -80,11 +80,18 @@ export const NotificationsSettingsPage: FC = () => {
     MainButton.hide()
   }
 
-  const createNotifications = async () => {
+  const updateNotifications = () => {
     const selectedIds = selectedNotificationsAccounts.map(
       (account) => account.id,
     )
-    await create(selectedIds)
+
+    const currentIds = data?.map((user) => user.id)
+
+    if (!currentIds) return
+
+    const ids = [...selectedIds, ...currentIds].map(Number)
+
+    updateNotificationIdsMutation.mutate({ account_id: user?.id!, ids })
 
     handleModalClose()
   }
@@ -92,10 +99,10 @@ export const NotificationsSettingsPage: FC = () => {
   const filteredFavorites = useMemo(() => {
     const currentNotificationsIds = data?.map((x) => x.id)
 
-    return list.filter(
+    return favorites.filter(
       (favorite) => !currentNotificationsIds?.includes(favorite.id),
     )
-  }, [data?.length, list.length, selectedNotificationsAccounts.length])
+  }, [data?.length, favorites.length, selectedNotificationsAccounts.length])
 
   useEffect(() => {
     if (selectedNotificationsAccounts.length) {
@@ -108,20 +115,20 @@ export const NotificationsSettingsPage: FC = () => {
   }, [selectedNotificationsAccounts.length])
 
   useEffect(() => {
-    onEvent('mainButtonClicked', createNotifications)
+    onEvent('mainButtonClicked', updateNotifications)
 
     return () => {
-      offEvent('mainButtonClicked', createNotifications)
+      offEvent('mainButtonClicked', updateNotifications)
     }
   }, [selectedNotificationsAccounts.length])
 
   const isNotificationsAccountsLimit = useMemo(() => {
     const total = selectedNotificationsAccounts.length + data?.length!
 
-    return total === 5
+    return total === 4
   }, [selectedNotificationsAccounts.length, data?.length])
 
-  if (isFetching) return <SpinLoader fullscreen />
+  if (isLoading) return <SpinLoader fullscreen />
 
   if (isError || !data?.length) return <Navigate to={Pages.Notifications} />
 
