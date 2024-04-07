@@ -2,7 +2,6 @@ import { mainInstance } from './axios.config'
 import {
   INotification,
   INotificationCreatePayload,
-  INotificationDeletePayload,
   INotificationUpdatePayload,
 } from '../types/notifications/notifications.types'
 
@@ -29,11 +28,11 @@ export const NotificationsApi = {
     })
   },
 
-  async removeNotification(payload: INotificationDeletePayload) {
-    const { account_id, id } = payload
-
-    return mainInstance.delete(url, {
-      params: { accountId: account_id, userId: id },
+  async updateNotificationIds(payload: INotificationUpdatePayload) {
+    return mainInstance.patch(`${url}/notifications/ids`, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
   },
 }
