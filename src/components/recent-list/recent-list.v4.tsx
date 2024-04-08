@@ -11,7 +11,7 @@ import { UserCard } from '../shared/cards/user-card'
 import { useRecentUsersStore } from '../../store/recent-users.store'
 
 export const RecentListV4: FC = () => {
-  const { themeParams } = useTelegram()
+  const { themeParams, HapticFeedback } = useTelegram()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -23,6 +23,17 @@ export const RecentListV4: FC = () => {
     navigate(`${Pages.User.replace(':username', username)}`, {
       state: { from: location.pathname },
     })
+  }, [])
+
+  const handleUserDelete = useCallback((id: string) => {
+    removeRecentUser(id)
+    HapticFeedback.impactOccurred('light')
+  }, [])
+
+  const handleResetRecentUsers = useCallback(() => {
+    resetRecentUsers()
+
+    HapticFeedback.impactOccurred('heavy')
   }, [])
 
   const reversedRecentUsers = useMemo(
@@ -41,7 +52,7 @@ export const RecentListV4: FC = () => {
           {t('home.recentSearch')}
         </p>
 
-        <button onClick={resetRecentUsers}>
+        <button onClick={handleResetRecentUsers}>
           <span style={{ color: themeParams.link_color }}>
             {t('common.clearAll')}
           </span>
@@ -60,7 +71,7 @@ export const RecentListV4: FC = () => {
 
             <button
               className='flex items-center'
-              onClick={() => removeRecentUser(user.id)}
+              onClick={() => handleUserDelete(user.id)}
             >
               <IoClose size={18} color={themeParams.hint_color} />
             </button>
