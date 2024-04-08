@@ -75,6 +75,9 @@ export const SearchForm = () => {
           onChange={handleInputChange}
           type='text'
           name='search'
+          autoComplete='off'
+          autoCorrect='off'
+          autoCapitalize='off'
         />
       </form>
     </>

@@ -8,7 +8,6 @@ import { IoTimer } from 'react-icons/io5'
 import { SpinLoader } from '../../components/ui/loaders/spin-loader'
 import { ModalVertical } from '../../components/ui/modals/modal-vertical'
 import { UserCard } from '../../components/shared/cards/user-card'
-import { ModeToggle } from '../../components/notifications/mode-toggle'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
@@ -36,8 +35,7 @@ export const NotificationsSettingsPage: FC = () => {
     offEvent,
   } = useTelegram()
 
-  const { favorites, remove: removeAccountFromFavorites } =
-    useFavoritesContext()
+  const { favorites } = useFavoritesContext()
 
   const updateNotificationIdsMutation = useMutation(
     NotificationsApi.updateNotificationIds,
@@ -161,8 +159,6 @@ export const NotificationsSettingsPage: FC = () => {
           className='px-5 py-3 rounded-xl flex flex-col gap-3.5'
           style={{ backgroundColor: themeParams.section_bg_color }}
         >
-          <ModeToggle />
-
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-2'>
               <div>

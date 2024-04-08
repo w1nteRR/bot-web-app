@@ -32,11 +32,13 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
       showConfirm(t('common.areUSure'), async (confirmed) => {
         if (confirmed) {
           await removeUserFromFavorites(user.id)
-          setIsUserFavorite(false)
+          HapticFeedback.notificationOccurred('warning')
 
           return
         }
       })
+
+      return
     }
 
     if (favorites.length >= 25) {
@@ -47,9 +49,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     }
 
     await addUserToFavorites(user)
-
-    setIsUserFavorite(true)
-    showAlert(t('common.userAddedToFavorites'))
+    HapticFeedback.notificationOccurred('success')
   }
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
     }
 
     checkIsUserFavorite()
-  }, [])
+  }, [favorites.length])
 
   return (
     <button

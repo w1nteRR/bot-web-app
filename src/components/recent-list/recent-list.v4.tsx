@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { IoClose } from 'react-icons/io5'
@@ -11,7 +11,7 @@ import { UserCard } from '../shared/cards/user-card'
 import { useRecentUsersStore } from '../../store/recent-users.store'
 
 export const RecentListV4: FC = () => {
-  const { themeParams } = useTelegram()
+  const { themeParams, HapticFeedback } = useTelegram()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -25,6 +25,21 @@ export const RecentListV4: FC = () => {
     })
   }, [])
 
+  const handleUserDelete = useCallback((id: string) => {
+    removeRecentUser(id)
+    HapticFeedback.impactOccurred('light')
+  }, [])
+
+  const handleResetRecentUsers = useCallback(() => {
+    resetRecentUsers()
+
+    HapticFeedback.impactOccurred('heavy')
+  }, [])
+
+  const reversedRecentUsers = useMemo(
+    () => [...recentUsers].reverse(),
+    [recentUsers.length],
+  )
   if (!recentUsers?.length) return null
 
   return (
@@ -37,7 +52,7 @@ export const RecentListV4: FC = () => {
           {t('home.recentSearch')}
         </p>
 
-        <button onClick={resetRecentUsers}>
+        <button onClick={handleResetRecentUsers}>
           <span style={{ color: themeParams.link_color }}>
             {t('common.clearAll')}
           </span>
@@ -47,7 +62,7 @@ export const RecentListV4: FC = () => {
         className='rounded-xl'
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
-        {recentUsers.map((user) => (
+        {reversedRecentUsers.map((user) => (
           <div key={user.id} className='p-3 flex justify-between '>
             <UserCard
               {...user}
@@ -56,7 +71,7 @@ export const RecentListV4: FC = () => {
 
             <button
               className='flex items-center'
-              onClick={() => removeRecentUser(user.id)}
+              onClick={() => handleUserDelete(user.id)}
             >
               <IoClose size={18} color={themeParams.hint_color} />
             </button>

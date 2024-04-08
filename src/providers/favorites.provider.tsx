@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useQuery } from 'react-query'
 
 import {
   getFavoritesStorage,
@@ -13,6 +14,9 @@ import {
 } from '../helpers/favorites.storage'
 
 import { IInstagramShortUser } from '../types/user/user.types'
+import { useTelegram } from '../hooks/telegram/useTelegram'
+import { useWebAppUserContext } from '../hooks/context/useWebAppUserContext'
+import { NotificationsApi } from '../api/notifications.api'
 
 interface IFavoritesContextProps {
   children: ReactNode
@@ -30,7 +34,30 @@ export const FavoritesContext = createContext<IContext>({} as IContext)
 export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<Array<IInstagramShortUser>>([])
 
+  const { user } = useWebAppUserContext()
+  const { showAlert } = useTelegram()
+
+  const { refetch } = useQuery(
+    ['notifications'],
+    () => NotificationsApi.getNotifications(user?.id!),
+
+    { enabled: false, onSuccess: (data) => data.data },
+  )
+
   const remove = async (id: string) => {
+    if (user?.is_subscriber) {
+      const { data } = await refetch()
+      if (!data) return
+
+      const isUserTracking = data.data.ids.includes(Number(id))
+
+      if (isUserTracking) {
+        showAlert('Unable to delete a tracked user.')
+
+        return
+      }
+    }
+
     let favoritesSnapshot = [...favorites]
 
     favoritesSnapshot = favoritesSnapshot.filter(
