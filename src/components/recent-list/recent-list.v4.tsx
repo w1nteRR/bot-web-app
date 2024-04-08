@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { IoClose } from 'react-icons/io5'
@@ -25,6 +25,10 @@ export const RecentListV4: FC = () => {
     })
   }, [])
 
+  const reversedRecentUsers = useMemo(
+    () => [...recentUsers].reverse(),
+    [recentUsers.length],
+  )
   if (!recentUsers?.length) return null
 
   return (
@@ -47,7 +51,7 @@ export const RecentListV4: FC = () => {
         className='rounded-xl'
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
-        {recentUsers.map((user) => (
+        {reversedRecentUsers.map((user) => (
           <div key={user.id} className='p-3 flex justify-between '>
             <UserCard
               {...user}
