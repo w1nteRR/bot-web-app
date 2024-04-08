@@ -11,7 +11,7 @@ export const Title: FC<ITitleProps> = ({ children, size = '4xl' }) => {
 
   return (
     <p
-      className={`text-3xl font-bold`}
+      className={`text-3xl font-bold truncate`}
       style={{ color: themeParams.text_color }}
     >
       {children}

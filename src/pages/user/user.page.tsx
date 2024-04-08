@@ -124,7 +124,7 @@ export const UserPage: FC = () => {
   return (
     <div className='py-10'>
       <div className='flex px-5 justify-between'>
-        <div>
+        <div className='truncate'>
           <Title>{data.data.username}</Title>
           <p className='text-sm' style={{ color: tg.themeParams.hint_color }}>
             {data?.data.full_name}
