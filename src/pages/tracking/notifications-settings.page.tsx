@@ -161,8 +161,6 @@ export const NotificationsSettingsPage: FC = () => {
           className='px-5 py-3 rounded-xl flex flex-col gap-3.5'
           style={{ backgroundColor: themeParams.section_bg_color }}
         >
-          <ModeToggle />
-
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-2'>
               <div>
