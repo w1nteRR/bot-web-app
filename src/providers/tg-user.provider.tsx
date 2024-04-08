@@ -48,7 +48,10 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
     try {
       const { data } = await refetch()
 
-      return data?.data.user
+      return {
+        ...data?.data.user,
+        is_subscriber: data?.data.is_subscriber,
+      }
     } catch (error) {
       throw error
     }
@@ -66,7 +69,7 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
     validateUser()
       .then((user) => setUser(user as IWebAppUser))
       .catch(() => navigate(Pages.NotAuthorized))
-  }, [user])
+  }, [user?.id])
 
   return (
     <WebAppUserContext.Provider value={value}>
