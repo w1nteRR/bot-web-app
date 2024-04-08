@@ -24,4 +24,11 @@ export interface IRecentUser {
   username: string
 }
 
+export interface IInstagramShortUser {
+  id: string
+  profile_image: string
+  full_name: string
+  username: string
+}
+
 export type RecentUsersList = Array<IRecentUser>

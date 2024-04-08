@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react'
+import { FC, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { IoClose } from 'react-icons/io5'
@@ -8,17 +8,16 @@ import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { Pages } from '../../types/navigation/navigation.types'
 import { UserCard } from '../shared/cards/user-card'
+import { useRecentUsersStore } from '../../store/recent-users.store'
 
 export const RecentListV4: FC = () => {
   const { themeParams } = useTelegram()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const {
-    recentUsers,
-    removeUserFromRecentCloudStorage,
-    removeAllUsersFromRecentCloudStorage,
-  } = useRecentUsers()
+  const { removeRecentUser, resetRecentUsers } = useRecentUsers()
+
+  const recentUsers = useRecentUsersStore((state) => state.recentUsers)
 
   const handleUserClick = useCallback((username: string) => {
     navigate(`${Pages.User.replace(':username', username)}`, {
@@ -38,7 +37,7 @@ export const RecentListV4: FC = () => {
           {t('home.recentSearch')}
         </p>
 
-        <button onClick={removeAllUsersFromRecentCloudStorage}>
+        <button onClick={resetRecentUsers}>
           <span style={{ color: themeParams.link_color }}>
             {t('common.clearAll')}
           </span>
@@ -57,9 +56,7 @@ export const RecentListV4: FC = () => {
 
             <button
               className='flex items-center'
-              onClick={async () =>
-                await removeUserFromRecentCloudStorage(user.id)
-              }
+              onClick={() => removeRecentUser(user.id)}
             >
               <IoClose size={18} color={themeParams.hint_color} />
             </button>

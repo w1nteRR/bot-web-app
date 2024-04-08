@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +11,7 @@ import { useFavorites } from '../../hooks/favorites/useFavorites'
 
 import { IRecentUser } from '../../types/user/user.types'
 import { showRecentListPopupError } from '../../helpers/popup.error'
+import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 
 export const RecentListV3 = () => {
   const { t } = useTranslation()
@@ -19,7 +20,7 @@ export const RecentListV3 = () => {
   const { setUser, query, user } = useStoriesQuery()
   const navigate = useNavigate()
 
-  const { list, isLoading: isFavoritesLoading } = useFavorites()
+  const { favorites } = useFavoritesContext()
 
   const onUserClick = (user: IRecentUser) => {
     if (query.isLoading) return
@@ -39,42 +40,49 @@ export const RecentListV3 = () => {
     }
   }, [user.id])
 
+  const reversedFavorites = useMemo(
+    () => [...favorites].reverse(),
+    [favorites.length],
+  )
+
   const isLoading = query.isLoading || query.isRefetching
 
-  if (isFavoritesLoading)
-    return (
-      <div className='w-full mt-5 flex justify-center gap-1'>
-        {[1, 2, 3, 4, 5].map((x) => (
-          <div
-            key={x}
-            className='w-16 h-16 rounded-full animate-pulse inline-block'
-            style={{ backgroundColor: themeParams.secondary_bg_color }}
-          />
-        ))}
-      </div>
-    )
-
-  if (!list.length)
-    return (
-      <div
-        className='rounded-xl p-3 m-5'
-        style={{ backgroundColor: themeParams.secondary_bg_color }}
-      >
-        <p
-          style={{ color: themeParams.text_color }}
-          className='text-center font-semibold'
-        >
-          {t('favorites.emptyTitle')}
-        </p>
-
-        <p
-          style={{ color: themeParams.hint_color }}
-          className='text-center text-xs'
-        >
-          {t('favorites.emptyBody')}
-        </p>
-      </div>
-    )
+  // if (isFavoritesLoading)
+  //   return (
+  //     <div className='w-full mt-5 flex justify-center gap-1'>
+  //       <div className='inline-block px-1.5'>
+  //         {[1, 2, 3, 4, 5].map((x) => (
+  //           <div
+  //             key={x}
+  //             className='w-16 h-16 rounded-full animate-pulse inline-block  mt-1'
+  //             style={{ backgroundColor: themeParams.secondary_bg_color }}
+  //           />
+  //         ))}
+  //       </div>
+  //     </div>
+  //   )
+  //
+  // if (!list.length)
+  //   return (
+  //     <div
+  //       className='rounded-xl p-3 m-5'
+  //       style={{ backgroundColor: themeParams.secondary_bg_color }}
+  //     >
+  //       <p
+  //         style={{ color: themeParams.text_color }}
+  //         className='text-center font-semibold'
+  //       >
+  //         {t('favorites.emptyTitle')}
+  //       </p>
+  //
+  //       <p
+  //         style={{ color: themeParams.hint_color }}
+  //         className='text-center text-xs'
+  //       >
+  //         {t('favorites.emptyBody')}
+  //       </p>
+  //     </div>
+  //   )
 
   return (
     <>
@@ -85,7 +93,6 @@ export const RecentListV3 = () => {
         >
           {t('home.favorites')}
         </span>
-
         {isLoading && (
           <CgSpinnerTwoAlt
             className='animate-spin'
@@ -94,9 +101,8 @@ export const RecentListV3 = () => {
           />
         )}
       </div>
-
       <div className='w-full mt-5 whitespace-nowrap overflow-x-scroll'>
-        {list.map((user) => (
+        {reversedFavorites.map((user) => (
           <RecentCard
             key={user.id}
             username={user.username}
