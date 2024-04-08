@@ -55,7 +55,7 @@ export const UserPage: FC = () => {
         const { username, full_name, id, profile_image } = data
 
         if (isFromSearch) {
-          await addUserToRecentCloudStorage({
+          addUserToRecentCloudStorage({
             username,
             full_name,
             id: String(id),
