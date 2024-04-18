@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from 'react-query'
 import { FiMinus } from 'react-icons/fi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
@@ -104,6 +104,7 @@ export const NotificationsSettingsPage: FC = () => {
 
   useEffect(() => {
     if (selectedNotificationsAccounts.length) {
+      MainButton.setText('Update')
       MainButton.show()
 
       return
@@ -128,7 +129,7 @@ export const NotificationsSettingsPage: FC = () => {
 
   if (isLoading) return <SpinLoader fullscreen />
 
-  if (isError || !data?.length) return <Navigate to={Pages.Notifications} />
+  if (!data) return null
 
   return (
     <>

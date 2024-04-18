@@ -164,11 +164,14 @@ export const UserPage: FC = () => {
           <li>&#x2022; {data.data.category_name}</li>
         )}
       </ul>
-      <div className='mt-5 px-2'>
-        <AddToFavorites
-          user={{ username, profile_image, full_name, id: String(id) }}
-        />
-      </div>
+
+      {!is_privite && (
+        <div className='mt-5 px-2'>
+          <AddToFavorites
+            user={{ username, profile_image, full_name, id: String(id) }}
+          />
+        </div>
+      )}
 
       {is_privite ? (
         <div className='flex items-center justify-center mt-10'>

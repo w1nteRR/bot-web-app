@@ -13,7 +13,7 @@ export const Tracking: FC = () => {
   const navigate = useNavigate()
 
   const handleButtonClick = () => {
-    navigate(Pages.NotificationsSettings)
+    navigate(Pages.Notifications)
   }
 
   return (

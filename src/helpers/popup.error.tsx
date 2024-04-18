@@ -14,7 +14,7 @@ export const showRecentListPopupError = (
 
   const params: PopupParams = {
     message: i18next.t('common.storiesNotFound'),
-    buttons: buttons,
+    buttons,
   }
 
   return window.Telegram.WebApp.showPopup(params, (id) => {
