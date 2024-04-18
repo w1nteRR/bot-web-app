@@ -104,6 +104,7 @@ export const NotificationsSettingsPage: FC = () => {
 
   useEffect(() => {
     if (selectedNotificationsAccounts.length) {
+      MainButton.setText('Update')
       MainButton.show()
 
       return
