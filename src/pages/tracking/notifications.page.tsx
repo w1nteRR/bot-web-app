@@ -59,7 +59,7 @@ export const NotificationsPage: FC = () => {
       MainButton.disable()
     }
 
-    if (selected.length > 5) {
+    if (selected.length > 4) {
       MainButton.disable()
       MainButton.setParams({
         color: themeParams.bg_color,
@@ -113,7 +113,7 @@ export const NotificationsPage: FC = () => {
           className='text-center text-sm mt-3'
           style={{ color: themeParams.hint_color }}
         >
-          Maximize ability to create up to five notifications*
+          Maximize ability to create up to <b>four</b> notifications*
         </p>
       </div>
 
@@ -128,7 +128,7 @@ export const NotificationsPage: FC = () => {
             <div className='flex items-center'>
               <input
                 type='checkbox'
-                className='p-1'
+                className='p-2.5'
                 value={user.id}
                 onChange={handleCheckboxChange}
               />
