@@ -2,9 +2,10 @@ export enum Pages {
   Home = '/',
   Favorites = '/favorites',
   User = '/user/:username',
+  NotificationsSelector = '/tracking',
   UserStories = '/user/stories/:id',
   Notifications = '/notifications',
-  NotificationsSettings = '/notifications/settings',
+  NotificationsSettings = 'settings',
   Subscription = '/subscription',
   NotAuthorized = '/403',
 }

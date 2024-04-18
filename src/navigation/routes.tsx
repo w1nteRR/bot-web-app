@@ -10,6 +10,7 @@ import { SubscriptionPage } from '../pages/subscription/subscription.page'
 import { NotAuthorizedPage } from '../pages/misc/403.page'
 
 import { Pages } from '../types/navigation/navigation.types'
+import { NotificationsLayout } from '../layouts/notifications.layout'
 
 export const routes: RouteObject[] = [
   {
@@ -29,17 +30,27 @@ export const routes: RouteObject[] = [
     element: <UserStoriesPage />,
   },
   {
-    path: Pages.Notifications,
+    path: Pages.NotificationsSelector,
     element: <NotificationsPage />,
   },
   {
-    path: Pages.NotificationsSettings,
-    element: <NotificationsSettingsPage />,
+    path: Pages.Notifications,
+    element: <NotificationsLayout />,
+
+    children: [
+      {
+        path: Pages.NotificationsSettings,
+        element: <NotificationsSettingsPage />,
+        index: true,
+      },
+    ],
   },
+
   {
     path: Pages.Subscription,
     element: <SubscriptionPage />,
   },
+
   {
     path: Pages.NotAuthorized,
     element: <NotAuthorizedPage />,
