@@ -30,6 +30,8 @@ export const NotificationsPage: FC = () => {
   }
 
   const createNotifications = async () => {
+    if (!selected.length) return
+
     await create(selected)
   }
 
@@ -55,10 +57,6 @@ export const NotificationsPage: FC = () => {
     MainButton.enable()
     MainButton.show()
 
-    if (!selected.length) {
-      MainButton.disable()
-    }
-
     if (selected.length > 4) {
       MainButton.disable()
       MainButton.setParams({
@@ -68,10 +66,6 @@ export const NotificationsPage: FC = () => {
       })
 
       return
-    }
-
-    return () => {
-      MainButton.enable()
     }
   }, [selected.length])
 
