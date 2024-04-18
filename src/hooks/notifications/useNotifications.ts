@@ -23,7 +23,7 @@ export const useNotifications = () => {
     () => NotificationsApi.getNotifications(user?.id!),
     {
       enabled: false,
-      onSuccess: () => navigate(Pages.NotificationsSettings),
+      onSuccess: () => navigate(Pages.Notifications),
     },
   )
 
