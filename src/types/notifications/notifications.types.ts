@@ -10,7 +10,6 @@ export interface INotificationUpdatePayload {
   ids: number[]
 }
 export interface INotificationCreatePayload {
-  last_time_checked: number
   ids: number[]
   account_id: number
 }
