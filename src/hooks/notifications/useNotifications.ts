@@ -15,7 +15,7 @@ export const useNotifications = () => {
   const navigate = useNavigate()
 
   const mutation = useMutation(NotificationsApi.createNotifications, {
-    retry: 0,
+    retry: 2,
   })
 
   const { refetch } = useQuery(
@@ -24,7 +24,7 @@ export const useNotifications = () => {
     {
       enabled: false,
       onSuccess: () => navigate(Pages.Notifications),
-    },
+    }
   )
 
   const create = useCallback(async (ids: string[]) => {
@@ -33,12 +33,9 @@ export const useNotifications = () => {
     const account_id = user.id
     const numberIds = ids.map(Number)
 
-    const last_time_checked = Math.floor(Date.now() / 1000)
-
     try {
       mutation.mutate({
         account_id,
-        last_time_checked,
         ids: numberIds,
       })
 
