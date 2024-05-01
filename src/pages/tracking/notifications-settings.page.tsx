@@ -2,12 +2,13 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from 'react-query'
 import { FiMinus } from 'react-icons/fi'
-import { IoIosAddCircleOutline } from 'react-icons/io'
+import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { IoTimer } from 'react-icons/io5'
 
 import { SpinLoader } from '../../components/ui/loaders/spin-loader'
 import { ModalVertical } from '../../components/ui/modals/modal-vertical'
 import { UserCard } from '../../components/shared/cards/user-card'
+import { Chip } from '../../components/ui/chip/chip.ui'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
@@ -40,9 +41,15 @@ export const NotificationsSettingsPage: FC = () => {
   const updateNotificationIdsMutation = useMutation(
     NotificationsApi.updateNotificationIds,
     {
-      onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: ['notifications'] }),
-    },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['notifications'] })
+        HapticFeedback.notificationOccurred('success')
+      },
+
+      onError: () => {
+        HapticFeedback.notificationOccurred('error')
+      },
+    }
   )
 
   const {
@@ -62,7 +69,6 @@ export const NotificationsSettingsPage: FC = () => {
     showConfirm('Remove tracking', (confirmed) => {
       if (confirmed) {
         updateNotificationIdsMutation.mutate({ account_id: user?.id!, ids })
-        HapticFeedback.notificationOccurred('success')
       }
     })
   }
@@ -80,7 +86,7 @@ export const NotificationsSettingsPage: FC = () => {
 
   const updateNotifications = () => {
     const selectedIds = selectedNotificationsAccounts.map(
-      (account) => account.id,
+      (account) => account.id
     )
 
     const currentIds = data?.map((user) => user.id)
@@ -98,11 +104,12 @@ export const NotificationsSettingsPage: FC = () => {
     const currentNotificationsIds = data?.map((x) => x.id)
 
     return favorites.filter(
-      (favorite) => !currentNotificationsIds?.includes(favorite.id),
+      (favorite) => !currentNotificationsIds?.includes(favorite.id)
     )
   }, [data?.length, favorites.length, selectedNotificationsAccounts.length])
 
   useEffect(() => {
+    MainButton.hideProgress()
     if (selectedNotificationsAccounts.length) {
       MainButton.setText('Update')
       MainButton.show()
@@ -128,7 +135,6 @@ export const NotificationsSettingsPage: FC = () => {
   }, [selectedNotificationsAccounts.length, data?.length])
 
   if (isLoading) return <SpinLoader fullscreen />
-
   if (!data) return null
 
   return (
@@ -175,28 +181,40 @@ export const NotificationsSettingsPage: FC = () => {
         </div>
       </div>
 
-      <div className='px-5'>
-        <p
-          className='uppercase text-sm mb-1'
-          style={{ color: themeParams.hint_color }}
-        >
-          Tracking accounts
-        </p>
+      <div className='px-5 py-3'>
+        <div className='flex flex-row items-center justify-between mb-1'>
+          <p
+            className='uppercase text-sm'
+            style={{ color: themeParams.hint_color }}
+          >
+            Tracking accounts
+          </p>
+
+          <button
+            style={{ color: themeParams.link_color }}
+            onClick={handleAccountAddClick}
+          >
+            Manage
+          </button>
+        </div>
+
         <div
           className='px-5 py-3 rounded-xl flex  flex-row items-center'
           style={{ backgroundColor: themeParams.section_bg_color }}
         >
-          {data.length < 5 && (
+          {/* {data.length < 5 && (
             <button onClick={handleAccountAddClick}>
               <IoIosAddCircleOutline
                 className='w-10 h-10'
                 color={themeParams.link_color}
               />
             </button>
-          )}
+          )} */}
 
           <div
-            className={`flex ${data.length === 5 ? 'justify-center' : 'justify-end'} items-center w-full gap-2.5`}
+            className={`flex ${
+              data.length === 5 ? 'justify-center' : 'justify-end'
+            } items-center w-full gap-2.5`}
           >
             {data.map((account) => (
               <div
@@ -229,10 +247,30 @@ export const NotificationsSettingsPage: FC = () => {
         </div>
       </div>
 
+      {updateNotificationIdsMutation.isLoading && (
+        <div className='flex items-center justify-center mt-10 transition-transform'>
+          <Chip>
+            <div className='flex items-center'>
+              <span
+                style={{ color: themeParams.text_color }}
+                className='text-xs'
+              >
+                Updating
+              </span>
+              <CgSpinnerTwoAlt
+                className='animate-spin ml-2'
+                color={themeParams.link_color}
+                size={13}
+              />
+            </div>
+          </Chip>
+        </div>
+      )}
+
       <ModalVertical open={isModalOpen} onClose={handleModalClose}>
         {filteredFavorites.map((user) => {
           const isSelected = selectedNotificationsAccounts.some(
-            (selectedAccount) => selectedAccount.id === user.id,
+            (selectedAccount) => selectedAccount.id === user.id
           )
 
           return (
