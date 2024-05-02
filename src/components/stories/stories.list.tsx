@@ -1,10 +1,12 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { IoCloudDownloadOutline } from 'react-icons/io5'
 
 import { MediaRender } from '../shared/media-render/media-render.shared'
 import { convertUnixTimestamp } from '../../helpers/story-timestamp'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
+import { useDownloadStory } from '../../hooks/stories/useDownloadStory'
 
 import { IStory } from '../../types/stories/stories.types'
 import { Pages } from '../../types/navigation/navigation.types'
@@ -14,13 +16,20 @@ interface IStoriesListProps {
 }
 
 export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
-  const { themeParams } = useTelegram()
+  const { themeParams, HapticFeedback } = useTelegram()
   const navigate = useNavigate()
+
+  const { download } = useDownloadStory()
 
   const handleMentionClick = (username: string) => {
     navigate(`${Pages.User.replace(':username', username)}`, {
       state: { from: location.pathname },
     })
+  }
+
+  const handleDownloadClick = async (story: IStory) => {
+    HapticFeedback.impactOccurred('light')
+    await download(story)
   }
 
   return stories.map((story) => (
@@ -31,9 +40,20 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
       />
 
       <div className='p-3 pb-10'>
-        <p className='text-sm' style={{ color: themeParams.text_color }}>
-          {convertUnixTimestamp(story.taken_at)}
-        </p>
+        <div className='flex items-center justify-between'>
+          <p className='text-sm' style={{ color: themeParams.text_color }}>
+            {convertUnixTimestamp(story.taken_at)}
+          </p>
+          <button
+            style={{ color: themeParams.button_color }}
+            className='text-sm'
+          >
+            <IoCloudDownloadOutline
+              size={24}
+              onClick={() => handleDownloadClick(story)}
+            />
+          </button>
+        </div>
 
         <div className='my-5 flex flex-wrap'>
           {story.story_bloks_stickers?.map(
@@ -51,7 +71,7 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
               >
                 @{sticker_data.ig_mention.username}
               </div>
-            ),
+            )
           )}
         </div>
       </div>
