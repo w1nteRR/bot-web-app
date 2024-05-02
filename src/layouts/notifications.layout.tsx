@@ -2,6 +2,7 @@ import { FC, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useGetNotificationsQuery } from '../hooks/queries/notifications/useGetNotificationsQuery'
 import { Pages } from '../types/navigation/navigation.types'
+import { SpinLoader } from '../components/ui/loaders/spin-loader'
 
 export const NotificationsLayout: FC = () => {
   const { data, isLoading, isError } = useGetNotificationsQuery()
@@ -19,6 +20,8 @@ export const NotificationsLayout: FC = () => {
 
     navigate(Pages.NotificationsSettings)
   }, [isLoading, data?.length, isError])
+
+  if (isLoading) return <SpinLoader fullscreen />
 
   return <Outlet />
 }
