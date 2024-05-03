@@ -21,5 +21,7 @@ export const useDownloadStory = () => {
 
   return {
     download,
+    isLoading: mutation.isLoading,
+    isSuccess: mutation.isSuccess,
   }
 }

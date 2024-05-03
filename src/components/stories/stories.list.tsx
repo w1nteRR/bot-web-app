@@ -1,7 +1,8 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IoCloudDownloadOutline } from 'react-icons/io5'
+import { IoCloudDownloadOutline, IoCloudDoneOutline } from 'react-icons/io5'
 
+import { SpinLoader } from '../ui/loaders/spin-loader'
 import { MediaRender } from '../shared/media-render/media-render.shared'
 import { convertUnixTimestamp } from '../../helpers/story-timestamp'
 
@@ -19,7 +20,7 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
   const { themeParams, HapticFeedback } = useTelegram()
   const navigate = useNavigate()
 
-  const { download } = useDownloadStory()
+  const { download, isLoading, isSuccess } = useDownloadStory()
 
   const handleMentionClick = (username: string) => {
     navigate(`${Pages.User.replace(':username', username)}`, {
@@ -48,10 +49,20 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
             style={{ color: themeParams.button_color }}
             className='text-sm'
           >
-            <IoCloudDownloadOutline
-              size={24}
-              onClick={() => handleDownloadClick(story)}
-            />
+            {isLoading ? (
+              <SpinLoader />
+            ) : (
+              <>
+                {isSuccess ? (
+                  <IoCloudDoneOutline />
+                ) : (
+                  <IoCloudDownloadOutline
+                    size={24}
+                    onClick={() => handleDownloadClick(story)}
+                  />
+                )}
+              </>
+            )}
           </button>
         </div>
 
@@ -71,7 +82,7 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
               >
                 @{sticker_data.ig_mention.username}
               </div>
-            )
+            ),
           )}
         </div>
       </div>
