@@ -56,7 +56,7 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
               ) : (
                 <>
                   {mutation.variables?.story_id === story.id &&
-                  !mutation.isSuccess ? (
+                  mutation.isSuccess ? (
                     <IoCloudDoneOutline size={24} />
                   ) : (
                     <IoCloudDownloadOutline
