@@ -5,8 +5,9 @@ import { useTelegram } from '../../../hooks/telegram/useTelegram'
 
 interface ISpinLoaderProps {
   fullscreen?: boolean
+  size?: number
 }
-export const SpinLoader: FC<ISpinLoaderProps> = ({ fullscreen }) => {
+export const SpinLoader: FC<ISpinLoaderProps> = ({ fullscreen, size = 26 }) => {
   const { themeParams } = useTelegram()
 
   if (fullscreen)
@@ -18,7 +19,7 @@ export const SpinLoader: FC<ISpinLoaderProps> = ({ fullscreen }) => {
         <CgSpinnerTwoAlt
           className='animate-spin ml-2'
           color={themeParams.link_color}
-          size={26}
+          size={size}
         />
       </div>
     )
@@ -27,7 +28,7 @@ export const SpinLoader: FC<ISpinLoaderProps> = ({ fullscreen }) => {
     <CgSpinnerTwoAlt
       className='animate-spin ml-2'
       color={themeParams.link_color}
-      size={26}
+      size={size}
     />
   )
 }

@@ -20,7 +20,7 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
   const { themeParams, HapticFeedback } = useTelegram()
   const navigate = useNavigate()
 
-  const { download, isLoading, isSuccess } = useDownloadStory()
+  const { download, mutation } = useDownloadStory()
 
   const handleMentionClick = (username: string) => {
     navigate(`${Pages.User.replace(':username', username)}`, {
@@ -49,20 +49,24 @@ export const StoriesList: FC<IStoriesListProps> = ({ stories }) => {
             style={{ color: themeParams.button_color }}
             className='text-sm'
           >
-            {isLoading ? (
-              <SpinLoader />
-            ) : (
-              <>
-                {isSuccess ? (
-                  <IoCloudDoneOutline />
-                ) : (
-                  <IoCloudDownloadOutline
-                    size={24}
-                    onClick={() => handleDownloadClick(story)}
-                  />
-                )}
-              </>
-            )}
+            <>
+              {mutation.variables?.story_id === story.id &&
+              mutation.isLoading ? (
+                <SpinLoader size={24} />
+              ) : (
+                <>
+                  {mutation.variables?.story_id === story.id &&
+                  !mutation.isSuccess ? (
+                    <IoCloudDoneOutline size={24} />
+                  ) : (
+                    <IoCloudDownloadOutline
+                      size={24}
+                      onClick={() => handleDownloadClick(story)}
+                    />
+                  )}
+                </>
+              )}
+            </>
           </button>
         </div>
 
