@@ -28,9 +28,10 @@ export const ScrapperApi = {
       },
     })
   },
-  async getUserStories(id_user: Id) {
+  async getUserStories(payload: { id_user: string; pageParam: number }) {
+    const { id_user, pageParam } = payload
     return mainInstance.get<IStoriesResponse>(`/get-stories`, {
-      params: { id_user },
+      params: { id_user, page: pageParam },
     })
   },
 }

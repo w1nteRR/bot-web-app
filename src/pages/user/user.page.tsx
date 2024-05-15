@@ -2,7 +2,7 @@ import { FC, useState, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AxiosError } from 'axios'
-import { useQuery } from 'react-query'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { IoMdLock } from 'react-icons/io'
 
@@ -20,6 +20,7 @@ import { ILocationFrom } from '../../types/navigation/navigation.types'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
+  const [page, setPage] = useState<number>(1)
 
   const tg = useTelegram()
 
@@ -33,6 +34,8 @@ export const UserPage: FC = () => {
   useBackButton(() => navigate(from, { state: { user: location.state.user } }))
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
+
+  console.log('params', params)
 
   const {
     data,
@@ -67,22 +70,58 @@ export const UserPage: FC = () => {
   )
 
   const {
-    data: stories,
+    data: storiesData,
     isLoading: isStoriesLoading,
-    isError: isStoreisError,
+    isError: isStoriesError,
     error: storiesError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     refetch: refetchStories,
-  } = useQuery(
+  } = useInfiniteQuery(
     ['user stories', data?.data.id],
-    () => ScrapperApi.getUserStories(String(data?.data.id)),
+    ({ pageParam = 1 }) =>
+      ScrapperApi.getUserStories({ id_user: String(data?.data.id), pageParam }),
     {
-      enabled: isUserSuccess,
       retry: 1,
-      onError: () => {
-        tg.HapticFeedback.notificationOccurred('error')
+      enabled: !!data?.data.id,
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.data.stories.media.length === 10) {
+          return true
+        }
+
+        return undefined
       },
     },
   )
+
+  useEffect(() => {
+    const mainButtonCallback = async () => {
+      if (!hasNextPage) return
+
+      setPage((prevPage) => prevPage + 1)
+      await fetchNextPage({ pageParam: page + 1 })
+    }
+
+    if (!hasNextPage) {
+      tg.MainButton.text
+      tg.MainButton.hide
+      tg.MainButton.offClick(mainButtonCallback)
+
+      return
+    }
+
+    tg.MainButton.setText('Load more')
+    tg.MainButton.show()
+    tg.MainButton.onClick(mainButtonCallback)
+
+    return () => {
+      tg.MainButton.hide()
+      tg.MainButton.text
+      tg.MainButton.offClick(mainButtonCallback)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state.user, hasNextPage])
 
   const onChipClick = (chipIndex: number) => {
     setActiveTabIndex(chipIndex)
@@ -118,6 +157,9 @@ export const UserPage: FC = () => {
   if (isError) return <></>
 
   if (!data) return <p>{t('common.noDataAvailable')}</p>
+
+  const storiesFlatted =
+    storiesData?.pages?.flatMap((response) => response.data.stories.media) || []
 
   const { username, profile_image, full_name, id, is_privite } = data.data
 
@@ -198,7 +240,7 @@ export const UserPage: FC = () => {
                 onClick={() => onChipClick(index)}
               >
                 <div className='flex items-center'>
-                  {isStoreisError ? (
+                  {isStoriesError ? (
                     <div className='text-center'>
                       <span style={{ color: tg.themeParams.text_color }}>
                         {writeError}
@@ -229,7 +271,7 @@ export const UserPage: FC = () => {
             ))}
           </div>
           <div className='my-5'>
-            <StoriesList stories={stories?.data.stories.media || []} />
+            <StoriesList stories={storiesFlatted} />
           </div>
         </>
       )}
