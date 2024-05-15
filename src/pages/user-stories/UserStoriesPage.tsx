@@ -129,7 +129,8 @@ export const UserStoriesPage = () => {
             style={{ color: themeParams.section_header_text_color }}
             className='text-sm'
           >
-            Found <b>{storiesTotal}</b> stories
+            Found <b>{storiesData?.pages[0].data.stories.media_count}</b>{' '}
+            stories
           </p>
 
           <button
