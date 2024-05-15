@@ -24,6 +24,7 @@ interface IFavoritesContextProps {
 
 interface IContext {
   favorites: Array<IInstagramShortUser>
+  isLoading: boolean
   remove: (id: string) => Promise<void>
   add: (user: IInstagramShortUser) => Promise<void>
   check: (id: string) => boolean
@@ -33,6 +34,7 @@ export const FavoritesContext = createContext<IContext>({} as IContext)
 
 export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<Array<IInstagramShortUser>>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const { user } = useWebAppUserContext()
   const { showAlert } = useTelegram()
@@ -91,6 +93,7 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
     const loadFavorites = async () => {
       const result = await getFavoritesStorage()
 
+      setIsLoading(false)
       setFavorites(result)
     }
 
@@ -98,7 +101,7 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
   }, [])
 
   const value = useMemo(
-    () => ({ favorites, remove, add, check }),
+    () => ({ favorites, remove, add, check, isLoading }),
     [favorites.length],
   )
 
