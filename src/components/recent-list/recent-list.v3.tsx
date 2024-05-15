@@ -24,8 +24,6 @@ export const RecentListV3 = () => {
 
   const { favorites, isLoading: isFavoritesLoading } = useFavoritesContext()
 
-  console.log('is loading fav', isFavoritesLoading)
-
   const query = useInfiniteQuery(
     ['user stories', user.id],
     ({ pageParam = 1 }) =>
