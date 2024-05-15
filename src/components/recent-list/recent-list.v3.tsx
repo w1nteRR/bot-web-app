@@ -1,4 +1,5 @@
-import { memo, useEffect, useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { useInfiniteQuery } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -6,83 +7,93 @@ import { useTranslation } from 'react-i18next'
 import { RecentCard } from './recent.card'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
-import { useStoriesQuery } from '../../hooks/stories/useStoriesQuery'
-import { useFavorites } from '../../hooks/favorites/useFavorites'
-
-import { IRecentUser } from '../../types/user/user.types'
-import { showRecentListPopupError } from '../../helpers/popup.error'
 import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 
+import { showRecentListPopupError } from '../../helpers/popup.error'
+import { ScrapperApi } from '../../api/scrapper.api'
+import { Pages } from '../../types/navigation/navigation.types'
+import { IRecentUser } from '../../types/user/user.types'
+
 export const RecentListV3 = () => {
+  const [user, setUser] = useState<IRecentUser>({} as IRecentUser)
+
   const { t } = useTranslation()
   const { themeParams, HapticFeedback } = useTelegram()
 
-  const { setUser, query, user } = useStoriesQuery()
   const navigate = useNavigate()
 
-  const { favorites } = useFavoritesContext()
+  const { favorites, isLoading: isFavoritesLoading } = useFavoritesContext()
 
-  const onUserClick = (user: IRecentUser) => {
-    if (query.isLoading) return
+  console.log('is loading fav', isFavoritesLoading)
 
-    HapticFeedback.selectionChanged()
+  const query = useInfiniteQuery(
+    ['user stories', user.id],
+    ({ pageParam = 1 }) =>
+      ScrapperApi.getUserStories({ id_user: user.id!, pageParam }),
+    {
+      retry: 1,
+      enabled: !!user.id,
+      onSuccess: (data) => {
+        navigate(`${Pages.UserStories.replace(':id', user.id)}`, {
+          state: { user, from: location.pathname },
+        })
+      },
+      onError: () => {
+        HapticFeedback.notificationOccurred('error')
+        showRecentListPopupError(navigate, user.username)
+      },
+    },
+  )
+
+  const isLoading = query.isLoading || query.isRefetching
+
+  const onUserClick = async (user: IRecentUser) => {
+    if (isLoading) return
 
     setUser(user)
   }
-
-  useEffect(() => {
-    if (user.id) {
-      query.refetch().then((result) => {
-        if (result.isError) {
-          showRecentListPopupError(navigate, user.username)
-        }
-      })
-    }
-  }, [user.id])
 
   const reversedFavorites = useMemo(
     () => [...favorites].reverse(),
     [favorites.length],
   )
 
-  const isLoading = query.isLoading || query.isRefetching
+  if (isFavoritesLoading)
+    return (
+      <div className='w-full mt-5 flex justify-center gap-1 ransition ease-in-out delay-150'>
+        <div className='inline-block px-1.5'>
+          {[1, 2, 3, 4, 5].map((x) => (
+            <div
+              key={x}
+              className='w-16 h-16 rounded-full animate-pulse inline-block  mt-1'
+              style={{ backgroundColor: themeParams.secondary_bg_color }}
+            />
+          ))}
+        </div>
+      </div>
+    )
 
-  // if (isFavoritesLoading)
-  //   return (
-  //     <div className='w-full mt-5 flex justify-center gap-1'>
-  //       <div className='inline-block px-1.5'>
-  //         {[1, 2, 3, 4, 5].map((x) => (
-  //           <div
-  //             key={x}
-  //             className='w-16 h-16 rounded-full animate-pulse inline-block  mt-1'
-  //             style={{ backgroundColor: themeParams.secondary_bg_color }}
-  //           />
-  //         ))}
-  //       </div>
-  //     </div>
-  //   )
-  //
-  // if (!list.length)
-  //   return (
-  //     <div
-  //       className='rounded-xl p-3 m-5'
-  //       style={{ backgroundColor: themeParams.secondary_bg_color }}
-  //     >
-  //       <p
-  //         style={{ color: themeParams.text_color }}
-  //         className='text-center font-semibold'
-  //       >
-  //         {t('favorites.emptyTitle')}
-  //       </p>
-  //
-  //       <p
-  //         style={{ color: themeParams.hint_color }}
-  //         className='text-center text-xs'
-  //       >
-  //         {t('favorites.emptyBody')}
-  //       </p>
-  //     </div>
-  //   )
+  if (!favorites.length)
+    return (
+      <div
+        className='rounded-xl p-3 m-5'
+        style={{ backgroundColor: themeParams.section_bg_color }}
+      >
+        <p
+          style={{ color: themeParams.text_color }}
+          className='text-center font-semibold'
+        >
+          {t('favorites.emptyTitle')}
+        </p>
+
+        <p
+          style={{ color: themeParams.hint_color }}
+          className='text-center text-xs'
+        >
+          {t('favorites.emptyBody')}
+        </p>
+      </div>
+    )
 
   return (
     <>
