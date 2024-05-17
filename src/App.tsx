@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
-const title = import.meta.env.VITE_MODE_TITLE
+
+import { ProjectMode } from './components/misc/project-mode'
+
+import { MainLayout } from './layouts/main.layout'
+
+import { FavoritesProvider } from './providers/favorites.provider'
+import { WebAppUserProvider } from './providers/tg-user.provider'
 
 import { useTelegram } from './hooks/telegram/useTelegram'
-import { WebAppUserProvider } from './providers/tg-user.provider'
-import { MainLayout } from './layouts/main.layout'
-import { FavoritesProvider } from './providers/favorites.provider'
 
 function App() {
   const tg = useTelegram()
@@ -18,7 +21,7 @@ function App() {
   return (
     <WebAppUserProvider>
       <FavoritesProvider>
-        <p className='text-green-500 text-sm'>{title}</p>
+        <ProjectMode />
         <MainLayout />
       </FavoritesProvider>
     </WebAppUserProvider>
