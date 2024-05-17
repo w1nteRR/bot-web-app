@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+const title = import.meta.env.VITE_MODE_TITLE
 
 import { useTelegram } from './hooks/telegram/useTelegram'
 import { WebAppUserProvider } from './providers/tg-user.provider'
@@ -17,6 +18,7 @@ function App() {
   return (
     <WebAppUserProvider>
       <FavoritesProvider>
+        <p className='text-green-500 text-sm'>{title}</p>
         <MainLayout />
       </FavoritesProvider>
     </WebAppUserProvider>
