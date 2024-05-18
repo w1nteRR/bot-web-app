@@ -91,18 +91,21 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
 
   useEffect(() => {
     const loadFavorites = async () => {
-      const result = await getFavoritesStorage()
-
-      setIsLoading(false)
-      setFavorites(result)
+      try {
+        const result = await getFavoritesStorage()
+        setFavorites(result)
+      } catch (error) {
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    loadFavorites()
+    loadFavorites().then()
   }, [])
 
   const value = useMemo(
     () => ({ favorites, remove, add, check, isLoading }),
-    [favorites.length],
+    [favorites.length, isLoading],
   )
 
   return (
