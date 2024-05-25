@@ -17,8 +17,7 @@ export const NotificationsPage: FC = () => {
 
   const navigate = useNavigate()
 
-  const { themeParams, MainButton, onEvent, offEvent, initDataUnsafe } =
-    useTelegram()
+  const { themeParams, MainButton, onEvent, offEvent } = useTelegram()
   const { create, isLoading } = useNotifications()
 
   const { favorites } = useFavoritesContext()
@@ -48,6 +47,12 @@ export const NotificationsPage: FC = () => {
   }
 
   useEffect(() => {
+    if (!favorites.length) {
+      MainButton.hide()
+
+      return
+    }
+
     MainButton.setParams({
       text: 'Continue',
       text_color: themeParams.button_text_color,
@@ -131,20 +136,31 @@ export const NotificationsPage: FC = () => {
         ))}
       </div>
 
-      <div className='flex justify-center mt-4'>
-        {trimOffset === TRIM_OFFSET ? (
-          <button onClick={handleShowMoreClick}>
-            <span
-              className='font-bold'
-              style={{ color: themeParams.link_color }}
-            >
-              Show More
-            </span>
-          </button>
-        ) : (
-          <div />
-        )}
-      </div>
+      {favorites.length ? (
+        <div className='flex justify-center mt-4'>
+          {favorites.length > TRIM_OFFSET && trimOffset === TRIM_OFFSET ? (
+            <button onClick={handleShowMoreClick}>
+              <span
+                className='font-bold'
+                style={{ color: themeParams.link_color }}
+              >
+                Show More
+              </span>
+            </button>
+          ) : (
+            <div />
+          )}
+        </div>
+      ) : (
+        <div
+          className='m-5 p-3 text-center rounded-xl'
+          style={{ backgroundColor: themeParams.section_bg_color }}
+        >
+          <p className='text-sm' style={{ color: themeParams.hint_color }}>
+            Add favorites first
+          </p>
+        </div>
+      )}
     </div>
   )
 }
