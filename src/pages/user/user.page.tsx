@@ -35,8 +35,6 @@ export const UserPage: FC = () => {
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
 
-  console.log('params', params)
-
   const {
     data,
     isLoading,
@@ -85,9 +83,12 @@ export const UserPage: FC = () => {
     {
       retry: 1,
       enabled: !!data?.data.id,
+      staleTime: Infinity,
       getNextPageParam: (lastPage, allPages) => {
+        console.log('last page')
+
         if (lastPage.data.stories.media.length === 10) {
-          return true
+          return lastPage.config.params.page + 1
         }
 
         return undefined
@@ -95,14 +96,23 @@ export const UserPage: FC = () => {
     },
   )
 
-  useEffect(() => {
-    const mainButtonCallback = async () => {
-      if (!hasNextPage) return
+  const mainButtonCallback = async () => {
+    if (!hasNextPage) return
 
-      setPage((prevPage) => prevPage + 1)
-      await fetchNextPage({ pageParam: page + 1 })
+    setPage((prevPage) => prevPage + 1)
+  }
+
+  useEffect(() => {
+    if (page === 1) return
+
+    const loadMore = async () => {
+      await fetchNextPage()
     }
 
+    loadMore().then()
+  }, [page])
+
+  useEffect(() => {
     if (!hasNextPage) {
       tg.MainButton.text
       tg.MainButton.hide
@@ -123,6 +133,20 @@ export const UserPage: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state.user, hasNextPage])
 
+  useEffect(() => {
+    if (isFetchingNextPage) {
+      tg.MainButton.showProgress()
+
+      return
+    }
+
+    tg.MainButton.hideProgress()
+
+    return () => {
+      tg.MainButton.hideProgress()
+    }
+  }, [isFetchingNextPage])
+
   const onChipClick = (chipIndex: number) => {
     setActiveTabIndex(chipIndex)
 
@@ -136,12 +160,6 @@ export const UserPage: FC = () => {
 
     return error.response?.data.message || ''
   }, [storiesError])
-
-  useEffect(() => {
-    tg.MainButton.hide()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   if (isLoading)
     return (

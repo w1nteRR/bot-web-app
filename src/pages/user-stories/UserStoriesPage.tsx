@@ -15,7 +15,6 @@ import { Pages } from '../../types/navigation/navigation.types'
 
 export const UserStoriesPage = () => {
   const [page, setPage] = useState<number>(1)
-  const [storiesTotal, setStoriesTotal] = useState<number>(0)
 
   const navigate = useNavigate()
   const params = useParams()
@@ -41,9 +40,11 @@ export const UserStoriesPage = () => {
     {
       retry: 1,
       enabled: false,
+      staleTime: Infinity,
+
       getNextPageParam: (lastPage, allPages) => {
         if (lastPage.data.stories.media.length === 10) {
-          return true
+          return lastPage.config.params.page + 1
         }
 
         return undefined
@@ -59,14 +60,23 @@ export const UserStoriesPage = () => {
       },
     )
 
-  useEffect(() => {
-    const mainButtonCallback = async () => {
-      if (!hasNextPage) return
+  const mainButtonCallback = async () => {
+    if (!hasNextPage) return
 
-      setPage((prevPage) => prevPage + 1)
-      await fetchNextPage({ pageParam: page + 1 })
+    setPage((prevPage) => prevPage + 1)
+  }
+
+  useEffect(() => {
+    if (page === 1) return
+
+    const loadMore = async () => {
+      await fetchNextPage()
     }
 
+    loadMore().then()
+  }, [page])
+
+  useEffect(() => {
     if (!hasNextPage) {
       MainButton.text
       MainButton.hide
