@@ -17,8 +17,7 @@ export const NotificationsPage: FC = () => {
 
   const navigate = useNavigate()
 
-  const { themeParams, MainButton, onEvent, offEvent, initDataUnsafe } =
-    useTelegram()
+  const { themeParams, MainButton, onEvent, offEvent } = useTelegram()
   const { create, isLoading } = useNotifications()
 
   const { favorites } = useFavoritesContext()
