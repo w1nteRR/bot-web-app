@@ -7,13 +7,6 @@ import { IHighlightsResponse } from '../types/api/highlights.response'
 import { IStoriesResponse } from '../types/api/stories.response'
 
 export const ScrapperApi = {
-  // async findIdByUsername(username: string) {
-  //   return mainInstance.get<IIdResponse>(`/user_id/`, {
-  //     params: {
-  //       user: username,
-  //     },
-  //   })
-  // },
   async findUserByUsername(username: string) {
     return mainInstance.get<IUserInfoResponse>(`/get-user`, {
       params: {
