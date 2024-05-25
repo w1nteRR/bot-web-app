@@ -15,6 +15,7 @@ export const useGetNotificationsQuery = () => {
 
   return useQuery([key], () => NotificationsApi.getNotifications(user?.id!), {
     retry: 1,
+    staleTime: Infinity,
     select: (data) => {
       const notificationIds = data.data.ids
 
