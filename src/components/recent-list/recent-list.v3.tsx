@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +21,7 @@ export const RecentListV3 = () => {
   const { themeParams, HapticFeedback } = useTelegram()
 
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const { favorites, isLoading: isFavoritesLoading } = useFavoritesContext()
 
@@ -31,7 +32,9 @@ export const RecentListV3 = () => {
     {
       retry: 1,
       enabled: !!user.id,
-      onSuccess: (data) => {
+      staleTime: Infinity,
+
+      onSuccess: () => {
         navigate(`${Pages.UserStories.replace(':id', user.id)}`, {
           state: { user, from: location.pathname },
         })
@@ -48,7 +51,20 @@ export const RecentListV3 = () => {
   const onUserClick = async (user: IRecentUser) => {
     if (isLoading) return
 
-    setUser(user)
+    const cachedData = queryClient.getQueryData<{ pages: []; pageParams: [] }>([
+      'user stories',
+      user.id,
+    ])
+
+    if (!cachedData?.pages.length) {
+      setUser(user)
+
+      return
+    }
+
+    navigate(`${Pages.UserStories.replace(':id', user.id)}`, {
+      state: { user, from: location.pathname },
+    })
   }
 
   const reversedFavorites = useMemo(
