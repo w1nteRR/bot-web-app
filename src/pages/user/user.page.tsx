@@ -183,22 +183,27 @@ export const UserPage: FC = () => {
 
   return (
     <div className='py-10'>
-      <div className='flex px-5 justify-between'>
-        <div className='truncate'>
-          <Title>{data.data.username}</Title>
-          <p className='text-sm' style={{ color: tg.themeParams.hint_color }}>
+      <div className='flex justify-between px-4'>
+        <div className='w-9/12'>
+          <div className=''>
+            <Title>{data.data.username}</Title>
+          </div>
+          <p
+            className='text-sm break-words'
+            style={{ color: tg.themeParams.hint_color }}
+          >
             {data?.data.full_name}
           </p>
         </div>
 
         <img
-          className='bg-gray-500 w-20 h-20 rounded-full'
+          className='w-20 h-20 rounded-full'
           alt='avatar'
           src={data?.data.profile_image}
         />
       </div>
 
-      <div className='my-5 mx-5 bg'>
+      <div className='m-5'>
         <pre
           className='text-xs whitespace-pre-wrap'
           style={{ color: tg.themeParams.text_color }}
