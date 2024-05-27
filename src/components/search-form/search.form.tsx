@@ -47,6 +47,12 @@ export const SearchForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue.length])
 
+  useEffect(() => {
+    return () => {
+      tg.MainButton.hide()
+    }
+  }, [])
+
   document.onclick = () => {
     if (document.activeElement instanceof HTMLElement) {
       document.body.blur()
