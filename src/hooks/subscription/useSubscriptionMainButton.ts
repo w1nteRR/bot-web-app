@@ -1,24 +1,31 @@
 import { useEffect } from 'react'
-import { useTelegram } from '../telegram/useTelegram'
 import { useMutation } from 'react-query'
-import { subscriptionApi } from '../../api/subscription.api'
+
+import { useTelegram } from '../telegram/useTelegram'
+import { walletPayApi } from '../../api/wallet-pay.api'
+import { useWebAppUserContext } from '../context/useWebAppUserContext'
 
 export const useSubscriptionMainButton = () => {
+  const { MainButton, onEvent, offEvent, openTelegramLink } = useTelegram()
+  const { user } = useWebAppUserContext()
+
   const {
-    MainButton,
-    onEvent,
-    offEvent,
-    initDataUnsafe: { user },
-    close,
-  } = useTelegram()
-  const mutation = useMutation(subscriptionApi.configureInvoice)
+    mutateAsync: createOrder,
+    data: order,
+    isLoading: isCreateOrderLoading,
+  } = useMutation(walletPayApi.createOrder)
 
   const handleMainButtonPress = async () => {
     if (!user?.id) return
 
-    await mutation.mutateAsync({ account_id: String(user.id) })
-
-    close()
+    await createOrder(
+      { user_id: user.id },
+      {
+        onSuccess: ({ data }) => {
+          openTelegramLink(data.payLink)
+        },
+      },
+    )
   }
 
   useEffect(() => {
@@ -27,14 +34,14 @@ export const useSubscriptionMainButton = () => {
   }, [])
 
   useEffect(() => {
-    if (mutation.isLoading) {
+    if (isCreateOrderLoading) {
       MainButton.showProgress()
 
       return
     }
 
     MainButton.hideProgress()
-  }, [mutation.isLoading])
+  }, [isCreateOrderLoading])
 
   useEffect(() => {
     onEvent('mainButtonClicked', handleMainButtonPress)
