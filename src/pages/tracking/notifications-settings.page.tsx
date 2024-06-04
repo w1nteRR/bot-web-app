@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from 'react-query'
 import { FiMinus } from 'react-icons/fi'
@@ -6,8 +6,6 @@ import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { IoTimer } from 'react-icons/io5'
 
 import { SpinLoader } from '../../components/ui/loaders/spin-loader'
-import { ModalVertical } from '../../components/ui/modals/modal-vertical'
-import { UserCard } from '../../components/shared/cards/user-card'
 import { Chip } from '../../components/ui/chip/chip.ui'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
@@ -19,10 +17,11 @@ import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 import { Pages } from '../../types/navigation/navigation.types'
 
 import { NotificationsApi } from '../../api/notifications.api'
+import { ModalVerticalV2 } from '../../components/ui/modals/modal-vertical-v2'
+import { useModal } from '../../hooks/common/useModal'
+import { NotificationsManageModalContent } from '../../components/notifications/notifications-manage-modal.content'
 
 export const NotificationsSettingsPage: FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
   const queryClient = useQueryClient()
   const { data, isLoading, isError } = useGetNotificationsQuery()
 
@@ -37,6 +36,7 @@ export const NotificationsSettingsPage: FC = () => {
   } = useTelegram()
 
   const { favorites } = useFavoritesContext()
+  const { open, handleModalClose: closeModal, handleModalOpen } = useModal()
 
   const updateNotificationIdsMutation = useMutation(
     NotificationsApi.updateNotificationIds,
@@ -49,7 +49,7 @@ export const NotificationsSettingsPage: FC = () => {
       onError: () => {
         HapticFeedback.notificationOccurred('error')
       },
-    }
+    },
   )
 
   const {
@@ -75,18 +75,18 @@ export const NotificationsSettingsPage: FC = () => {
 
   const handleAccountAddClick = () => {
     HapticFeedback.impactOccurred('medium')
-    setIsModalOpen(true)
+    handleModalOpen()
   }
 
   const handleModalClose = () => {
-    setIsModalOpen(false)
+    closeModal()
     setSelectedNotificationsAccounts([])
     MainButton.hide()
   }
 
   const updateNotifications = () => {
     const selectedIds = selectedNotificationsAccounts.map(
-      (account) => account.id
+      (account) => account.id,
     )
 
     const currentIds = data?.map((user) => user.id)
@@ -104,7 +104,7 @@ export const NotificationsSettingsPage: FC = () => {
     const currentNotificationsIds = data?.map((x) => x.id)
 
     return favorites.filter(
-      (favorite) => !currentNotificationsIds?.includes(favorite.id)
+      (favorite) => !currentNotificationsIds?.includes(favorite.id),
     )
   }, [data?.length, favorites.length, selectedNotificationsAccounts.length])
 
@@ -213,8 +213,8 @@ export const NotificationsSettingsPage: FC = () => {
 
           <div
             className={`flex ${
-              data.length === 5 ? 'justify-center' : 'justify-end'
-            } items-center w-full gap-2.5`}
+              data.length === 4 ? 'justify-center' : 'justify-end'
+            } items-center w-full gap-3.5`}
           >
             {data.map((account) => (
               <div
@@ -267,50 +267,14 @@ export const NotificationsSettingsPage: FC = () => {
         </div>
       )}
 
-      <ModalVertical open={isModalOpen} onClose={handleModalClose}>
-        {filteredFavorites.map((user) => {
-          const isSelected = selectedNotificationsAccounts.some(
-            (selectedAccount) => selectedAccount.id === user.id
-          )
-
-          return (
-            <div key={user.id} className='p-3 flex justify-between'>
-              <UserCard {...user} />
-
-              <div className='flex items-center'>
-                {isSelected ? (
-                  <button
-                    className='w-14 py-1 rounded-full flex items-center justify-center'
-                    style={{ backgroundColor: themeParams.secondary_bg_color }}
-                    onClick={() => handleAccountClick(user)}
-                  >
-                    <span
-                      className='text-xs'
-                      style={{ color: themeParams.text_color }}
-                    >
-                      Remove
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    disabled={isNotificationsAccountsLimit}
-                    className='w-14 py-1 rounded-full flex items-center justify-center'
-                    style={{ backgroundColor: themeParams.button_color }}
-                    onClick={() => handleAccountClick(user)}
-                  >
-                    <span
-                      className='text-xs'
-                      style={{ color: themeParams.button_text_color }}
-                    >
-                      Add
-                    </span>
-                  </button>
-                )}
-              </div>
-            </div>
-          )
-        })}
-      </ModalVertical>
+      <ModalVerticalV2 open={open} onClose={handleModalClose}>
+        <NotificationsManageModalContent
+          favorites={filteredFavorites}
+          selectedNotificationsAccounts={selectedNotificationsAccounts}
+          isNotificationsAccountsLimit={isNotificationsAccountsLimit}
+          onAccountClick={handleAccountClick}
+        />
+      </ModalVerticalV2>
     </>
   )
 }
