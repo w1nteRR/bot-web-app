@@ -13,8 +13,3 @@ export interface INotificationCreatePayload {
   ids: number[]
   account_id: number
 }
-
-export interface INotificationDeletePayload {
-  id: string
-  account_id: string
-}

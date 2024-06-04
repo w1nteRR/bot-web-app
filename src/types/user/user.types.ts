@@ -1,5 +1,3 @@
-import { Id } from '../common'
-
 export interface IUser {
   username: string
   full_name: string

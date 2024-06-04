@@ -40,6 +40,7 @@ export const RecentListV4: FC = () => {
     () => [...recentUsers].reverse(),
     [recentUsers.length],
   )
+
   if (!recentUsers?.length) return null
 
   return (
