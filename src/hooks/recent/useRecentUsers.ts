@@ -48,7 +48,11 @@ export const useRecentUsers = () => {
   }
 
   useEffect(() => {
-    loadRecentUsers()
+    const load = async () => {
+      await loadRecentUsers()
+    }
+
+    load()
   }, [])
 
   useEffect(() => {

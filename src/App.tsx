@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import { ProjectMode } from './components/misc/project-mode'
-
 import { MainLayout } from './layouts/main.layout'
 
 import { FavoritesProvider } from './providers/favorites.provider'
