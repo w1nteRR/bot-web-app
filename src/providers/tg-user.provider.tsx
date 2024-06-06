@@ -32,30 +32,27 @@ export const WebAppUserContext = createContext<IContext>({} as IContext)
 export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
   const [user, setUser] = useState<null | IWebAppUser>(null)
 
-  const { data, isLoading, refetch } = useQuery(
+  const { isLoading } = useQuery(
     ['user'],
     () => AuthApi.validate(tg.initData),
     {
-      enabled: false,
-      onSuccess: (data) => data.data,
+      onSuccess: ({ data }) => {
+        const user = {
+          ...data.user,
+          is_subscriber: data.is_subscriber,
+        }
+
+        setUser(user as IWebAppUser)
+      },
+
+      onError: () => {
+        navigate(Pages.NotAuthorized)
+      },
     },
   )
 
   const tg = useTelegram()
   const navigate = useNavigate()
-
-  const validateUser = async () => {
-    try {
-      const { data } = await refetch()
-
-      return {
-        ...data?.data.user,
-        is_subscriber: data?.data.is_subscriber,
-      }
-    } catch (error) {
-      throw error
-    }
-  }
 
   const value = useMemo(
     () => ({
@@ -65,15 +62,9 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
     [user],
   )
 
-  useEffect(() => {
-    validateUser()
-      .then((user) => setUser(user as IWebAppUser))
-      .catch(() => navigate(Pages.NotAuthorized))
-  }, [user?.id])
-
   return (
     <WebAppUserContext.Provider value={value}>
-      {children}
+      {!isLoading && children}
     </WebAppUserContext.Provider>
   )
 }

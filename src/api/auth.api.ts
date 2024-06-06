@@ -3,7 +3,10 @@ import { ITgUser } from '../types/user/tg-user.types'
 
 export const AuthApi = {
   async validate(initData: string) {
-    return mainInstance.get<ITgUser>('/user-validation', {
+    const mode = import.meta.env.MODE
+    const url = `/user-validation${mode === 'development' && '-dev'}`
+
+    return mainInstance.get<ITgUser>(url, {
       headers: { 'init-tg': initData, 'Content-Type': 'application/json' },
     })
   },
