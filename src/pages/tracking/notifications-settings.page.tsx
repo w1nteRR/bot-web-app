@@ -41,8 +41,8 @@ export const NotificationsSettingsPage: FC = () => {
   const updateNotificationIdsMutation = useMutation(
     NotificationsApi.updateNotificationIds,
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['notifications'] })
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['notifications'] })
         HapticFeedback.notificationOccurred('success')
       },
 

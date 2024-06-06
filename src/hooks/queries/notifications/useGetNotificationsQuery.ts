@@ -1,21 +1,17 @@
 import { useQuery } from 'react-query'
 
-import { useTelegram } from '../../telegram/useTelegram'
-
 import { NotificationsApi } from '../../../api/notifications.api'
 import { useFavoritesContext } from '../../context/useFavoritesContext'
+import { useWebAppUserContext } from '../../context/useWebAppUserContext'
 
 const key = 'notifications'
 export const useGetNotificationsQuery = () => {
-  const {
-    initDataUnsafe: { user },
-  } = useTelegram()
+  const { user } = useWebAppUserContext()
 
   const { favorites } = useFavoritesContext()
 
   return useQuery([key], () => NotificationsApi.getNotifications(user?.id!), {
-    retry: 1,
-    staleTime: Infinity,
+    retry: 0,
     select: (data) => {
       const notificationIds = data.data.ids
 
