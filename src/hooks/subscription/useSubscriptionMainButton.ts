@@ -9,17 +9,14 @@ export const useSubscriptionMainButton = () => {
   const { MainButton, onEvent, offEvent, openTelegramLink } = useTelegram()
   const { user } = useWebAppUserContext()
 
-  const {
-    mutateAsync: createOrder,
-    data: order,
-    isLoading: isCreateOrderLoading,
-  } = useMutation(walletPayApi.createOrder)
+  const { mutateAsync: createOrder, isLoading: isCreateOrderLoading } =
+    useMutation(walletPayApi.createOrder)
 
   const handleMainButtonPress = async () => {
     if (!user?.id) return
 
     await createOrder(
-      { user_id: user.id },
+      { user },
       {
         onSuccess: ({ data }) => {
           openTelegramLink(data.payLink)

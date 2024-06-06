@@ -1,5 +1,7 @@
+import { WebAppUser } from '@twa-dev/types'
+
 export interface ICreateOrderPayload {
-  user_id: number
+  user: WebAppUser
 }
 
 export interface ICreateOrderResponse {
