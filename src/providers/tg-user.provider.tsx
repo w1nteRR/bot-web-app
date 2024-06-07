@@ -9,6 +9,7 @@ import {
 import { WebAppUser } from '@twa-dev/types'
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
+import { SpinLoader } from '../components/ui/loaders/spin-loader'
 
 import { useTelegram } from '../hooks/telegram/useTelegram'
 import { AuthApi } from '../api/auth.api'
@@ -66,7 +67,7 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
 
   return (
     <WebAppUserContext.Provider value={value}>
-      {!isLoading && children}
+      {isLoading ? <SpinLoader fullscreen /> : children}
     </WebAppUserContext.Provider>
   )
 }
