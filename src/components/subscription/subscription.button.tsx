@@ -24,7 +24,7 @@ export const SubscriptionButton: FC = () => {
         className='p-4 w-full h-full flex items-center gap-2'
         onClick={handleButtonClick}
       >
-        <AiFillDollarCircle size={29} color={themeParams.link_color} />
+        <AiFillDollarCircle size={34} color={themeParams.link_color} />
 
         <span className='font-medium' style={{ color: themeParams.text_color }}>
           Subscription
