@@ -7,6 +7,8 @@ export enum Pages {
   Notifications = '/notifications',
   NotificationsSettings = 'settings',
   Subscription = '/subscription',
+  SubscriptionPaid = 'paid',
+  SubscriptionCheckout = 'checkout',
   NotAuthorized = '/403',
 }
 
