@@ -9,6 +9,7 @@ import {
 import { WebAppUser } from '@twa-dev/types'
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
+import { SpinLoader } from '../components/ui/loaders/spin-loader'
 
 import { useTelegram } from '../hooks/telegram/useTelegram'
 import { AuthApi } from '../api/auth.api'
@@ -32,10 +33,15 @@ export const WebAppUserContext = createContext<IContext>({} as IContext)
 export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
   const [user, setUser] = useState<null | IWebAppUser>(null)
 
+  const tg = useTelegram()
+  const navigate = useNavigate()
+
   const { isLoading } = useQuery(
     ['user'],
     () => AuthApi.validate(tg.initData),
     {
+      retry: 1,
+
       onSuccess: ({ data }) => {
         const user = {
           ...data.user,
@@ -46,25 +52,22 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
       },
 
       onError: () => {
-        navigate(Pages.NotAuthorized)
+        navigate(Pages.NotAuthorized, { replace: true })
       },
     },
   )
-
-  const tg = useTelegram()
-  const navigate = useNavigate()
 
   const value = useMemo(
     () => ({
       user,
       isLoading,
     }),
-    [user],
+    [user, isLoading],
   )
 
   return (
     <WebAppUserContext.Provider value={value}>
-      {!isLoading && children}
+      {isLoading ? <SpinLoader fullscreen /> : children}
     </WebAppUserContext.Provider>
   )
 }

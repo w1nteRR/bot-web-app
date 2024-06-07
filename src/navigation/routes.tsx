@@ -10,6 +10,8 @@ import { NotAuthorizedPage } from '../pages/misc/403.page'
 
 import { Pages } from '../types/navigation/navigation.types'
 import { NotificationsLayout } from '../layouts/notifications.layout'
+import { SubscriptionLayout } from '../layouts/subscription.layout'
+import { SubscriptionPaidPage } from '../pages/subscription/subscription-paid.page'
 
 export const routes: RouteObject[] = [
   {
@@ -43,7 +45,18 @@ export const routes: RouteObject[] = [
 
   {
     path: Pages.Subscription,
-    element: <SubscriptionPage />,
+    element: <SubscriptionLayout />,
+
+    children: [
+      {
+        path: Pages.SubscriptionCheckout,
+        element: <SubscriptionPage />,
+      },
+      {
+        path: Pages.SubscriptionPaid,
+        element: <SubscriptionPaidPage />,
+      },
+    ],
   },
 
   {
