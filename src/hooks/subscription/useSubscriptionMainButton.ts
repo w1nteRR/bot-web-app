@@ -28,6 +28,11 @@ export const useSubscriptionMainButton = () => {
   useEffect(() => {
     MainButton.setText('Checkout for 2,49 US$ / month')
     MainButton.show()
+
+    return () => {
+      MainButton.text
+      MainButton.hide()
+    }
   }, [])
 
   useEffect(() => {
