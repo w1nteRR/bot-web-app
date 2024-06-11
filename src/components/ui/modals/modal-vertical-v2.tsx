@@ -40,7 +40,10 @@ export const ModalVerticalV2: FC<IModalVerticalV2Props> = ({
               transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] },
             }}
           >
-            <div className='p-5 flex justify-between'>
+            <div
+              className='p-5 flex justify-between sticky top-0'
+              style={{ backgroundColor: themeParams.section_bg_color }}
+            >
               <div>{header}</div>
 
               <button onClick={onClose}>
