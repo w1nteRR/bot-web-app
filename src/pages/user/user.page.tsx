@@ -16,7 +16,7 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
 import { ScrapperApi } from '../../api/scrapper.api'
-import { ILocationFrom } from '../../types/navigation/navigation.types'
+import { ILocationFrom, Pages } from '../../types/navigation/navigation.types'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -49,7 +49,8 @@ export const UserPage: FC = () => {
       onError: (error) => {
         if (error instanceof AxiosError) {
           tg.HapticFeedback.notificationOccurred('error')
-          tg.showAlert(error.response?.data.message, () => navigate(-1))
+          navigate(Pages.NotFound)
+          // tg.showAlert(error.response?.data.message, () => navigate(-1))
         }
       },
       onSuccess: async ({ data }) => {

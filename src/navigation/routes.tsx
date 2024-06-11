@@ -12,6 +12,7 @@ import { Pages } from '../types/navigation/navigation.types'
 import { NotificationsLayout } from '../layouts/notifications.layout'
 import { SubscriptionLayout } from '../layouts/subscription.layout'
 import { SubscriptionPaidPage } from '../pages/subscription/subscription-paid.page'
+import { NotFoundPage } from '../pages/misc/not-found.page'
 
 export const routes: RouteObject[] = [
   {
@@ -62,5 +63,10 @@ export const routes: RouteObject[] = [
   {
     path: Pages.NotAuthorized,
     element: <NotAuthorizedPage />,
+  },
+
+  {
+    path: Pages.NotFound,
+    element: <NotFoundPage />,
   },
 ]

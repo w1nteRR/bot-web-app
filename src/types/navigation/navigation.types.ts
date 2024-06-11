@@ -10,6 +10,7 @@ export enum Pages {
   SubscriptionPaid = 'paid',
   SubscriptionCheckout = 'checkout',
   NotAuthorized = '/403',
+  NotFound = '/not-found',
 }
 
 export interface ILocationFrom {
