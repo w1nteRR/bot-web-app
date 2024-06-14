@@ -23,7 +23,7 @@ export const useRecentUsers = () => {
     await CloudStorage.setValue(CloudStorageKeys.Recent, value)
   }
 
-  const addUserToRecentCloudStorage = (user: IRecentUser) => {
+  const addUserToRecentCloudStorage = async (user: IRecentUser) => {
     const isUserFavorite = favorites.some(
       (favoriteUser) => favoriteUser.id === user.id,
     )
@@ -34,37 +34,26 @@ export const useRecentUsers = () => {
 
     if (isUserExist || isUserFavorite) return
 
+    const updatedRecentUsers = [...recentUsers, user]
+
+    await updateRecentUsers(updatedRecentUsers)
     addRecentUser(user)
   }
 
-  const loadRecentUsers = async () => {
-    try {
-      const recentUsers = await CloudStorage.values(CloudStorageKeys.Recent)
+  const removeUserFromRecentCloudStorage = async (id: string) => {
+    const updatedRecentUsers = recentUsers.filter((user) => user.id !== id)
 
-      initRecentUsers(recentUsers)
-    } catch (error) {
-      console.log('LOAD ERROR', error)
-    }
+    await updateRecentUsers(updatedRecentUsers)
+    removeRecentUser(id)
   }
 
   useEffect(() => {
-    const load = async () => {
-      await loadRecentUsers()
-    }
-
-    load()
+    initRecentUsers()
   }, [])
-
-  useEffect(() => {
-    const updateRecentUsersStorage = async () => {
-      await updateRecentUsers(recentUsers)
-    }
-
-    updateRecentUsersStorage()
-  }, [recentUsers.length])
 
   return {
     addUserToRecentCloudStorage,
+    removeUserFromRecentCloudStorage,
     removeRecentUser,
     resetRecentUsers,
     recentUsers,
