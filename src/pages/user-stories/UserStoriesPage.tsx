@@ -43,7 +43,7 @@ export const UserStoriesPage = () => {
       staleTime: Infinity,
 
       getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.data.stories.media.length === 10) {
+        if (lastPage.data.stories.media.length > 10) {
           return lastPage.config.params.page + 1
         }
 
