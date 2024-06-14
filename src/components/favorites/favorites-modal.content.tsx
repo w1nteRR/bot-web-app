@@ -9,14 +9,18 @@ import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 import { useGetNotificationsQuery } from '../../hooks/queries/notifications/useGetNotificationsQuery'
 
 export const FavoritesModalContent: FC = () => {
-  const { data: notifications, isLoading } = useGetNotificationsQuery()
+  const { data: notifications, isLoading, isError } = useGetNotificationsQuery()
 
   const { themeParams } = useTelegram()
   const { favorites, remove } = useFavoritesContext()
 
   if (isLoading) return <SpinLoader fullscreen />
 
-  const notificationsIds = notifications?.map(({ id }) => id) || []
+  const usersInTracking = () => {
+    if (isError) return []
+
+    return notifications?.map((user) => Number(user.id)) || []
+  }
 
   return (
     <div className='mx-5'>
@@ -24,7 +28,7 @@ export const FavoritesModalContent: FC = () => {
         <div className='py-2 flex items-center justify-between' key={user.id}>
           <UserCard {...user} />
           <div className='flex justify-center w-14 items-center'>
-            {notificationsIds.includes(user.id) ? (
+            {usersInTracking().includes(Number(user.id)) ? (
               <button
                 className='rounded-full p-3 flex items-center justify-center'
                 disabled

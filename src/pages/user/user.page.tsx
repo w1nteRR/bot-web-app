@@ -50,7 +50,6 @@ export const UserPage: FC = () => {
         if (error instanceof AxiosError) {
           tg.HapticFeedback.notificationOccurred('error')
           navigate(Pages.NotFound)
-          // tg.showAlert(error.response?.data.message, () => navigate(-1))
         }
       },
       onSuccess: async ({ data }) => {
