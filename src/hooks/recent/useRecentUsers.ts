@@ -20,7 +20,9 @@ export const useRecentUsers = () => {
   const updateRecentUsers = async (list: List) => {
     const value = JSON.stringify(list)
 
-    await CloudStorage.setValue(CloudStorageKeys.Recent, value)
+    const cloudStorage = window.Telegram.WebApp.CloudStorage
+
+    cloudStorage.setItem(CloudStorageKeys.Recent, value)
   }
 
   const addUserToRecentCloudStorage = async (user: IRecentUser) => {
@@ -41,9 +43,7 @@ export const useRecentUsers = () => {
   }
 
   const removeUserFromRecentCloudStorage = async (id: string) => {
-    const updatedRecentUsers = recentUsers.filter((user) => user.id !== id)
-
-    await updateRecentUsers(updatedRecentUsers)
+    if (!recentUsers.length) return
     removeRecentUser(id)
   }
 
