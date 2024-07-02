@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRecentUsersStore } from '../../store/recent-users.store'
 
-import { CloudStorage, CloudStorageKeys } from '../../helpers/cloud-storage'
+import { CloudStorageKeys } from '../../helpers/cloud-storage'
 import { IRecentUser } from '../../types/user/user.types'
 import { useFavoritesContext } from '../context/useFavoritesContext'
 

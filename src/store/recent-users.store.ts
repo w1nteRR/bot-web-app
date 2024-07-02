@@ -22,7 +22,7 @@ export const useRecentUsersStore = create<IRecentUsersStore>()((set) => ({
 
       const recentUsers = JSON.parse(result || '[]')
 
-      set((state) => ({ recentUsers }))
+      set(() => ({ recentUsers }))
     })
   },
 
