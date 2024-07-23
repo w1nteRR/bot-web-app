@@ -15,6 +15,8 @@ import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
+import { getNextPageParam } from '../../helpers/query/stories-next-page'
+
 import { ScrapperApi } from '../../api/scrapper.api'
 import { ILocationFrom, Pages } from '../../types/navigation/navigation.types'
 
@@ -84,15 +86,7 @@ export const UserPage: FC = () => {
       retry: 1,
       enabled: !!data?.data.id,
       staleTime: Infinity,
-      getNextPageParam: (lastPage, allPages) => {
-        console.log('last page')
-
-        if (lastPage.data.stories.media.length === 10) {
-          return lastPage.config.params.page + 1
-        }
-
-        return undefined
-      },
+      getNextPageParam,
     },
   )
 
