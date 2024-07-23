@@ -10,6 +10,8 @@ import { StoriesList } from '../../components/stories/stories.list'
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 
+import { getNextPageParam } from '../../helpers/query/stories-next-page'
+
 import { ScrapperApi } from '../../api/scrapper.api'
 import { Pages } from '../../types/navigation/navigation.types'
 
@@ -41,14 +43,7 @@ export const UserStoriesPage = () => {
       retry: 1,
       enabled: false,
       staleTime: Infinity,
-
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.data.stories.media.length > 10) {
-          return lastPage.config.params.page + 1
-        }
-
-        return undefined
-      },
+      getNextPageParam,
     },
   )
 
