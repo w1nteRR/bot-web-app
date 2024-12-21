@@ -9,7 +9,6 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 
 export const SubscriptionFeatures = () => {
   const { themeParams } = useTelegram()
-
   const { link_color, text_color, subtitle_text_color } = themeParams
 
   return (
@@ -47,7 +46,7 @@ const sections = [
   {
     title: 'Increased Usage Limits',
     description:
-      'Elevate your journey by expanding your reach to up to 50 favorite accounts and monitoring 5 tracking accounts simultaneously',
+      `Elevate your journey by expanding your reach to up to 25 favorite accounts and monitoring 8 tracking accounts simultaneously`,
     icon: TbMultiplier2X,
   },
   {

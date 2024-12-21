@@ -1,9 +1,9 @@
 import { mainInstance } from './axios.config'
-import { IConfigureInvoicePayload } from '../types/api/subscription.request'
+import { IConfigureInvoicePayload, IConfigureInvoiceResponse } from '../types/api/subscription.types'
 
 const url = 'https://europe-west1-ia-bot-api.cloudfunctions.net/subscription'
 export const subscriptionApi = {
   async configureInvoice(payload: IConfigureInvoicePayload) {
-    return mainInstance.post(url, payload)
+    return mainInstance.post<IConfigureInvoiceResponse>(url, payload)
   },
 }

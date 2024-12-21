@@ -166,7 +166,7 @@ export const RecentListV3 = () => {
         header={
           <div
             className='px-4 py-1 flex items-center gap-1 rounded-xl'
-            style={{ backgroundColor: themeParams.secondary_bg_color }}
+            style={{ backgroundColor: themeParams.section_bg_color }}
           >
             <p style={{ color: themeParams.hint_color }} className='text-xs'>
               {favorites.length}

@@ -23,32 +23,32 @@ export const FavoritesModalContent: FC = () => {
   }
 
   return (
-    <div className='mx-5'>
+    <div className='m-5 p-2 rounded-xl' style={{ backgroundColor: themeParams.section_bg_color }}>
       {favorites.map((user) => (
-        <div className='py-2 flex items-center justify-between' key={user.id}>
-          <UserCard {...user} />
-          <div className='flex justify-center w-14 items-center'>
-            {usersInTracking().includes(Number(user.id)) ? (
-              <button
-                className='rounded-full p-3 flex items-center justify-center'
-                disabled
-              >
-                <FaLock size={12} color={themeParams.link_color} />
-              </button>
-            ) : (
-              <button
-                className='w-14 py-1 rounded-full flex items-center justify-center'
-                style={{ backgroundColor: themeParams.secondary_bg_color }}
-                onClick={async () => await remove(user.id)}
-              >
-                <span
-                  className='text-xs'
-                  style={{ color: themeParams.text_color }}
+          <div className='py-2 flex items-center justify-between' key={user.id}>
+            <UserCard {...user} />
+            <div className='flex justify-center w-14 items-center'>
+              {usersInTracking().includes(Number(user.id)) ? (
+                <button
+                  className='rounded-full p-3 flex items-center justify-center'
+                  disabled
                 >
-                  Remove
-                </span>
-              </button>
-            )}
+                  <FaLock size={12} color={themeParams.link_color} />
+                </button>
+              ) : (
+                <button
+                  className='w-14 py-1 rounded-full flex items-center justify-center'
+                  style={{ backgroundColor: themeParams.secondary_bg_color }}
+                  onClick={async () => await remove(user.id)}
+                >
+                  <span
+                    className='text-xs'
+                    style={{ color: themeParams.text_color }}
+                  >
+                    Remove
+                  </span>
+                </button>
+              )}
           </div>
         </div>
       ))}
