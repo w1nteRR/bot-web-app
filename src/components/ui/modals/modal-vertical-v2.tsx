@@ -26,9 +26,9 @@ export const ModalVerticalV2: FC<IModalVerticalV2Props> = ({
   return (
     <AnimatePresence>
       {open && (
-        <div className='fixed z-10 h-screen inset-0 pt-4'>
+        <div className='fixed z-10 h-screen inset-0'>
           <motion.div
-            style={{ backgroundColor: themeParams.section_bg_color }}
+            style={{ backgroundColor: themeParams.secondary_bg_color }}
             className='w-full h-full rounded-t-xl overflow-y-scroll no-scrollbar'
             initial={{ y: '100%' }}
             animate={{
@@ -42,7 +42,7 @@ export const ModalVerticalV2: FC<IModalVerticalV2Props> = ({
           >
             <div
               className='p-5 flex justify-between sticky top-0'
-              style={{ backgroundColor: themeParams.section_bg_color }}
+              // style={{ backgroundColor: themeParams.section_bg_color }}
             >
               <div>{header}</div>
 

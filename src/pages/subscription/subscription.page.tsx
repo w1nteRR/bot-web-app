@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IoCheckmarkCircleSharp } from 'react-icons/io5'
+
 
 import { SubscriptionFeatures } from '../../components/subscription/subscription-features'
 
@@ -9,8 +9,10 @@ import { useSubscriptionMainButton } from '../../hooks/subscription/useSubscript
 import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { Pages } from '../../types/navigation/navigation.types'
 
+import starIcon from '../../assets/telegram-star.svg'
+
 export const SubscriptionPage: FC = () => {
-  const { themeParams, openInvoice } = useTelegram()
+  const { themeParams } = useTelegram()
   const navigate = useNavigate()
 
   useSubscriptionMainButton()
@@ -36,18 +38,27 @@ export const SubscriptionPage: FC = () => {
       </div>
 
       <div
-        className='mt-10 py-3 px-5 flex rounded-xl mx-1'
+        className='mt-10 py-3 px-5 flex justify-center items-center rounded-xl mx-1'
         style={{ backgroundColor: section_bg_color }}
       >
-        <div className='mr-2'>
-          <IoCheckmarkCircleSharp size={30} color={link_color} />
-        </div>
+        {/*<div className='mr-2'>*/}
+        {/*  <IoCheckmarkCircleSharp size={30} color={link_color} />*/}
+        {/*</div>*/}
 
         <div className='flex justify-between items-center w-full'>
-          <p className='font-bold' style={{ color: text_color }}>
-            Monthly
-          </p>
-          <p style={{ color: hint_color }}>2,49 US$/month</p>
+          <div>
+            <p className="font-semibold" style={{ color: text_color }}>
+              Monthly Subscription
+            </p>
+            <p style={{ color: hint_color }}>
+             Premium Access
+            </p>
+          </div>
+
+          <div className="flex flex-row items-center gap-1.5">
+            <p className="font-semibold" style={{ color: text_color }}>100 / <span style={{ color: hint_color }} className='font-medium'>mo</span></p>
+            <img src={starIcon} alt='star' />
+          </div>
         </div>
       </div>
 

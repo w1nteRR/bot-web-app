@@ -21,14 +21,14 @@ export const NotificationsManageModalContent: FC<
   const { themeParams } = useTelegram()
 
   return (
-    <>
+    <div className='m-5 p-2 rounded-xl' style={{ backgroundColor: themeParams.section_bg_color }}>
       {favorites.map((user) => {
         const isSelected = selectedNotificationsAccounts.some(
           (selectedAccount) => selectedAccount.id === user.id,
         )
 
         return (
-          <div key={user.id} className='p-3 flex justify-between'>
+          <div key={user.id} className='flex py-2 justify-between'>
             <UserCard {...user} />
 
             <div className='flex items-center'>
@@ -64,6 +64,6 @@ export const NotificationsManageModalContent: FC<
           </div>
         )
       })}
-    </>
+    </div>
   )
 }

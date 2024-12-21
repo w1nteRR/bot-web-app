@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Lottie from 'lottie-react'
+import { useQuery } from 'react-query'
 
 import { SubscriptionFeatures } from '../../components/subscription/subscription-features'
 
@@ -9,15 +10,25 @@ import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { Pages } from '../../types/navigation/navigation.types'
 
 import success from '../../assets/lottie/success.json'
+import { paymentsApi } from '../../api/payments.api'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
+import { useSubscriptionExpirationDate } from '../../hooks/subscription/useSubscriptionExpirationDate'
 
 export const SubscriptionPaidPage: FC = () => {
+  const { data, isLoading } = useQuery('', () => paymentsApi.getSubscriptionExpirationDate({ user_id: user?.id! }))
+
+
   const { themeParams } = useTelegram()
+  const { user } = useWebAppUserContext()
 
   const navigate = useNavigate()
   useBackButton(() => navigate(Pages.Home))
 
+  const expirationDate = useSubscriptionExpirationDate(data?.data.subscription_expiration_date || 0)
+
   const { text_color, section_bg_color, link_color, subtitle_text_color } =
     themeParams
+
 
   return (
     <div className='px-3 py-5'>
@@ -51,13 +62,12 @@ export const SubscriptionPaidPage: FC = () => {
           className='py-5 px-4 m-2 rounded-xl flex flex-col gap-3.5'
         >
           <p style={{ color: text_color }} className='text-sm'>
-            Your subscription ends on <b>22.07.2024</b>
+            Your subscription ends on <b>{!isLoading && expirationDate}</b>
           </p>
 
           <p style={{ color: text_color }} className='text-sm'>
             Need help? Contact us at{' '}
-            <span style={{ color: link_color }}>support@example.com</span> or
-            visit our <span style={{ color: link_color }}>Help Center</span>.
+            <a href='/' style={{ color: link_color }}>support@example.com</a>
           </p>
         </div>
       </div>

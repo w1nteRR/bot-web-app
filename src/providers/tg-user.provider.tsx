@@ -26,6 +26,7 @@ interface IWebAppUser extends WebAppUser {
 interface IContext {
   user: IWebAppUser | null
   isLoading: boolean
+  updateSubscriptionStatus: (status: boolean) => void
 }
 
 export const WebAppUserContext = createContext<IContext>({} as IContext)
@@ -35,6 +36,15 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
 
   const tg = useTelegram()
   const navigate = useNavigate()
+
+  const updateSubscriptionStatus = (status: boolean) => {
+    const updateCandidate = {
+      ...user,
+      is_subscriber: status
+    }
+
+    setUser(updateCandidate as IWebAppUser)
+  }
 
   const { isLoading } = useQuery(
     ['user'],
@@ -61,6 +71,7 @@ export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
     () => ({
       user,
       isLoading,
+      updateSubscriptionStatus
     }),
     [user, isLoading],
   )

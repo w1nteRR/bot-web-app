@@ -5,7 +5,6 @@ import { Pages } from '../types/navigation/navigation.types'
 
 export const SubscriptionLayout: FC = () => {
   const { user } = useWebAppUserContext()
-
   const navigate = useNavigate()
 
   useEffect(() => {

@@ -2,7 +2,6 @@ import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IoChevronForwardOutline } from 'react-icons/io5'
 import { AiFillDollarCircle } from 'react-icons/ai'
-import { CgSpinnerTwoAlt } from 'react-icons/cg'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { Pages } from '../../types/navigation/navigation.types'
@@ -30,13 +29,7 @@ export const SubscriptionButton: FC = () => {
           Subscription
         </span>
 
-        {false ? (
-          <CgSpinnerTwoAlt
-            className='animate-spin justify-self-end ml-auto'
-            color={themeParams.link_color}
-            size={18}
-          />
-        ) : (
+        {(
           <IoChevronForwardOutline
             className='justify-self-end ml-auto'
             color={themeParams.hint_color}
