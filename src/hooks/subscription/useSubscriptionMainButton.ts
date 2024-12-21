@@ -1,32 +1,44 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'react-query'
+import { InvoiceStatuses } from '@twa-dev/types'
 
 import { useTelegram } from '../telegram/useTelegram'
-import { walletPayApi } from '../../api/wallet-pay.api'
 import { useWebAppUserContext } from '../context/useWebAppUserContext'
+import { subscriptionApi } from '../../api/subscription.api'
+import { Pages } from '../../types/navigation/navigation.types'
 
 export const useSubscriptionMainButton = () => {
-  const { MainButton, onEvent, offEvent, openTelegramLink } = useTelegram()
-  const { user } = useWebAppUserContext()
+  const { MainButton, onEvent, offEvent, openTelegramLink, openInvoice, setHeaderColor } = useTelegram()
+  const { user, updateSubscriptionStatus } = useWebAppUserContext()
+  const navigate = useNavigate()
 
-  const { mutateAsync: createOrder, isLoading: isCreateOrderLoading } =
-    useMutation(walletPayApi.createOrder)
+
+  const { mutateAsync: configureInvoice, isLoading: isConfigureInvoiceLoading } = useMutation(subscriptionApi.configureInvoice)
+
+  const handleInvoicePaid = (status: InvoiceStatuses) => {
+    if(status === 'paid') {
+      updateSubscriptionStatus(true)
+      navigate(`${Pages.Subscription}/${Pages.SubscriptionPaid}`, { replace: true })
+    }
+  }
 
   const handleMainButtonPress = async () => {
     if (!user?.id) return
 
-    await createOrder(
-      { user },
+
+    await configureInvoice(
+      { account_id: String(user.id) },
       {
         onSuccess: ({ data }) => {
-          openTelegramLink(data.payLink)
+          openInvoice(data.invoiceLink, handleInvoicePaid)
         },
       },
     )
   }
 
   useEffect(() => {
-    MainButton.setText('Checkout for 2,49 US$ / month')
+    MainButton.setText('Subscribe')
     MainButton.show()
 
     return () => {
@@ -36,14 +48,14 @@ export const useSubscriptionMainButton = () => {
   }, [])
 
   useEffect(() => {
-    if (isCreateOrderLoading) {
+    if (isConfigureInvoiceLoading) {
       MainButton.showProgress()
 
       return
     }
 
     MainButton.hideProgress()
-  }, [isCreateOrderLoading])
+  }, [isConfigureInvoiceLoading])
 
   useEffect(() => {
     onEvent('mainButtonClicked', handleMainButtonPress)
