@@ -18,7 +18,10 @@ import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 import { getNextPageParam } from '../../helpers/query/stories-next-page'
 
 import { ScrapperApi } from '../../api/scrapper.api'
+import { NotificationsApi } from '../../api/notifications.api'
+
 import { ILocationFrom, Pages } from '../../types/navigation/navigation.types'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -30,12 +33,14 @@ export const UserPage: FC = () => {
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
+  const { user } = useWebAppUserContext()
 
   const { from, isFromSearch } = location.state as ILocationFrom
 
   useBackButton(() => navigate(from, { state: { user: location.state.user } }))
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
+
 
   const {
     data,
@@ -89,6 +94,19 @@ export const UserPage: FC = () => {
       getNextPageParam,
     },
   )
+
+  const { data: notifications } = useQuery(
+    ['notifications'],
+    () => NotificationsApi.getNotifications(user?.id!),
+
+    { retry: 0, onSuccess: (data) => data.data },
+  )
+
+  const isUserInTracking = useMemo<boolean>(() => {
+    const ids = notifications?.data.ids || []
+
+    return ids.includes(Number(data?.data.id!))
+  }, [notifications?.data, data?.data.id])
 
   const mainButtonCallback = async () => {
     if (!hasNextPage) return
@@ -154,6 +172,7 @@ export const UserPage: FC = () => {
 
     return error.response?.data.message || ''
   }, [storiesError])
+
 
   if (isLoading)
     return (
@@ -227,6 +246,7 @@ export const UserPage: FC = () => {
       {!is_privite && (
         <div className='mt-5 px-2'>
           <AddToFavorites
+            isUserInTracking={isUserInTracking}
             user={{ username, profile_image, full_name, id: String(id) }}
           />
         </div>

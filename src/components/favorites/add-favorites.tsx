@@ -8,9 +8,10 @@ import { IFavoriteUser } from '../../types/favorites/favorites.types'
 
 interface IAddToFavoritesProps {
   user: IFavoriteUser
+  isUserInTracking: boolean
 }
 
-export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
+export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user, isUserInTracking }) => {
   const [isUserFavorite, setIsUserFavorite] = useState<boolean | 'pending'>(
     'pending',
   )
@@ -61,6 +62,8 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user }) => {
 
     checkIsUserFavorite()
   }, [favorites.length])
+
+  if(isUserInTracking) return  null
 
   return (
     <button
