@@ -21,9 +21,11 @@ import { ModalVerticalV2 } from '../../components/ui/modals/modal-vertical-v2'
 import { useModal } from '../../hooks/common/useModal'
 import { NotificationsManageModalContent } from '../../components/notifications/notifications-manage-modal.content'
 
+const ACCOUNTS_LIMIT = 4
+
 export const NotificationsSettingsPage: FC = () => {
   const queryClient = useQueryClient()
-  const { data, isLoading, isError } = useGetNotificationsQuery()
+  const { data, isLoading } = useGetNotificationsQuery()
 
   const {
     themeParams,
@@ -131,7 +133,7 @@ export const NotificationsSettingsPage: FC = () => {
   const isNotificationsAccountsLimit = useMemo(() => {
     const total = selectedNotificationsAccounts.length + data?.length!
 
-    return total === 4
+    return total === ACCOUNTS_LIMIT
   }, [selectedNotificationsAccounts.length, data?.length])
 
   if (isLoading) return <SpinLoader fullscreen />
@@ -190,16 +192,17 @@ export const NotificationsSettingsPage: FC = () => {
             Tracking accounts
           </p>
 
-          <button
+          {!!filteredFavorites.length && <button
             style={{ color: themeParams.link_color }}
             onClick={handleAccountAddClick}
           >
             Manage
-          </button>
+          </button>}
+
         </div>
 
         <div
-          className='px-5 py-3 rounded-xl flex  flex-row items-center'
+          className="px-5 py-3 rounded-xl flex  flex-row items-center"
           style={{ backgroundColor: themeParams.section_bg_color }}
         >
           {/* {data.length < 5 && (

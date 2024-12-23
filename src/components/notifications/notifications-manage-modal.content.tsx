@@ -1,4 +1,6 @@
 import { FC } from 'react'
+import { FaLock } from 'react-icons/fa'
+
 import { UserCard } from '../shared/cards/user-card'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { IFavoriteUser } from '../../types/favorites/favorites.types'
@@ -49,14 +51,14 @@ export const NotificationsManageModalContent: FC<
                 <button
                   disabled={isNotificationsAccountsLimit}
                   className='w-14 py-1 rounded-full flex items-center justify-center'
-                  style={{ backgroundColor: themeParams.button_color }}
+                  style={{ backgroundColor: isNotificationsAccountsLimit ? 'unset'  : themeParams.button_color}}
                   onClick={() => onAccountClick(user)}
                 >
                   <span
                     className='text-xs'
                     style={{ color: themeParams.button_text_color }}
                   >
-                    Add
+                    {isNotificationsAccountsLimit ? <FaLock size={12} color={themeParams.link_color} /> : 'Add'}
                   </span>
                 </button>
               )}
