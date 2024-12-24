@@ -9,6 +9,7 @@ import {
 import { WebAppUser } from '@twa-dev/types'
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
+import { SpinLoader } from '../components/ui/loaders/spin-loader'
 
 import { useTelegram } from '../hooks/telegram/useTelegram'
 import { AuthApi } from '../api/auth.api'
@@ -25,6 +26,7 @@ interface IWebAppUser extends WebAppUser {
 interface IContext {
   user: IWebAppUser | null
   isLoading: boolean
+  updateSubscriptionStatus: (status: boolean) => void
 }
 
 export const WebAppUserContext = createContext<IContext>({} as IContext)
@@ -32,48 +34,51 @@ export const WebAppUserContext = createContext<IContext>({} as IContext)
 export const WebAppUserProvider: FC<IUserContextProps> = ({ children }) => {
   const [user, setUser] = useState<null | IWebAppUser>(null)
 
-  const { data, isLoading, refetch } = useQuery(
-    ['user'],
-    () => AuthApi.validate(tg.initData),
-    {
-      enabled: false,
-      onSuccess: (data) => data.data,
-    },
-  )
-
   const tg = useTelegram()
   const navigate = useNavigate()
 
-  const validateUser = async () => {
-    try {
-      const { data } = await refetch()
-
-      return {
-        ...data?.data.user,
-        is_subscriber: data?.data.is_subscriber,
-      }
-    } catch (error) {
-      throw error
+  const updateSubscriptionStatus = (status: boolean) => {
+    const updateCandidate = {
+      ...user,
+      is_subscriber: status
     }
+
+    setUser(updateCandidate as IWebAppUser)
   }
+
+  const { isLoading } = useQuery(
+    ['user'],
+    () => AuthApi.validate(tg.initData),
+    {
+      retry: 1,
+
+      onSuccess: ({ data }) => {
+        const user = {
+          ...data.user,
+          is_subscriber: data.is_subscriber,
+        }
+
+        setUser(user as IWebAppUser)
+      },
+
+      onError: () => {
+        navigate(Pages.NotAuthorized, { replace: true })
+      },
+    },
+  )
 
   const value = useMemo(
     () => ({
       user,
       isLoading,
+      updateSubscriptionStatus
     }),
-    [user],
+    [user, isLoading],
   )
-
-  useEffect(() => {
-    validateUser()
-      .then((user) => setUser(user as IWebAppUser))
-      .catch(() => navigate(Pages.NotAuthorized))
-  }, [user?.id])
 
   return (
     <WebAppUserContext.Provider value={value}>
-      {children}
+      {isLoading ? <SpinLoader fullscreen /> : children}
     </WebAppUserContext.Provider>
   )
 }

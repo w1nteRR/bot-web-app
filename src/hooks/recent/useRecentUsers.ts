@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRecentUsersStore } from '../../store/recent-users.store'
 
-import { CloudStorage, CloudStorageKeys } from '../../helpers/cloud-storage'
+import { CloudStorageKeys } from '../../helpers/cloud-storage'
 import { IRecentUser } from '../../types/user/user.types'
 import { useFavoritesContext } from '../context/useFavoritesContext'
 
@@ -20,10 +20,12 @@ export const useRecentUsers = () => {
   const updateRecentUsers = async (list: List) => {
     const value = JSON.stringify(list)
 
-    await CloudStorage.setValue(CloudStorageKeys.Recent, value)
+    const cloudStorage = window.Telegram.WebApp.CloudStorage
+
+    cloudStorage.setItem(CloudStorageKeys.Recent, value)
   }
 
-  const addUserToRecentCloudStorage = (user: IRecentUser) => {
+  const addUserToRecentCloudStorage = async (user: IRecentUser) => {
     const isUserFavorite = favorites.some(
       (favoriteUser) => favoriteUser.id === user.id,
     )
@@ -34,33 +36,24 @@ export const useRecentUsers = () => {
 
     if (isUserExist || isUserFavorite) return
 
+    const updatedRecentUsers = [...recentUsers, user]
+
+    await updateRecentUsers(updatedRecentUsers)
     addRecentUser(user)
   }
 
-  const loadRecentUsers = async () => {
-    try {
-      const recentUsers = await CloudStorage.values(CloudStorageKeys.Recent)
-
-      initRecentUsers(recentUsers)
-    } catch (error) {
-      console.log('LOAD ERROR', error)
-    }
+  const removeUserFromRecentCloudStorage = async (id: string) => {
+    if (!recentUsers.length) return
+    removeRecentUser(id)
   }
 
   useEffect(() => {
-    loadRecentUsers()
+    initRecentUsers()
   }, [])
-
-  useEffect(() => {
-    const updateRecentUsersStorage = async () => {
-      await updateRecentUsers(recentUsers)
-    }
-
-    updateRecentUsersStorage()
-  }, [recentUsers.length])
 
   return {
     addUserToRecentCloudStorage,
+    removeUserFromRecentCloudStorage,
     removeRecentUser,
     resetRecentUsers,
     recentUsers,

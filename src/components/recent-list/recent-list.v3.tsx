@@ -1,16 +1,21 @@
-import { useMemo, useState } from 'react'
-import { useInfiniteQuery } from 'react-query'
+import { useEffect, useMemo, useState } from 'react'
+import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
+import { IoMdSettings } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { RecentCard } from './recent.card'
+import { ModalVerticalV2 } from '../ui/modals/modal-vertical-v2'
+import { FavoritesModalContent } from '../favorites/favorites-modal.content'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
+import { useModal } from '../../hooks/common/useModal'
+
+import { ScrapperApi } from '../../api/scrapper.api'
 
 import { showRecentListPopupError } from '../../helpers/popup.error'
-import { ScrapperApi } from '../../api/scrapper.api'
 import { Pages } from '../../types/navigation/navigation.types'
 import { IRecentUser } from '../../types/user/user.types'
 
@@ -21,6 +26,9 @@ export const RecentListV3 = () => {
   const { themeParams, HapticFeedback } = useTelegram()
 
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  const { open, handleModalOpen, handleModalClose } = useModal()
 
   const { favorites, isLoading: isFavoritesLoading } = useFavoritesContext()
 
@@ -31,7 +39,9 @@ export const RecentListV3 = () => {
     {
       retry: 1,
       enabled: !!user.id,
-      onSuccess: (data) => {
+      staleTime: Infinity,
+
+      onSuccess: () => {
         navigate(`${Pages.UserStories.replace(':id', user.id)}`, {
           state: { user, from: location.pathname },
         })
@@ -48,13 +58,34 @@ export const RecentListV3 = () => {
   const onUserClick = async (user: IRecentUser) => {
     if (isLoading) return
 
-    setUser(user)
+    const cachedData = queryClient.getQueryData<{ pages: []; pageParams: [] }>([
+      'user stories',
+      user.id,
+    ])
+
+    if (!cachedData?.pages.length) {
+      setUser(user)
+
+      return
+    }
+
+    navigate(`${Pages.UserStories.replace(':id', user.id)}`, {
+      state: { user, from: location.pathname },
+    })
   }
 
   const reversedFavorites = useMemo(
     () => [...favorites].reverse(),
     [favorites.length],
   )
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : 'unset'
+
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [open])
 
   if (isFavoritesLoading)
     return (
@@ -102,12 +133,20 @@ export const RecentListV3 = () => {
         >
           {t('home.favorites')}
         </span>
-        {isLoading && (
+        {isLoading ? (
           <CgSpinnerTwoAlt
             className='animate-spin'
             color={themeParams.link_color}
             size={16}
           />
+        ) : (
+          <button>
+            <IoMdSettings
+              color={themeParams.link_color}
+              size={20}
+              onClick={handleModalOpen}
+            />
+          </button>
         )}
       </div>
       <div className='w-full mt-5 whitespace-nowrap overflow-x-scroll'>
@@ -120,6 +159,34 @@ export const RecentListV3 = () => {
           />
         ))}
       </div>
+
+      <ModalVerticalV2
+        open={open}
+        onClose={handleModalClose}
+        header={
+          <div
+            className='px-4 py-1 flex items-center gap-1 rounded-xl'
+            style={{ backgroundColor: themeParams.section_bg_color }}
+          >
+            <p style={{ color: themeParams.hint_color }} className='text-xs'>
+              {favorites.length}
+            </p>
+
+            <p
+              className='text-xs font-bold'
+              style={{ color: themeParams.text_color }}
+            >
+              /
+            </p>
+
+            <p style={{ color: themeParams.text_color }} className='text-xs'>
+              25
+            </p>
+          </div>
+        }
+      >
+        <FavoritesModalContent />
+      </ModalVerticalV2>
     </>
   )
 }

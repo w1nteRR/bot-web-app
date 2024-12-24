@@ -15,8 +15,13 @@ import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 
+import { getNextPageParam } from '../../helpers/query/stories-next-page'
+
 import { ScrapperApi } from '../../api/scrapper.api'
-import { ILocationFrom } from '../../types/navigation/navigation.types'
+import { NotificationsApi } from '../../api/notifications.api'
+
+import { ILocationFrom, Pages } from '../../types/navigation/navigation.types'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 
 export const UserPage: FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState<null | number>(null)
@@ -28,6 +33,7 @@ export const UserPage: FC = () => {
   const navigate = useNavigate()
   const params = useParams()
   const location = useLocation()
+  const { user } = useWebAppUserContext()
 
   const { from, isFromSearch } = location.state as ILocationFrom
 
@@ -35,7 +41,6 @@ export const UserPage: FC = () => {
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
 
-  console.log('params', params)
 
   const {
     data,
@@ -51,7 +56,7 @@ export const UserPage: FC = () => {
       onError: (error) => {
         if (error instanceof AxiosError) {
           tg.HapticFeedback.notificationOccurred('error')
-          tg.showAlert(error.response?.data.message, () => navigate(-1))
+          navigate(Pages.NotFound)
         }
       },
       onSuccess: async ({ data }) => {
@@ -85,24 +90,41 @@ export const UserPage: FC = () => {
     {
       retry: 1,
       enabled: !!data?.data.id,
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.data.stories.media.length === 10) {
-          return true
-        }
-
-        return undefined
-      },
+      staleTime: Infinity,
+      getNextPageParam,
     },
   )
 
-  useEffect(() => {
-    const mainButtonCallback = async () => {
-      if (!hasNextPage) return
+  const { data: notifications } = useQuery(
+    ['notifications'],
+    () => NotificationsApi.getNotifications(user?.id!),
 
-      setPage((prevPage) => prevPage + 1)
-      await fetchNextPage({ pageParam: page + 1 })
+    { retry: 0, onSuccess: (data) => data.data },
+  )
+
+  const isUserInTracking = useMemo<boolean>(() => {
+    const ids = notifications?.data.ids || []
+
+    return ids.includes(Number(data?.data.id!))
+  }, [notifications?.data, data?.data.id])
+
+  const mainButtonCallback = async () => {
+    if (!hasNextPage) return
+
+    setPage((prevPage) => prevPage + 1)
+  }
+
+  useEffect(() => {
+    if (page === 1) return
+
+    const loadMore = async () => {
+      await fetchNextPage()
     }
 
+    loadMore().then()
+  }, [page])
+
+  useEffect(() => {
     if (!hasNextPage) {
       tg.MainButton.text
       tg.MainButton.hide
@@ -123,6 +145,20 @@ export const UserPage: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state.user, hasNextPage])
 
+  useEffect(() => {
+    if (isFetchingNextPage) {
+      tg.MainButton.showProgress()
+
+      return
+    }
+
+    tg.MainButton.hideProgress()
+
+    return () => {
+      tg.MainButton.hideProgress()
+    }
+  }, [isFetchingNextPage])
+
   const onChipClick = (chipIndex: number) => {
     setActiveTabIndex(chipIndex)
 
@@ -137,11 +173,6 @@ export const UserPage: FC = () => {
     return error.response?.data.message || ''
   }, [storiesError])
 
-  useEffect(() => {
-    tg.MainButton.hide()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   if (isLoading)
     return (
@@ -165,22 +196,27 @@ export const UserPage: FC = () => {
 
   return (
     <div className='py-10'>
-      <div className='flex px-5 justify-between'>
-        <div className='truncate'>
-          <Title>{data.data.username}</Title>
-          <p className='text-sm' style={{ color: tg.themeParams.hint_color }}>
+      <div className='flex justify-between px-4'>
+        <div className='w-9/12'>
+          <div className=''>
+            <Title>{data.data.username}</Title>
+          </div>
+          <p
+            className='text-sm break-words'
+            style={{ color: tg.themeParams.hint_color }}
+          >
             {data?.data.full_name}
           </p>
         </div>
 
         <img
-          className='bg-gray-500 w-20 h-20 rounded-full'
+          className='w-20 h-20 rounded-full'
           alt='avatar'
           src={data?.data.profile_image}
         />
       </div>
 
-      <div className='my-5 mx-5 bg'>
+      <div className='m-5'>
         <pre
           className='text-xs whitespace-pre-wrap'
           style={{ color: tg.themeParams.text_color }}
@@ -210,6 +246,7 @@ export const UserPage: FC = () => {
       {!is_privite && (
         <div className='mt-5 px-2'>
           <AddToFavorites
+            isUserInTracking={isUserInTracking}
             user={{ username, profile_image, full_name, id: String(id) }}
           />
         </div>

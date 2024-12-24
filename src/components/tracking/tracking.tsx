@@ -25,7 +25,7 @@ export const Tracking: FC = () => {
         className='p-4 rounded-xl  w-full h-full flex items-center gap-2'
         onClick={handleButtonClick}
       >
-        <IoNotificationsCircleSharp size={30} color={themeParams.link_color} />
+        <IoNotificationsCircleSharp size={35} color={themeParams.link_color} />
 
         <span className='font-medium' style={{ color: themeParams.text_color }}>
           Notifications

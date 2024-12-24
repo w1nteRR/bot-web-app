@@ -1,40 +1,61 @@
 import { useEffect } from 'react'
-import { useTelegram } from '../telegram/useTelegram'
+import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'react-query'
+import { InvoiceStatuses } from '@twa-dev/types'
+
+import { useTelegram } from '../telegram/useTelegram'
+import { useWebAppUserContext } from '../context/useWebAppUserContext'
 import { subscriptionApi } from '../../api/subscription.api'
+import { Pages } from '../../types/navigation/navigation.types'
 
 export const useSubscriptionMainButton = () => {
-  const {
-    MainButton,
-    onEvent,
-    offEvent,
-    initDataUnsafe: { user },
-    close,
-  } = useTelegram()
-  const mutation = useMutation(subscriptionApi.configureInvoice)
+  const { MainButton, onEvent, offEvent, openTelegramLink, openInvoice, setHeaderColor } = useTelegram()
+  const { user, updateSubscriptionStatus } = useWebAppUserContext()
+  const navigate = useNavigate()
+
+
+  const { mutateAsync: configureInvoice, isLoading: isConfigureInvoiceLoading } = useMutation(subscriptionApi.configureInvoice)
+
+  const handleInvoicePaid = (status: InvoiceStatuses) => {
+    if(status === 'paid') {
+      updateSubscriptionStatus(true)
+      navigate(`${Pages.Subscription}/${Pages.SubscriptionPaid}`, { replace: true })
+    }
+  }
 
   const handleMainButtonPress = async () => {
     if (!user?.id) return
 
-    await mutation.mutateAsync({ account_id: String(user.id) })
 
-    close()
+    await configureInvoice(
+      { account_id: String(user.id) },
+      {
+        onSuccess: ({ data }) => {
+          openInvoice(data.invoiceLink, handleInvoicePaid)
+        },
+      },
+    )
   }
 
   useEffect(() => {
-    MainButton.setText('Checkout for 2,49 US$ / month')
+    MainButton.setText('Subscribe')
     MainButton.show()
+
+    return () => {
+      MainButton.text
+      MainButton.hide()
+    }
   }, [])
 
   useEffect(() => {
-    if (mutation.isLoading) {
+    if (isConfigureInvoiceLoading) {
       MainButton.showProgress()
 
       return
     }
 
     MainButton.hideProgress()
-  }, [mutation.isLoading])
+  }, [isConfigureInvoiceLoading])
 
   useEffect(() => {
     onEvent('mainButtonClicked', handleMainButtonPress)

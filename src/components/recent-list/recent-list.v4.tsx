@@ -15,7 +15,8 @@ export const RecentListV4: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const { removeRecentUser, resetRecentUsers } = useRecentUsers()
+  const { removeUserFromRecentCloudStorage, resetRecentUsers } =
+    useRecentUsers()
 
   const recentUsers = useRecentUsersStore((state) => state.recentUsers)
 
@@ -25,8 +26,8 @@ export const RecentListV4: FC = () => {
     })
   }, [])
 
-  const handleUserDelete = useCallback((id: string) => {
-    removeRecentUser(id)
+  const handleUserDelete = useCallback(async (id: string) => {
+    await removeUserFromRecentCloudStorage(id)
     HapticFeedback.impactOccurred('light')
   }, [])
 
@@ -40,6 +41,7 @@ export const RecentListV4: FC = () => {
     () => [...recentUsers].reverse(),
     [recentUsers.length],
   )
+
   if (!recentUsers?.length) return null
 
   return (

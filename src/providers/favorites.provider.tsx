@@ -36,29 +36,29 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<Array<IInstagramShortUser>>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const { user } = useWebAppUserContext()
-  const { showAlert } = useTelegram()
+  // const { user } = useWebAppUserContext()
+  // const { showAlert } = useTelegram()
 
-  const { refetch } = useQuery(
-    ['notifications'],
-    () => NotificationsApi.getNotifications(user?.id!),
-
-    { enabled: false, onSuccess: (data) => data.data },
-  )
+  // const { refetch } = useQuery(
+  //   ['notifications'],
+  //   () => NotificationsApi.getNotifications(user?.id!),
+  //
+  //   { enabled: false, onSuccess: (data) => data.data },
+  // )
 
   const remove = async (id: string) => {
-    if (user?.is_subscriber) {
-      const { data } = await refetch()
-      if (!data) return
-
-      const isUserTracking = data.data.ids.includes(Number(id))
-
-      if (isUserTracking) {
-        showAlert('Unable to delete a tracked user.')
-
-        return
-      }
-    }
+    // if (user?.is_subscriber) {
+    //   const { data } = await refetch()
+    //   if (!data) return
+    //
+    //   const isUserTracking = data.data.ids.includes(Number(id))
+    //
+    //   if (isUserTracking) {
+    //     showAlert('Unable to delete a tracked user.')
+    //
+    //     return
+    //   }
+    // }
 
     let favoritesSnapshot = [...favorites]
 
