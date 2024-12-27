@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Lottie from 'lottie-react'
 
 import { UserCard } from '../../components/shared/cards/user-card'
 
@@ -9,8 +10,12 @@ import { useNotifications } from '../../hooks/notifications/useNotifications'
 import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 
 import { Pages } from '../../types/navigation/navigation.types'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
+
+import noFavorites from '../../assets/lottie/no-favorites.json'
 
 const TRIM_OFFSET = 5
+
 export const NotificationsPage: FC = () => {
   const [trimOffset, setTrimOffset] = useState(TRIM_OFFSET)
   const [selected, setSelected] = useState<Array<string>>([])
@@ -21,6 +26,9 @@ export const NotificationsPage: FC = () => {
   const { create, isLoading } = useNotifications()
 
   const { favorites } = useFavoritesContext()
+  const { user } = useWebAppUserContext()
+
+  const ACCOUNTS_LIMIT = user?.is_subscriber ? 4 : 1
 
   useBackButton(() => navigate(Pages.Home))
 
@@ -46,6 +54,8 @@ export const NotificationsPage: FC = () => {
     }
   }
 
+  const handleSubscribeButton = () => navigate(Pages.Subscription)
+
   useEffect(() => {
     if (!favorites.length) {
       MainButton.hide()
@@ -62,7 +72,7 @@ export const NotificationsPage: FC = () => {
     MainButton.enable()
     MainButton.show()
 
-    if (selected.length > 4) {
+    if (selected.length > ACCOUNTS_LIMIT) {
       MainButton.disable()
       MainButton.setParams({
         color: themeParams.bg_color,
@@ -94,30 +104,38 @@ export const NotificationsPage: FC = () => {
 
   return (
     <div>
-      <div className='p-5 flex flex-col gap-3.5'>
+      <div className="p-5 flex flex-col gap-3.5">
         <p
-          className='text-4xl font-bold text-center'
+          className="text-4xl font-bold text-center"
           style={{ color: themeParams.text_color }}
         >
           Choose accounts from Your Favorites
         </p>
-        <p
-          className='text-center font-medium text-md'
-          style={{ color: themeParams.text_color }}
-        >
-          Customize your notification experience with adjustable frequency
-          settings
-        </p>
-        <p
-          className='text-center text-sm mt-3'
-          style={{ color: themeParams.hint_color }}
-        >
-          Maximize ability to create up to <b>four</b> notifications*
-        </p>
+
+        <div className="py-3 mt-5 px-5 flex justify-center items-center rounded-xl mx-1"
+             style={{ backgroundColor: themeParams.section_bg_color }}>
+          <div className="flex justify-between items-center w-full">
+            <div>
+              <p className="font-semibold" style={{ color: themeParams.text_color }}>
+                Accounts Limit
+              </p>
+              <p className="text-sm" style={{ color: themeParams.subtitle_text_color, cursor: 'pointer' }}>
+                Up to <b>{user?.is_subscriber ? 'four' : 'one'}</b> notifications
+              </p>
+            </div>
+
+            <div>
+              <button onClick={handleSubscribeButton} className='font-bold' style={{ color: themeParams.link_color }}>Subscribe</button>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-sm text-center font-bold" style={{ color: themeParams.subtitle_text_color }}>Subscribe to increase your
+          notifications limit</p>
       </div>
 
       <div
-        className='mx-3 rounded-xl'
+        className="mx-3 rounded-xl"
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
         {favorites.slice(0, trimOffset).map((user) => (
@@ -137,7 +155,7 @@ export const NotificationsPage: FC = () => {
       </div>
 
       {favorites.length ? (
-        <div className='flex justify-center mt-4'>
+        <div className='flex justify-center my-4'>
           {favorites.length > TRIM_OFFSET && trimOffset === TRIM_OFFSET ? (
             <button onClick={handleShowMoreClick}>
               <span
@@ -152,14 +170,19 @@ export const NotificationsPage: FC = () => {
           )}
         </div>
       ) : (
-        <div
-          className='m-5 p-3 text-center rounded-xl'
-          style={{ backgroundColor: themeParams.section_bg_color }}
-        >
-          <p className='text-sm' style={{ color: themeParams.hint_color }}>
-            Add favorites first
-          </p>
+        <div className='flex flex-col'>
+          <Lottie className='h-80' animationData={noFavorites} />
+
+          <div
+            className='p-3 mx-5 text-center rounded-xl'
+            style={{ backgroundColor: themeParams.section_bg_color }}
+          >
+            <p className='text-md font-bold' style={{ color: themeParams.text_color }}>
+              Add favorites first
+            </p>
+          </div>
         </div>
+
       )}
     </div>
   )
