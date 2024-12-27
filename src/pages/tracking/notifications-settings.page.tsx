@@ -20,6 +20,7 @@ import { NotificationsApi } from '../../api/notifications.api'
 import { ModalVerticalV2 } from '../../components/ui/modals/modal-vertical-v2'
 import { useModal } from '../../hooks/common/useModal'
 import { NotificationsManageModalContent } from '../../components/notifications/notifications-manage-modal.content'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 
 const ACCOUNTS_LIMIT = 4
 
@@ -30,7 +31,6 @@ export const NotificationsSettingsPage: FC = () => {
   const {
     themeParams,
     MainButton,
-    initDataUnsafe: { user },
     showConfirm,
     HapticFeedback,
     onEvent,
@@ -39,6 +39,7 @@ export const NotificationsSettingsPage: FC = () => {
 
   const { favorites } = useFavoritesContext()
   const { open, handleModalClose: closeModal, handleModalOpen } = useModal()
+  const { user } = useWebAppUserContext()
 
   const updateNotificationIdsMutation = useMutation(
     NotificationsApi.updateNotificationIds,
@@ -192,17 +193,18 @@ export const NotificationsSettingsPage: FC = () => {
             Tracking accounts
           </p>
 
-          {!!filteredFavorites.length && <button
-            style={{ color: themeParams.link_color }}
-            onClick={handleAccountAddClick}
-          >
-            Manage
-          </button>}
-
+          {!!filteredFavorites.length && (
+            <button
+              style={{ color: themeParams.link_color }}
+              onClick={handleAccountAddClick}
+            >
+              Manage
+            </button>
+          )}
         </div>
 
         <div
-          className="px-5 py-3 rounded-xl flex  flex-row items-center"
+          className='px-5 py-3 rounded-xl flex flex-row items-center'
           style={{ backgroundColor: themeParams.section_bg_color }}
         >
           {/* {data.length < 5 && (
@@ -216,7 +218,7 @@ export const NotificationsSettingsPage: FC = () => {
 
           <div
             className={`flex ${
-              data.length === 4 ? 'justify-center' : 'justify-end'
+              data.length === 4 ? 'justify-center' : 'justify-start'
             } items-center w-full gap-3.5`}
           >
             {data.map((account) => (
@@ -237,7 +239,6 @@ export const NotificationsSettingsPage: FC = () => {
                   src={account.profile_image}
                   alt={''}
                 />
-
                 <p
                   className='text-xs truncate w-14 py-1'
                   style={{ color: themeParams.text_color }}
@@ -246,8 +247,44 @@ export const NotificationsSettingsPage: FC = () => {
                 </p>
               </div>
             ))}
+
+            {!user?.is_subscriber && (
+              <div
+                className='py-3  flex justify-center items-center rounded-xl mx-1'
+                style={{ backgroundColor: themeParams.section_bg_color }}
+              >
+                <div className='flex justify-between items-center w-full'>
+                  <div>
+                    <p
+                      className='font-semibold'
+                      style={{ color: themeParams.text_color }}
+                    >
+                      Accounts Limited
+                    </p>
+                    <p
+                      className='text-sm'
+                      style={{
+                        color: themeParams.subtitle_text_color,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Subscribe to increase your limit
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
+
+        {!user?.is_subscriber && (
+          <button
+            className='mt-5 text-center w-full'
+            style={{ color: themeParams.link_color }}
+          >
+            Get Premium Subscription
+          </button>
+        )}
       </div>
 
       {updateNotificationIdsMutation.isLoading && (
