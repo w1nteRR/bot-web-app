@@ -17,6 +17,7 @@ function App() {
   useEffect(() => {
     tg.ready()
     tg.setHeaderColor('secondary_bg_color')
+    tg.setBackgroundColor('secondary_bg_color')
     tg.expand()
   }, [tg])
 

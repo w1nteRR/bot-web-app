@@ -105,7 +105,7 @@ export const RecentListV3 = () => {
   if (!favorites.length)
     return (
       <div
-        className='rounded-xl p-3 m-5'
+        className='rounded-xl p-3 m-3'
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
         <p
