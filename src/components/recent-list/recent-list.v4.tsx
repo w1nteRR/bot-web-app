@@ -45,16 +45,24 @@ export const RecentListV4: FC = () => {
     [recentUsers.length],
   )
 
-  if (!recentUsers?.length) return <div className='relative'>
-    <Lottie animationData={noRecent} className='h-80 ' />
-    <div className='flex flex-col items-center absolute bottom-0 w-full'>
-      <p className='font-medium' style={{ color: themeParams.text_color }}>No Recent Users</p>
-      <p className='text-sm' style={{ color: themeParams.hint_color }}>Start searching to view stories anonymously</p>
-    </div>
-  </div>
+  if (!recentUsers?.length)
+    return (
+      <div className='relative'>
+        <Lottie animationData={noRecent} className='h-80' />
+
+        <div className='flex flex-col items-center absolute bottom-0 w-full'>
+          <p className='font-medium' style={{ color: themeParams.text_color }}>
+            No Recent Users
+          </p>
+          <p className='text-sm' style={{ color: themeParams.hint_color }}>
+            Start searching to view stories anonymously
+          </p>
+        </div>
+      </div>
+    )
 
   return (
-    <div className='mt-20 pb-11 mx-3'>
+    <div className='mt-12 pb-11 mx-3'>
       <div className='mb-3 flex justify-between items-center'>
         <p
           className='uppercase text-sm'

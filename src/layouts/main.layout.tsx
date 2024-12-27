@@ -16,10 +16,10 @@ export const MainLayout: FC = () => {
 
   return (
     <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: themeParams.secondary_bg_color,
-      }}
+    // style={{
+    //   minHeight: '100vh',
+    //   backgroundColor: themeParams.secondary_bg_color,
+    // }}
     >
       {element}
     </div>
