@@ -1,5 +1,6 @@
 import { FC, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Lottie from 'lottie-react'
 import { useTranslation } from 'react-i18next'
 import { IoClose } from 'react-icons/io5'
 
@@ -9,6 +10,8 @@ import { useRecentUsers } from '../../hooks/recent/useRecentUsers'
 import { Pages } from '../../types/navigation/navigation.types'
 import { UserCard } from '../shared/cards/user-card'
 import { useRecentUsersStore } from '../../store/recent-users.store'
+
+import noRecent from '../../assets/lottie/no-recents.json'
 
 export const RecentListV4: FC = () => {
   const { themeParams, HapticFeedback } = useTelegram()
@@ -42,7 +45,13 @@ export const RecentListV4: FC = () => {
     [recentUsers.length],
   )
 
-  if (!recentUsers?.length) return null
+  if (!recentUsers?.length) return <div className='relative'>
+    <Lottie animationData={noRecent} className='h-80 ' />
+    <div className='flex flex-col items-center absolute bottom-0 w-full'>
+      <p className='font-medium' style={{ color: themeParams.text_color }}>No Recent Users</p>
+      <p className='text-sm' style={{ color: themeParams.hint_color }}>Start searching to view stories anonymously</p>
+    </div>
+  </div>
 
   return (
     <div className='mt-20 pb-11 mx-3'>
