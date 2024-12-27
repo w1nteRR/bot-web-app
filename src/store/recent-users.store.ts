@@ -26,7 +26,14 @@ export const useRecentUsersStore = create<IRecentUsersStore>()((set) => ({
     })
   },
 
-  reset: () => set({ recentUsers: [] }),
+  reset: () => {
+    cloudStorage.setItem(
+      CloudStorageKeys.Recent,
+      JSON.stringify([]),
+    )
+
+    set({ recentUsers: [] })
+  },
 
   add: (user) => {
     set((state) => {

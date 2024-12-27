@@ -49,12 +49,12 @@ const sections = [
       `Elevate your journey by expanding your reach to up to 25 favorite accounts and monitoring 8 tracking accounts simultaneously`,
     icon: TbMultiplier2X,
   },
-  {
-    title: 'Cloud Archive',
-    description:
-      'Your digital vault for preserving the essence of your journey through captivating user stories and cherished photos',
-    icon: HiArchiveBox,
-  },
+  // {
+  //   title: 'Cloud Archive',
+  //   description:
+  //     'Your digital vault for preserving the essence of your journey through captivating user stories and cherished photos',
+  //   icon: HiArchiveBox,
+  // },
   {
     title: 'Ad-free',
     description:
