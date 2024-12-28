@@ -45,8 +45,7 @@ const sections = [
   },
   {
     title: 'Increased Usage Limits',
-    description:
-      `Elevate your journey by expanding your reach to up to 25 favorite accounts and monitoring 8 tracking accounts simultaneously`,
+    description: `Elevate your journey by expanding your reach to up to 25 favorite accounts and monitoring 4 tracking accounts simultaneously`,
     icon: TbMultiplier2X,
   },
   // {

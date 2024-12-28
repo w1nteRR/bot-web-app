@@ -14,8 +14,8 @@ import {
 } from '../helpers/favorites.storage'
 
 import { IInstagramShortUser } from '../types/user/user.types'
-import { useTelegram } from '../hooks/telegram/useTelegram'
 import { useWebAppUserContext } from '../hooks/context/useWebAppUserContext'
+import { FavoritesLimits } from '../types/subscription/subscription.types'
 import { NotificationsApi } from '../api/notifications.api'
 
 interface IFavoritesContextProps {
@@ -36,15 +36,19 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<Array<IInstagramShortUser>>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // const { user } = useWebAppUserContext()
-  // const { showAlert } = useTelegram()
+  const { user } = useWebAppUserContext()
 
-  // const { refetch } = useQuery(
-  //   ['notifications'],
-  //   () => NotificationsApi.getNotifications(user?.id!),
-  //
-  //   { enabled: false, onSuccess: (data) => data.data },
-  // )
+  const { data: notificationsIds, isLoading: isNotificationsLoading } =
+    useQuery(
+      'notifications',
+      () => NotificationsApi.getNotifications(user?.id!),
+      {
+        retry: 0,
+        select: ({ data }) => data?.ids || [],
+      },
+    )
+
+  console.log('notif', notificationsIds)
 
   const remove = async (id: string) => {
     // if (user?.is_subscriber) {
@@ -89,6 +93,38 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
     return !!user
   }
 
+  const verifyFavorites = async () => {
+    if (!user) return
+
+    const limit = user.is_subscriber
+      ? FavoritesLimits.Unlimited
+      : FavoritesLimits.Limited
+
+    let favoritesSnapshot = [...favorites]
+    const ids = notificationsIds || []
+
+    // console.log('IDS', ids)
+
+    const preservedFavorites = favoritesSnapshot.filter((fav) =>
+      ids.includes(Number(fav.id)),
+    )
+    const remainingFavorites = favoritesSnapshot.filter(
+      (fav) => !ids.includes(Number(fav.id)),
+    )
+
+    const trimmedFavorites = [
+      ...preservedFavorites,
+      ...remainingFavorites.slice(0, limit - preservedFavorites.length),
+    ]
+
+    // console.log('TRIMMED', trimmedFavorites)
+
+    const updatedFavoritesJSON = JSON.stringify(trimmedFavorites)
+
+    await setFavoritesStorage(updatedFavoritesJSON)
+    setFavorites(trimmedFavorites)
+  }
+
   useEffect(() => {
     const loadFavorites = async () => {
       try {
@@ -100,8 +136,18 @@ export const FavoritesProvider: FC<IFavoritesContextProps> = ({ children }) => {
       }
     }
 
-    loadFavorites().then()
+    void loadFavorites()
   }, [])
+
+  // useEffect(() => {
+  //   console.log('is', isLoa)
+  //   if (!isLoa) {
+  //     const run = async () => {
+  //       await verifyFavorites()
+  //     }
+  //     void run()
+  //   }
+  // }, [user, isLoa])
 
   const value = useMemo(
     () => ({ favorites, remove, add, check, isLoading }),
