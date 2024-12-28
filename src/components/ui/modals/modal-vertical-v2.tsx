@@ -42,7 +42,7 @@ export const ModalVerticalV2: FC<IModalVerticalV2Props> = ({
           >
             <div
               className='p-5 flex justify-between sticky top-0'
-              // style={{ backgroundColor: themeParams.section_bg_color }}
+              style={{ backgroundColor: themeParams.secondary_bg_color }}
             >
               <div>{header}</div>
 

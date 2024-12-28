@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 
 import { useTelegram } from '../telegram/useTelegram'
 import { NotificationsApi } from '../../api/notifications.api'
@@ -23,15 +23,6 @@ export const useNotifications = () => {
     },
   })
 
-  const { refetch } = useQuery(
-    ['notifications'],
-    () => NotificationsApi.getNotifications(user?.id!),
-    {
-      enabled: false,
-      onSuccess: () => navigate(Pages.Notifications),
-    },
-  )
-
   const create = useCallback(async (ids: string[]) => {
     if (!user?.id) return
 
@@ -43,8 +34,6 @@ export const useNotifications = () => {
         account_id,
         ids: numberIds,
       })
-
-      // await refetch()
     } catch (error) {
       console.log('error')
       showAlert('Something went wrong.')

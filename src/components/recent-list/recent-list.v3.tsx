@@ -18,19 +18,20 @@ import { ScrapperApi } from '../../api/scrapper.api'
 import { showRecentListPopupError } from '../../helpers/popup.error'
 import { Pages } from '../../types/navigation/navigation.types'
 import { IRecentUser } from '../../types/user/user.types'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
+import { FavoritesLimits } from '../../types/subscription/subscription.types'
 
 export const RecentListV3 = () => {
   const [user, setUser] = useState<IRecentUser>({} as IRecentUser)
 
   const { t } = useTranslation()
   const { themeParams, HapticFeedback } = useTelegram()
+  const { open, handleModalOpen, handleModalClose } = useModal()
+  const { favorites, isLoading: isFavoritesLoading } = useFavoritesContext()
+  const { user: webUser } = useWebAppUserContext()
 
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-
-  const { open, handleModalOpen, handleModalClose } = useModal()
-
-  const { favorites, isLoading: isFavoritesLoading } = useFavoritesContext()
 
   const query = useInfiniteQuery(
     ['user stories', user.id],
@@ -105,7 +106,7 @@ export const RecentListV3 = () => {
   if (!favorites.length)
     return (
       <div
-        className='rounded-xl p-3 m-5'
+        className='rounded-xl p-3 m-3'
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
         <p
@@ -180,7 +181,9 @@ export const RecentListV3 = () => {
             </p>
 
             <p style={{ color: themeParams.text_color }} className='text-xs'>
-              25
+              {webUser?.is_subscriber
+                ? FavoritesLimits.Unlimited
+                : FavoritesLimits.Limited}
             </p>
           </div>
         }
