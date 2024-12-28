@@ -110,7 +110,7 @@ export const NotificationsPage: FC = () => {
           className='text-4xl font-bold text-center'
           style={{ color: themeParams.text_color }}
         >
-          Choose accounts from Your Favorites
+          Setup tracking accounts
         </p>
 
         <div
@@ -206,15 +206,15 @@ export const NotificationsPage: FC = () => {
         <div className='flex flex-col'>
           <Lottie className='h-80' animationData={noFavorites} />
 
-          <div
-            className='p-3 mx-5 text-center rounded-xl'
-            style={{ backgroundColor: themeParams.section_bg_color }}
-          >
+          <div className='p-3 mx-5 flex flex-col tems-center'>
             <p
-              className='text-md font-bold'
+              className='font-medium'
               style={{ color: themeParams.text_color }}
             >
-              Add favorites first
+              No Favorites Accounts
+            </p>
+            <p className='text-sm' style={{ color: themeParams.hint_color }}>
+              You need favorites accounts to start tracking
             </p>
           </div>
         </div>
