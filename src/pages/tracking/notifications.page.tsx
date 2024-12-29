@@ -208,7 +208,7 @@ export const NotificationsPage: FC = () => {
 
           <div className='p-3 mx-5 flex flex-col tems-center'>
             <p
-              className='font-medium'
+              className='font-medium text-center'
               style={{ color: themeParams.text_color }}
             >
               No Favorites Accounts
