@@ -65,7 +65,7 @@ export const SearchForm = () => {
 
   return (
     <>
-      <form className='w-full relative'>
+      <form className='w-full relative mb-2'>
         <div className='p-2 absolute right-0 h-full flex items-center'>
           {searchValue.length >= 1 && (
             <MdCancel size={20} color='gray' onClick={resetSearchForm} />

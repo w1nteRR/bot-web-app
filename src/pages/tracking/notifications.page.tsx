@@ -13,6 +13,7 @@ import { Pages } from '../../types/navigation/navigation.types'
 import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 
 import noFavorites from '../../assets/lottie/no-favorites.json'
+import success from '../../assets/lottie/success-2.json'
 
 const TRIM_OFFSET = 5
 
@@ -104,38 +105,70 @@ export const NotificationsPage: FC = () => {
 
   return (
     <div>
-      <div className="p-5 flex flex-col gap-3.5">
+      <div className='p-5 flex flex-col gap-3.5'>
         <p
-          className="text-4xl font-bold text-center"
+          className='text-4xl font-bold text-center'
           style={{ color: themeParams.text_color }}
         >
-          Choose accounts from Your Favorites
+          Setup tracking accounts
         </p>
 
-        <div className="py-3 mt-5 px-5 flex justify-center items-center rounded-xl mx-1"
-             style={{ backgroundColor: themeParams.section_bg_color }}>
-          <div className="flex justify-between items-center w-full">
+        <div
+          className='py-3 mt-5 px-5 flex justify-center items-center rounded-xl'
+          style={{ backgroundColor: themeParams.section_bg_color }}
+        >
+          <div className='flex justify-between items-center w-full'>
             <div>
-              <p className="font-semibold" style={{ color: themeParams.text_color }}>
+              <p
+                className='font-semibold'
+                style={{ color: themeParams.text_color }}
+              >
                 Accounts Limit
               </p>
-              <p className="text-sm" style={{ color: themeParams.subtitle_text_color, cursor: 'pointer' }}>
-                Up to <b>{user?.is_subscriber ? 'four' : 'one'}</b> notifications
+              <p
+                className='text-sm'
+                style={{
+                  color: themeParams.subtitle_text_color,
+                  cursor: 'pointer',
+                }}
+              >
+                Up to <b>{user?.is_subscriber ? 'four' : 'one'}</b>{' '}
+                notifications
               </p>
             </div>
 
             <div>
-              <button onClick={handleSubscribeButton} className='font-bold' style={{ color: themeParams.link_color }}>Subscribe</button>
+              {user?.is_subscriber ? (
+                <Lottie
+                  animationData={success}
+                  className='h-11 w-11'
+                  loop={false}
+                />
+              ) : (
+                <button
+                  onClick={handleSubscribeButton}
+                  className='font-bold'
+                  style={{ color: themeParams.link_color }}
+                >
+                  Subscribe
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        <p className="text-sm text-center font-bold" style={{ color: themeParams.subtitle_text_color }}>Subscribe to increase your
-          notifications limit</p>
+        {!user?.is_subscriber && (
+          <p
+            className='text-sm text-center font-bold'
+            style={{ color: themeParams.subtitle_text_color }}
+          >
+            Subscribe to increase your notifications limit
+          </p>
+        )}
       </div>
 
       <div
-        className="mx-3 rounded-xl"
+        className='mx-3 rounded-xl'
         style={{ backgroundColor: themeParams.section_bg_color }}
       >
         {favorites.slice(0, trimOffset).map((user) => (
@@ -173,16 +206,18 @@ export const NotificationsPage: FC = () => {
         <div className='flex flex-col'>
           <Lottie className='h-80' animationData={noFavorites} />
 
-          <div
-            className='p-3 mx-5 text-center rounded-xl'
-            style={{ backgroundColor: themeParams.section_bg_color }}
-          >
-            <p className='text-md font-bold' style={{ color: themeParams.text_color }}>
-              Add favorites first
+          <div className='p-3 mx-5 flex flex-col tems-center'>
+            <p
+              className='font-medium text-center'
+              style={{ color: themeParams.text_color }}
+            >
+              No Favorites Accounts
+            </p>
+            <p className='text-sm' style={{ color: themeParams.hint_color }}>
+              You need favorites accounts to start tracking
             </p>
           </div>
         </div>
-
       )}
     </div>
   )

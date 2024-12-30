@@ -41,7 +41,6 @@ export const UserPage: FC = () => {
 
   const { addUserToRecentCloudStorage } = useRecentUsers()
 
-
   const {
     data,
     isLoading,
@@ -103,6 +102,8 @@ export const UserPage: FC = () => {
   )
 
   const isUserInTracking = useMemo<boolean>(() => {
+    if (!notifications?.data) return false
+
     const ids = notifications?.data.ids || []
 
     return ids.includes(Number(data?.data.id!))
@@ -172,7 +173,6 @@ export const UserPage: FC = () => {
 
     return error.response?.data.message || ''
   }, [storiesError])
-
 
   if (isLoading)
     return (

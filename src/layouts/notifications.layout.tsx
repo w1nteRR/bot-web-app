@@ -12,14 +12,14 @@ export const NotificationsLayout: FC = () => {
   useEffect(() => {
     if (isLoading) return
 
-    if (!data?.length || isError) {
+    if (!data?.length) {
       navigate(Pages.NotificationsSelector)
 
       return
     }
 
     navigate(Pages.NotificationsSettings)
-  }, [isLoading, data?.length, isError])
+  }, [isLoading, data])
 
   if (isLoading) return <SpinLoader fullscreen />
 

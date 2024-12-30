@@ -5,19 +5,25 @@ import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { useFavoritesContext } from '../../hooks/context/useFavoritesContext'
 
 import { IFavoriteUser } from '../../types/favorites/favorites.types'
+import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
+import { FavoritesLimits } from '../../types/subscription/subscription.types'
 
 interface IAddToFavoritesProps {
   user: IFavoriteUser
   isUserInTracking: boolean
 }
 
-export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user, isUserInTracking }) => {
+export const AddToFavorites: FC<IAddToFavoritesProps> = ({
+  user,
+  isUserInTracking,
+}) => {
   const [isUserFavorite, setIsUserFavorite] = useState<boolean | 'pending'>(
     'pending',
   )
 
   const { themeParams, showAlert, showConfirm, HapticFeedback } = useTelegram()
   const { t } = useTranslation()
+  const { user: webUser } = useWebAppUserContext()
 
   const {
     favorites,
@@ -28,6 +34,10 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user, isUserInTrackin
 
   const onButtonClick = async () => {
     const isUserExist = check(user.id)
+
+    const limit = webUser?.is_subscriber
+      ? FavoritesLimits.Unlimited
+      : FavoritesLimits.Limited
 
     if (isUserExist) {
       showConfirm(t('common.areUSure'), async (confirmed) => {
@@ -42,7 +52,7 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user, isUserInTrackin
       return
     }
 
-    if (favorites.length >= 25) {
+    if (favorites.length >= limit) {
       HapticFeedback.notificationOccurred('error')
       showAlert(t('favorites.limitError'))
 
@@ -60,10 +70,10 @@ export const AddToFavorites: FC<IAddToFavoritesProps> = ({ user, isUserInTrackin
       setIsUserFavorite(result)
     }
 
-    checkIsUserFavorite()
+    void checkIsUserFavorite()
   }, [favorites.length])
 
-  if(isUserInTracking) return  null
+  if (isUserInTracking) return null
 
   return (
     <button
