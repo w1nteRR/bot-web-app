@@ -213,7 +213,10 @@ export const NotificationsPage: FC = () => {
             >
               No Favorites Accounts
             </p>
-            <p className='text-sm' style={{ color: themeParams.hint_color }}>
+            <p
+              className='text-sm text-center'
+              style={{ color: themeParams.hint_color }}
+            >
               You need favorites accounts to start tracking
             </p>
           </div>
