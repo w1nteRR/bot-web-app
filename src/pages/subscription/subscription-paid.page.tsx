@@ -13,10 +13,12 @@ import success from '../../assets/lottie/success.json'
 import { paymentsApi } from '../../api/payments.api'
 import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 import { useSubscriptionExpirationDate } from '../../hooks/subscription/useSubscriptionExpirationDate'
+import { SpinLoader } from '../../components/ui/loaders/spin-loader'
 
 export const SubscriptionPaidPage: FC = () => {
-  const { data, isLoading } = useQuery('', () => paymentsApi.getSubscriptionExpirationDate({ user_id: user?.id! }))
-
+  const { data, isLoading } = useQuery('', () =>
+    paymentsApi.getSubscriptionExpirationDate({ user_id: user?.id! }),
+  )
 
   const { themeParams } = useTelegram()
   const { user } = useWebAppUserContext()
@@ -24,11 +26,12 @@ export const SubscriptionPaidPage: FC = () => {
   const navigate = useNavigate()
   useBackButton(() => navigate(Pages.Home))
 
-  const expirationDate = useSubscriptionExpirationDate(data?.data.subscription_expiration_date || 0)
+  const expirationDate = useSubscriptionExpirationDate(
+    data?.data.subscription_expiration_date || 0,
+  )
 
   const { text_color, section_bg_color, link_color, subtitle_text_color } =
     themeParams
-
 
   return (
     <div className='px-3 py-5'>
@@ -61,13 +64,23 @@ export const SubscriptionPaidPage: FC = () => {
           style={{ backgroundColor: section_bg_color }}
           className='py-5 px-4 m-2 rounded-xl flex flex-col gap-3.5'
         >
-          <p style={{ color: text_color }} className='text-sm'>
-            Your subscription ends on <b>{!isLoading && expirationDate}</b>
+          <p
+            style={{ color: text_color }}
+            className='text-sm flex items-center'
+          >
+            Your subscription ends on
+            {isLoading ? (
+              <SpinLoader size={14} />
+            ) : (
+              <p className='font-bold ml-1'>{expirationDate}</p>
+            )}
           </p>
 
           <p style={{ color: text_color }} className='text-sm'>
             Need help? Contact us at{' '}
-            <a href='/' style={{ color: link_color }}>support@example.com</a>
+            <a href='/' style={{ color: link_color }}>
+              support@example.com
+            </a>
           </p>
         </div>
       </div>
