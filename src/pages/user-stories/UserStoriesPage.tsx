@@ -134,8 +134,9 @@ export const UserStoriesPage = () => {
             style={{ color: themeParams.section_header_text_color }}
             className='text-sm'
           >
-            Found <b>{storiesData?.pages[0].data.stories.media_count}</b>{' '}
-            stories
+            {t('common.found')}{' '}
+            <b>{storiesData?.pages[0].data.stories.media_count}</b>{' '}
+            {t('common.stories').toLowerCase()}
           </p>
 
           <button
@@ -143,7 +144,7 @@ export const UserStoriesPage = () => {
             className='flex items-center'
             onClick={onProfileButtonClick}
           >
-            Profile
+            {t('common.profile')}
             <MdChevronRight size={25} />
           </button>
         </div>

@@ -14,6 +14,7 @@ import { paymentsApi } from '../../api/payments.api'
 import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 import { useSubscriptionExpirationDate } from '../../hooks/subscription/useSubscriptionExpirationDate'
 import { SpinLoader } from '../../components/ui/loaders/spin-loader'
+import { useTranslation } from 'react-i18next'
 
 export const SubscriptionPaidPage: FC = () => {
   const { data, isLoading } = useQuery('', () =>
@@ -22,6 +23,7 @@ export const SubscriptionPaidPage: FC = () => {
 
   const { themeParams } = useTelegram()
   const { user } = useWebAppUserContext()
+  const { t } = useTranslation()
 
   const navigate = useNavigate()
   useBackButton(() => navigate(Pages.Home))
@@ -43,15 +45,15 @@ export const SubscriptionPaidPage: FC = () => {
           className='text-center font-medium text-3xl'
           style={{ color: text_color }}
         >
-          Subscription Successful!
+          {t('subscriptionPaid.title')}
         </p>
         <p
           className='text-center font-medium text-md'
           style={{ color: text_color }}
         >
-          Thank you for subscribing!
+          {t('subscriptionPaid.subtitle')}
           <br />
-          We’re excited to have you on board.
+          {t('subscriptionPaid.subtitle-2')}
         </p>
         <div
           className='py-5 px-4 rounded-xl m-2 flex flex-col gap-5'
@@ -62,13 +64,13 @@ export const SubscriptionPaidPage: FC = () => {
 
         <div
           style={{ backgroundColor: section_bg_color }}
-          className='py-5 px-4 m-2 rounded-xl flex flex-col gap-3.5'
+          className='py-5 px-4 m-1 rounded-xl flex flex-col gap-3.5'
         >
           <p
             style={{ color: text_color }}
             className='text-sm flex items-center'
           >
-            Your subscription ends on
+            {t('subscriptionPaid.subEnd')}
             {isLoading ? (
               <SpinLoader size={14} />
             ) : (
@@ -77,7 +79,7 @@ export const SubscriptionPaidPage: FC = () => {
           </p>
 
           <p style={{ color: text_color }} className='text-sm'>
-            Need help? Contact us at{' '}
+            {t('subscriptionPaid.contact')}{' '}
             <a href='/' style={{ color: link_color }}>
               support@example.com
             </a>

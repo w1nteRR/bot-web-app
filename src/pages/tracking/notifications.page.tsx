@@ -14,6 +14,7 @@ import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
 
 import noFavorites from '../../assets/lottie/no-favorites.json'
 import success from '../../assets/lottie/success-2.json'
+import { useTranslation } from 'react-i18next'
 
 const TRIM_OFFSET = 5
 
@@ -22,6 +23,7 @@ export const NotificationsPage: FC = () => {
   const [selected, setSelected] = useState<Array<string>>([])
 
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const { themeParams, MainButton, onEvent, offEvent } = useTelegram()
   const { create, isLoading } = useNotifications()
@@ -110,7 +112,7 @@ export const NotificationsPage: FC = () => {
           className='text-4xl font-bold text-center'
           style={{ color: themeParams.text_color }}
         >
-          Setup tracking accounts
+          {t('notifications.title')}
         </p>
 
         <div
@@ -123,7 +125,7 @@ export const NotificationsPage: FC = () => {
                 className='font-semibold'
                 style={{ color: themeParams.text_color }}
               >
-                Accounts Limit
+                {t('notifications.limitSection.title')}
               </p>
               <p
                 className='text-sm'
@@ -132,8 +134,15 @@ export const NotificationsPage: FC = () => {
                   cursor: 'pointer',
                 }}
               >
-                Up to <b>{user?.is_subscriber ? 'four' : 'one'}</b>{' '}
-                notifications
+                {t('notifications.limitSection.subtitle')}
+                <b>
+                  {user?.is_subscriber ? (
+                    <> {t('notifications.limitSection.four')}</>
+                  ) : (
+                    <> {t('notifications.limitSection.one')}</>
+                  )}
+                </b>{' '}
+                {t('notifications.limitSection.notifications')}
               </p>
             </div>
 
@@ -150,7 +159,7 @@ export const NotificationsPage: FC = () => {
                   className='font-bold'
                   style={{ color: themeParams.link_color }}
                 >
-                  Subscribe
+                  {t('subscription.mainButton')}
                 </button>
               )}
             </div>
@@ -162,7 +171,7 @@ export const NotificationsPage: FC = () => {
             className='text-sm text-center font-bold'
             style={{ color: themeParams.subtitle_text_color }}
           >
-            Subscribe to increase your notifications limit
+            {t('notifications.notSubTip')}
           </p>
         )}
       </div>
@@ -195,7 +204,7 @@ export const NotificationsPage: FC = () => {
                 className='font-bold'
                 style={{ color: themeParams.link_color }}
               >
-                Show More
+                {t('common.showMore')}
               </span>
             </button>
           ) : (
@@ -211,13 +220,13 @@ export const NotificationsPage: FC = () => {
               className='font-medium text-center'
               style={{ color: themeParams.text_color }}
             >
-              No Favorites Accounts
+              {t('notifications.noFavorites.title')}
             </p>
             <p
               className='text-sm text-center'
               style={{ color: themeParams.hint_color }}
             >
-              You need favorites accounts to start tracking
+              {t('notifications.noFavorites.subtitle')}
             </p>
           </div>
         </div>

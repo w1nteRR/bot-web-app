@@ -5,10 +5,12 @@ import { AiFillDollarCircle } from 'react-icons/ai'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { Pages } from '../../types/navigation/navigation.types'
+import { useTranslation } from 'react-i18next'
 
 export const SubscriptionButton: FC = () => {
   const { themeParams } = useTelegram()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const handleButtonClick = () => {
     navigate(Pages.Subscription)
@@ -26,15 +28,15 @@ export const SubscriptionButton: FC = () => {
         <AiFillDollarCircle size={34} color={themeParams.link_color} />
 
         <span className='font-medium' style={{ color: themeParams.text_color }}>
-          Subscription
+          {t('navigation.subscription')}
         </span>
 
-        {(
+        {
           <IoChevronForwardOutline
             className='justify-self-end ml-auto'
             color={themeParams.hint_color}
           />
-        )}
+        }
       </button>
     </div>
   )
