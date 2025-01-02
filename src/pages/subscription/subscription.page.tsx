@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-
 import { SubscriptionFeatures } from '../../components/subscription/subscription-features'
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
@@ -10,10 +9,12 @@ import { useBackButton } from '../../hooks/telegram/useBackButton'
 import { Pages } from '../../types/navigation/navigation.types'
 
 import starIcon from '../../assets/telegram-star.svg'
+import { useTranslation } from 'react-i18next'
 
 export const SubscriptionPage: FC = () => {
   const { themeParams } = useTelegram()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   useSubscriptionMainButton()
   useBackButton(() => navigate(Pages.Home))
@@ -27,13 +28,13 @@ export const SubscriptionPage: FC = () => {
           className='text-4xl font-bold text-center'
           style={{ color: text_color }}
         >
-          Premium Subscription
+          {t('subscription.title')}
         </h1>
         <p
           className='text-center font-medium text-md'
           style={{ color: themeParams.text_color }}
         >
-          Unlock exclusive features & elevate Your experience
+          {t('subscription.subtitle')}
         </p>
       </div>
 
@@ -47,16 +48,21 @@ export const SubscriptionPage: FC = () => {
 
         <div className='flex justify-between items-center w-full'>
           <div>
-            <p className="font-semibold" style={{ color: text_color }}>
-              Monthly Subscription
+            <p className='font-semibold' style={{ color: text_color }}>
+              {t('subscription.subscription-item.title')}
             </p>
             <p style={{ color: hint_color }}>
-             Premium Access
+              {t('subscription.subscription-item.subtitle')}
             </p>
           </div>
 
-          <div className="flex flex-row items-center gap-1.5">
-            <p className="font-semibold" style={{ color: text_color }}>100 / <span style={{ color: hint_color }} className='font-medium'>mo</span></p>
+          <div className='flex flex-row items-center gap-1.5'>
+            <p className='font-semibold' style={{ color: text_color }}>
+              100 /{' '}
+              <span style={{ color: hint_color }} className='font-medium'>
+                {t('subscription.subscription-item.month')}
+              </span>
+            </p>
             <img src={starIcon} alt='star' />
           </div>
         </div>
@@ -67,7 +73,7 @@ export const SubscriptionPage: FC = () => {
           className='uppercase text-sm'
           style={{ color: themeParams.section_header_text_color }}
         >
-          What's included
+          {t('subscription.include')}
         </span>
       </div>
       <div

@@ -21,12 +21,13 @@ import { ModalVerticalV2 } from '../../components/ui/modals/modal-vertical-v2'
 import { useModal } from '../../hooks/common/useModal'
 import { NotificationsManageModalContent } from '../../components/notifications/notifications-manage-modal.content'
 import { useWebAppUserContext } from '../../hooks/context/useWebAppUserContext'
+import { useTranslation } from 'react-i18next'
 
 const ACCOUNTS_LIMIT = 4
 
 export const NotificationsSettingsPage: FC = () => {
   const queryClient = useQueryClient()
-  const { data, isLoading } = useGetNotificationsQuery()
+  const { data: notifications, isLoading } = useGetNotificationsQuery()
 
   const {
     themeParams,
@@ -40,6 +41,7 @@ export const NotificationsSettingsPage: FC = () => {
   const { favorites } = useFavoritesContext()
   const { open, handleModalClose: closeModal, handleModalOpen } = useModal()
   const { user } = useWebAppUserContext()
+  const { t } = useTranslation()
 
   const updateNotificationIdsMutation = useMutation(
     NotificationsApi.updateNotificationIds,
@@ -65,11 +67,13 @@ export const NotificationsSettingsPage: FC = () => {
   useBackButton(() => navigate(Pages.Home))
 
   const handleAccountRemoveClick = (id: string) => {
-    if (!data) return
+    if (!notifications) return
 
-    const ids = data.filter((user) => user.id != id).map((x) => Number(x.id))
+    const ids = notifications
+      .filter((user) => user.id != id)
+      .map((x) => Number(x.id))
 
-    showConfirm('Remove tracking', (confirmed) => {
+    showConfirm(t('notificationsPaid.removeTracking'), (confirmed) => {
       if (confirmed) {
         updateNotificationIdsMutation.mutate({ account_id: user?.id!, ids })
       }
@@ -79,6 +83,10 @@ export const NotificationsSettingsPage: FC = () => {
   const handleAccountAddClick = () => {
     HapticFeedback.impactOccurred('medium')
     handleModalOpen()
+  }
+
+  const handleGetPremiumButton = () => {
+    navigate(Pages.Subscription)
   }
 
   const handleModalClose = () => {
@@ -92,7 +100,7 @@ export const NotificationsSettingsPage: FC = () => {
       (account) => account.id,
     )
 
-    const currentIds = data?.map((user) => user.id)
+    const currentIds = notifications?.map((user) => user.id)
 
     if (!currentIds) return
 
@@ -104,12 +112,16 @@ export const NotificationsSettingsPage: FC = () => {
   }
 
   const filteredFavorites = useMemo(() => {
-    const currentNotificationsIds = data?.map((x) => x.id)
+    const currentNotificationsIds = notifications?.map((x) => x.id)
 
     return favorites.filter(
       (favorite) => !currentNotificationsIds?.includes(favorite.id),
     )
-  }, [data?.length, favorites.length, selectedNotificationsAccounts.length])
+  }, [
+    notifications?.length,
+    favorites.length,
+    selectedNotificationsAccounts.length,
+  ])
 
   useEffect(() => {
     MainButton.hideProgress()
@@ -132,13 +144,13 @@ export const NotificationsSettingsPage: FC = () => {
   }, [selectedNotificationsAccounts.length])
 
   const isNotificationsAccountsLimit = useMemo(() => {
-    const total = selectedNotificationsAccounts.length + data?.length!
+    const total = selectedNotificationsAccounts.length + notifications?.length!
 
     return total === ACCOUNTS_LIMIT
-  }, [selectedNotificationsAccounts.length, data?.length])
+  }, [selectedNotificationsAccounts.length, notifications?.length])
 
   if (isLoading) return <SpinLoader fullscreen />
-  if (!data) return null
+  if (!notifications) return null
 
   return (
     <>
@@ -147,13 +159,13 @@ export const NotificationsSettingsPage: FC = () => {
           className='text-4xl font-bold text-center'
           style={{ color: themeParams.text_color }}
         >
-          Notifications Accounts
+          {t('notificationsPaid.title')}
         </h1>
         <p
           className='text-center font-medium text-md'
           style={{ color: themeParams.text_color }}
         >
-          Manage Your notifications settings
+          {t('notificationsPaid.notSubTip')}
         </p>
       </div>
 
@@ -162,7 +174,7 @@ export const NotificationsSettingsPage: FC = () => {
           className='uppercase text-sm mb-1'
           style={{ color: themeParams.subtitle_text_color }}
         >
-          Settings
+          {t('notificationsPaid.settings.title')}
         </p>
 
         <div
@@ -174,7 +186,9 @@ export const NotificationsSettingsPage: FC = () => {
               <div>
                 <IoTimer size={28} color={themeParams.accent_text_color} />
               </div>
-              <p style={{ color: themeParams.text_color }}>Frequency</p>
+              <p style={{ color: themeParams.text_color }}>
+                {t('notificationsPaid.settings.frequency')}
+              </p>
             </div>
 
             <div>
@@ -190,17 +204,21 @@ export const NotificationsSettingsPage: FC = () => {
             className='uppercase text-sm'
             style={{ color: themeParams.hint_color }}
           >
-            Tracking accounts
+            {t('notificationsPaid.tracking.section')}
           </p>
 
-          {!!filteredFavorites.length && (
+          {user?.is_subscriber && !!filteredFavorites.length && (
             <button
               style={{ color: themeParams.link_color }}
               onClick={handleAccountAddClick}
             >
-              Manage
+              {t('common.manage')}
             </button>
           )}
+
+          {/*{!!filteredFavorites.length && (*/}
+
+          {/*)}*/}
         </div>
 
         <div
@@ -218,10 +236,10 @@ export const NotificationsSettingsPage: FC = () => {
 
           <div
             className={`flex ${
-              data.length === 4 ? 'justify-center' : 'justify-start'
+              notifications.length === 4 ? 'justify-center' : 'justify-start'
             } items-center w-full gap-3.5`}
           >
-            {data.map((account) => (
+            {notifications.map((account) => (
               <div
                 key={account.id}
                 className='relative'
@@ -259,7 +277,7 @@ export const NotificationsSettingsPage: FC = () => {
                       className='font-semibold'
                       style={{ color: themeParams.text_color }}
                     >
-                      Accounts Limited
+                      {t('notificationsPaid.tracking.title')}
                     </p>
                     <p
                       className='text-sm'
@@ -268,7 +286,7 @@ export const NotificationsSettingsPage: FC = () => {
                         cursor: 'pointer',
                       }}
                     >
-                      Subscribe to increase your limit
+                      {t('notificationsPaid.tracking.subtitle')}
                     </p>
                   </div>
                 </div>
@@ -281,8 +299,9 @@ export const NotificationsSettingsPage: FC = () => {
           <button
             className='mt-5 text-center w-full'
             style={{ color: themeParams.link_color }}
+            onClick={handleGetPremiumButton}
           >
-            Get Premium Subscription
+            {t('notificationsPaid.getPremium')}
           </button>
         )}
       </div>
@@ -295,7 +314,7 @@ export const NotificationsSettingsPage: FC = () => {
                 style={{ color: themeParams.text_color }}
                 className='text-xs'
               >
-                Updating
+                {t('common.updating')}
               </span>
               <CgSpinnerTwoAlt
                 className='animate-spin ml-2'
