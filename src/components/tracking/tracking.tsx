@@ -7,10 +7,12 @@ import {
 
 import { useTelegram } from '../../hooks/telegram/useTelegram'
 import { Pages } from '../../types/navigation/navigation.types'
+import { useTranslation } from 'react-i18next'
 
 export const Tracking: FC = () => {
   const { themeParams, initDataUnsafe } = useTelegram()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const handleButtonClick = () => {
     navigate(Pages.Notifications)
@@ -28,7 +30,7 @@ export const Tracking: FC = () => {
         <IoNotificationsCircleSharp size={35} color={themeParams.link_color} />
 
         <span className='font-medium' style={{ color: themeParams.text_color }}>
-          Notifications
+          {t('navigation.notifications')}
         </span>
 
         <IoChevronForwardOutline
