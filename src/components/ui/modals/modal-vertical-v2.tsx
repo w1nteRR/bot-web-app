@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTelegram } from '../../../hooks/telegram/useTelegram'
+import { useTranslation } from 'react-i18next'
 
 interface IModalVerticalV2Props extends PropsWithChildren {
   open: boolean
@@ -14,6 +15,7 @@ export const ModalVerticalV2: FC<IModalVerticalV2Props> = ({
   onClose,
 }) => {
   const { themeParams } = useTelegram()
+  const { t } = useTranslation()
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : 'unset'
@@ -47,7 +49,9 @@ export const ModalVerticalV2: FC<IModalVerticalV2Props> = ({
               <div>{header}</div>
 
               <button onClick={onClose}>
-                <span style={{ color: themeParams.link_color }}>Close</span>
+                <span style={{ color: themeParams.link_color }}>
+                  {t('common.close')}
+                </span>
               </button>
             </div>
 

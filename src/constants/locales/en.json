@@ -20,7 +20,78 @@
     },
     "navigation": {
       "profile": "Go to profile",
-      "close": "Close"
+      "close": "Close",
+      "notifications": "Notifications",
+      "subscription": "Stories Viewer Premium"
+    },
+    "subscription": {
+      "title": "Premium Subscription",
+      "subtitle": "Unlock exclusive features & elevate Your experience",
+      "mainButton": "Subscribe",
+      "subscription-item": {
+        "title": "Monthly Subscription",
+        "subtitle": "Premium Access",
+        "month": "mo"
+      },
+      "include": "What's included",
+      "features": {
+        "notifications": {
+          "title": "Notifications",
+          "description": "Stay effortlessly connected and in the loop with our notification feature."
+        },
+        "increasedUsage": {
+          "title": "Increased Usage Limits",
+          "description": "Elevate your journey by expanding your reach to up to 25 favorite accounts and monitoring 4 tracking accounts simultaneously."
+        },
+        "adFree": {
+          "title": "Ad-free",
+          "description": "Premium subscribers might enjoy an ad-free experience while using the bot's interface."
+        }
+      }
+    },
+    "notifications": {
+      "title": "Setup tracking accounts",
+      "notSubTip": "Subscribe to increase your notifications limit",
+      "limitSection": {
+        "title": "Accounts Limit",
+        "subtitle": "Up to",
+        "four": "four",
+        "one": "one",
+        "notifications": "notifications"
+      },
+      "noFavorites": {
+        "title": "No Favorites Accounts",
+        "subtitle": "You need favorites accounts to start tracking"
+      }
+    },
+    "subscriptionPaid": {
+      "title": "Subscription Successful!",
+      "subtitle": "Thank you for subscribing!",
+      "subtitle-2": "We’re excited to have you on board.",
+      "subEnd": "Your subscription ends on",
+      "contact": "Need help? Contact us at",
+      "cancelSubscription": "Cancel subscription anytime in Telegram settings"
+    },
+    "notificationsPaid": {
+      "title": "Tracking Accounts",
+      "notSubTip": "Manage Your notifications settings",
+      "settings": {
+        "title": "Settings",
+        "frequency": "Frequency"
+      },
+      "tracking": {
+        "section": "Tracking accounts",
+        "title": "Accounts Limited",
+        "subtitle": "Subscribe to increase your limit"
+      },
+      "getPremium": "Get Premium Subscription",
+      "removeTracking": "Remove tracking"
+    },
+    "recentUsers": {
+      "noRecentUsers": {
+        "title": "No Recent Users",
+        "subtitle": "Start searching to view stories anonymously"
+      }
     },
     "common": {
       "clearAll": "Clear All",
@@ -35,7 +106,14 @@
       "areUSure": "Are u sure?",
       "userAddedToFavorites": "User added to favorites",
       "highlights": "Highlights",
-      "recentActivity": "Recent activity"
+      "recentActivity": "Recent activity",
+      "showMore": "Show more",
+      "updating": "Updating",
+      "close": "Close",
+      "remove": "Remove",
+      "add": "Add",
+      "found": "Found",
+      "profile": "Profile"
     }
   }
 }

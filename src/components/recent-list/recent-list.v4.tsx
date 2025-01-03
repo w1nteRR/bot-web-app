@@ -52,10 +52,10 @@ export const RecentListV4: FC = () => {
 
         <div className='flex flex-col items-center absolute bottom-0 w-full'>
           <p className='font-medium' style={{ color: themeParams.text_color }}>
-            No Recent Users
+            {t('recentUsers.noRecentUsers.title')}
           </p>
           <p className='text-sm' style={{ color: themeParams.hint_color }}>
-            Start searching to view stories anonymously
+            {t('recentUsers.noRecentUsers.subtitle')}
           </p>
         </div>
       </div>
