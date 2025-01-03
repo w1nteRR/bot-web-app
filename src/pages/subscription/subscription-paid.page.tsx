@@ -91,7 +91,7 @@ export const SubscriptionPaidPage: FC = () => {
             className='text-sm'
             onClick={handleChannelClick}
           >
-            {t('subscriptionPaid.contact')}{' '}
+            {t('subscriptionPaid.contact')}
             <span style={{ color: text_color }} className='font-bold'>
               storiesbotdev@gmail.com
             </span>
