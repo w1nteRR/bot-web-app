@@ -21,7 +21,7 @@ export const SubscriptionPaidPage: FC = () => {
     paymentsApi.getSubscriptionExpirationDate({ user_id: user?.id! }),
   )
 
-  const { themeParams } = useTelegram()
+  const { themeParams, HapticFeedback, openLink } = useTelegram()
   const { user } = useWebAppUserContext()
   const { t } = useTranslation()
 
@@ -31,6 +31,11 @@ export const SubscriptionPaidPage: FC = () => {
   const expirationDate = useSubscriptionExpirationDate(
     data?.data.subscription_expiration_date || 0,
   )
+
+  const handleChannelClick = () => {
+    HapticFeedback.impactOccurred('light')
+    openLink('https://t.me/stories_viewer_bot_support')
+  }
 
   const { text_color, section_bg_color, link_color, subtitle_text_color } =
     themeParams
@@ -78,11 +83,18 @@ export const SubscriptionPaidPage: FC = () => {
             )}
           </p>
 
-          <p style={{ color: text_color }} className='text-sm'>
+          <p className='text-sm' style={{ color: text_color }}>
+            {t('subscriptionPaid.cancelSubscription')}
+          </p>
+          <p
+            style={{ color: text_color }}
+            className='text-sm'
+            onClick={handleChannelClick}
+          >
             {t('subscriptionPaid.contact')}{' '}
-            <a href='/' style={{ color: link_color }}>
-              support@example.com
-            </a>
+            <span style={{ color: link_color }} className='font-bold'>
+              @SupportDev
+            </span>
           </p>
         </div>
       </div>
